@@ -1,0 +1,120 @@
+\begin{thebibliography}{10}\itemsep=-1pt
+
+\bibitem{jupyter_notebook}
+{\em Jupyter Notebook Documentation}.
+\newblock Project Jupyter, 2018.
+
+\bibitem{Ahmadi}
+H.~Ahmadi.
+\newblock {\em Testability of the Arbitrage Pricing Theory by Neural Network}.
+\newblock Proceedings of the International Conference on Neural Networks, 1990.
+
+\bibitem{Alberg}
+J.~Alberg and Z.~C. Lipton.
+\newblock {\em Improving Factor-Based Quantitative Investing by Forecasting
+  Company Fundamentals}.
+\newblock arXiv, 2018.
+
+\bibitem{Bergmeir}
+C.~Bergmeir, R.~J. Hyndman, and B.~Koo.
+\newblock {\em A Note on the Validity of Cross-Validation for Evaluating
+  Autoregressive Time Series Prediction}.
+\newblock Elsevier, 2017.
+
+\bibitem{DeMiguel}
+V.~DeMiguel, L.~Garlappi, and R.~Uppal.
+\newblock {\em Optimal Versus Naive Diversification: How Inefficient is the 1/N
+  Portfolio Strategy?}
+\newblock Oxford University Press, 2007.
+
+\bibitem{Eun}
+C.~S. Eun, W.~Huang, and S.~Lai.
+\newblock {\em International Diversification with Large- and Small-Cap Stocks}.
+\newblock Journal of Financial and Quantitative Analysis, 2008.
+
+\bibitem{Fama}
+E.~F. Fama and K.~R. French.
+\newblock {\em Common risk factors in the returns on stocks and bonds}.
+\newblock Journal of Financial Economics, 1993.
+
+\bibitem{Graham}
+B.~Graham and D.~Dodd.
+\newblock {\em Security Analysis}.
+\newblock Whittlesey House, 1934.
+
+\bibitem{Gregor}
+K.~Gregor, I.~Danihelka, A.~Graves, D.~J. Rezende, and D.~Wierstra.
+\newblock {\em DRAW: A Recurrent Neural Network For Image Generation}.
+\newblock arXiv, 2015.
+
+\bibitem{Henrique}
+B.~M. Henrique, V.~A. Sobreiro, and H.~Kimura.
+\newblock {\em Literature review: Machine learning techniques applied to
+  financial market prediction}.
+\newblock Expert Systems With Applications, 2019.
+
+\bibitem{Hockreiter}
+S.~Hockreiter and J.~Schmidhuber.
+\newblock {\em Long Short Term Memory}.
+\newblock MIT Press, 1997.
+
+\bibitem{Kim}
+K.~jae Kim.
+\newblock {\em Financial time series forecasting using support vector
+  machines}.
+\newblock Neurocomputing, 2003.
+
+\bibitem{Merz}
+T.~Merz and P.~Janus.
+\newblock {\em Low-Volatility Investing: Empirical evidence of the defensive
+  properties of low volatility enhanced portfolios}.
+\newblock UBS, 2016.
+
+\bibitem{Olah}
+C.~Olah.
+\newblock {\em Understanding LSTM Networks}.
+\newblock colah.github.io., 2015.
+
+\bibitem{Racine}
+J.~Racine.
+\newblock {\em Consistent cross-validatory model-selection for dependent data:
+  hv-block cross-validation}.
+\newblock Journal of Econometrics, 2000.
+
+\bibitem{Man_Group}
+G.~Robertson.
+\newblock {\em Machine Learning in Investment Management}.
+\newblock Man AHL, 2018.
+
+\bibitem{Ross}
+S.~A. Ross.
+\newblock {\em The Arbitrage Theory of Capital Asset Pricing}.
+\newblock Journal of Economic Theory, 1976.
+
+\bibitem{Rouwenhorst}
+G.~Rouwenhorst and W.~N. Goetzmann.
+\newblock {\em The Origins of Value: The Financial Innovations that Created
+  Modern Capital Markets}.
+\newblock Oxford University Press, 2005.
+
+\bibitem{Rumelhart}
+D.~E. Rumelhart, P.~Smolensky, J.~L. McClelland, and G.~E. Hinton.
+\newblock {\em Schemata and Sequential Thought Processes in PDP Models}.
+\newblock Morgan Kaufmann Publishers, 1986.
+
+\bibitem{Sharpe}
+W.~F. Sharpe.
+\newblock {\em Mutual Fund Performance}.
+\newblock Journal of Business, 1966.
+
+\bibitem{python_testing}
+A.~Shaw.
+\newblock Getting started with testing in python.
+\newblock https://realpython.com/python-testing/.
+
+\bibitem{Treynor}
+J.~L. Treynor.
+\newblock {\em Market Value, Time, and Risk}.
+\newblock 1961.
+
+\end{thebibliography}
