@@ -1,0 +1,50 @@
+This is BibTeX, Version 0.99d (TeX Live 2018)
+Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+The top-level auxiliary file: thw116.aux
+The style file: ieee.bst
+Database file #1: thw116bib.bib
+Warning--to sort, need author, editor, or key in jupyter_notebook
+Warning--empty author and editor in jupyter_notebook
+Warning--empty publisher in Treynor
+You've used 24 entries,
+            2120 wiz_defined-function locations,
+            629 strings with 6767 characters,
+and the built_in function-call counts, 5956 in all, are:
+= -- 513
+> -- 296
+< -- 0
++ -- 122
+- -- 94
+* -- 300
+:= -- 1046
+add.period$ -- 71
+call.type$ -- 24
+change.case$ -- 96
+chr.to.int$ -- 0
+cite$ -- 27
+duplicate$ -- 284
+empty$ -- 531
+format.name$ -- 94
+if$ -- 1246
+int.to.chr$ -- 0
+int.to.str$ -- 24
+missing$ -- 45
+newline$ -- 122
+num.names$ -- 46
+pop$ -- 216
+preamble$ -- 1
+purify$ -- 95
+quote$ -- 0
+skip$ -- 152
+stack$ -- 0
+substring$ -- 124
+swap$ -- 24
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 50
+warning$ -- 3
+while$ -- 46
+width$ -- 26
+write$ -- 238
+(There were 3 warnings)

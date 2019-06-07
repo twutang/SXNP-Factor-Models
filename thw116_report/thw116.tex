@@ -48,7 +48,7 @@ frame=single
                                 \raggedright
                                 Imperial College London\\[17pt]
                                 Department of Electrical and Electronic Engineering\\[17pt]
-                                Final Year Project Interim Report 2019\\[17pt]
+                                Final Year Project Report 2019\\[17pt]
                 }
 
                 \rule{\columnwidth}{3pt}
@@ -71,19 +71,20 @@ frame=single
 
 \begin{abstract}
 
-This project explores the effectiveness of recurrent neural network architectures (RNN) for feature identification within a set of companies that form part of the STOXX Europe 600 Index. In particular, the focus will be on long short-term memory (LSTM) variants which are often used in sequential data applications that require learning of long term dependencies. The objective is to develop a model that will analyse a company's fundamental features and identify the underlying drivers that cause price movements in a stock. The model will then be tested against an industry benchmark heuristic to see if any outperformance can be managed. The fundamentals data is supplied by an external long/short equities hedge fund. The various processes required to develop a solution to this machine learning problem such as data preprocessing, network structuring, optimisation etc. will be studied and analysed.  
-
+This project explores the effectiveness of certain recurrent neural network architectures with long short-term memory units (LSTM RNNs) in the forecasting of stock prices for companies in the STOXX Europe 600 Industrial Goods and Services Index (SXNP). In particular, the project focused on attempting to identify whether certain attributes of a company’s fundamentals data, such as book value and annual sales, had significant influences on its stock price. The main emphasis of this project was to implement a complete tool that would provide all the functionalities required to take this machine learning problem from the initial raw dataset to a reasonable final forecast result. As such, the various processes required to develop a solution to a machine learning problem such as data preparation, network structuring, optimisation etc. were studied and analysed. A significant proportion of the project focused on processing the raw data into a suitable and effective format that could be used as the input of a Keras model. Additionally, by tuning various hyperparameters and experimenting with multiple loss functions and classifications methods, attempts were also made to optimize and improve the performance of the model. Finally, the stock weightings provided by the model were used to construct a portfolio to simulate a real world scenario. Its performance was then compared to the naïve diversification heuristic over a time period consisting of unseen test data. 
 \end{abstract}
 
 \section*{Acknowledgements}
-A special thanks goes to Dr. Carlo Ciliberto of Imperial College London for providing expertise about developing and designing a machine learning experiment and Dr. Marco Bianchi and Michele Ragazzi of Giano Capital for providing the financial background knowledge to help bring this project to a real world application. 
+A special thanks goes to Dr. Carlo Ciliberto of Imperial College London for taking the time to provide expertise about developing and designing a machine learning experiment. Additional thanks goes to Dr. Marco Bianchi and Michele Ragazzi of Giano Capital for providing the financial background knowledge to help bring this project to a real world application as well as their development team for providing the raw data. 
+
+\newpage
 
 \tableofcontents
 
 \newpage
 
 %%%%%%%%% BODY TEXT
-\section{Project Specification} % RENAME Introduction  AFTER INTERIM
+\section{Introduction} 
 
 \subsection{Project Motivation} \label{Project Motivation}
 
@@ -95,9 +96,9 @@ The process of automating the identification of features which are able to deliv
 
 \subsection{Problem Definition} \label{Problem Definition}
 
-Using the SXXPI Dataset supplied by Giano Capital, this project aims to establish the key fundamentals that affect the returns of a company's stock price. This is achieved by developing algorithms that can assist in predicting the future prices of the stock. The algorithms utilise several inputs such as book value, sales and profit of the specified company to train and learn a function that correlates with the price. The performance is then benchmarked against an industry standard to see if the algorithms have achieved any outperformance compared to traditional models. This problem falls in the scope of machine learning, which has been frequently used to produce solutions in data-driven problems in recent times. Focus will be directed at RNNs with LSTM units. We choose well established and tested techniques used in literature to extract features from the dataset and attempt to learn patterns in the data. We will then tune the hyperparameters to optimise the model, and evaluate its potential performance in a pseudo-generated real world application. 
+Using the SXNP dataset supplied by Giano Capital, this project aims to establish the key fundamentals that affect the returns of a company's stock price. This is achieved by developing algorithms that can assist in predicting the future prices of the stock. The algorithms utilise several inputs such as book value, sales and profit of the specified company to train and learn a function that correlates with the price. The performance is then benchmarked against an industry standard to see if the algorithms have achieved any outperformance compared to traditional models. This problem falls in the scope of machine learning, which has been frequently used to produce solutions in data-driven problems in recent times. Focus will be directed at RNNs with LSTM units. We choose well established and tested techniques used in literature to extract features from the dataset and attempt to learn patterns in the data. We will then tune the hyperparameters to optimise the model, and evaluate its potential performance in a pseudo-generated real world application. 
 
-\subsubsection{Intended Deliverables}
+\subsubsection{Intended Deliverables} \label{Intended Deliverables}
 \begin{itemize}
 	\item A cleaned dataset capable of being trained on. 
 	\item A piece of software that implements a predictive model. 
@@ -120,16 +121,11 @@ All software development will be within the student's personal Google drive, wit
 
 Cloud services will be used for the computational power and elements of data storage. Google Colaboratory offers good support for the Notebook and has previously been used as part of the EE3-25 Deep Learning module and so has a low barrier to entry. Given the fairly small size of the dataset (at approximately 300MB), the required computation power required is estimated to be well below the maximum threshold of the environment. 
 
-%-------------------------------------------------------------------------
-\iffalse
-%-------------------------------------------------------------------------
 \subsection{Report Structure} \label{Report Structure}
 
 This report begins with a background outline to provide more colour into the problem by highlighting historical approaches. It will then establish a benchmark evaluation metric for the problem to objectively measure performances. This will be followed by a detailed discussion of the design processes of our approaches. Afterwards, the challenges of the actual implementation of the various models will be discussed, with comments about how their designs were modified from the initial specification to build the final solution. Finally, we will test and analyse the systems against our self-developed metrics, noting down all the key discoveries and findings learned throughout the project before concluding the direction in which the project could be further developed in the future. 
 
-%-------------------------------------------------------------------------
-\fi
-%-------------------------------------------------------------------------
+\newpage
 
 \section{Background}
 
@@ -206,6 +202,14 @@ This implies that if $\gamma_{\theta}\gamma_{f} > 1$ or very small, the gradient
 \caption{Breakdown of a LSTM cell depicting the input, forget and update gates.}
 \end{figure}
 
+\subsubsection{Loss Functions} \label{loss functions}
+
+The loss function is important in the feedback mechanism of general neural networks and vary given the task at hand. They typically fall into two categories depending on the problem itself: classification and regression. These domains treat discrete and continuous value labelling problems. 
+
+For regression problems, two of the most common loss functions used are mean squared error (MSE) and mean absolute error (MAE). Mathematically, there are defined as following: $MSE = \frac{1}{N}\sum_{i = 1}^{N}(x_{i}-y_{i})^2$, $MAE = \frac{1}{N}\sum_{i = 1}^{N}|x_{i}-y_{i}|$. The difference in the behaviour of the loss functions can be observed with large errors, with MSE putting much more emphasis on learning and correcting from those data points. Interestingly, Janocha et al.\cite{Janocha} suggested that these loss functions also perform surprisingly well in deep net classification objectives as a means of providing a probabilistic interpretation in terms of expected misclassification.
+
+A popular example of a classification problem is the a binary classifier. These take input data and assign one of two possible output values. An example would be the binary cross-entropy loss function, expressed as $\frac{1}{N}\sum_{i = 1}^{N}log(p(y_{i}))-(1-y_{i})(log(p(1-y_{i})))$ where $y_{i}$ is the target label. 
+
 \subsubsection{Cross Validation} \label{cross validation}
 
 An issue with LSTM networks arises when using classical cross validation methods. K-fold cross validation involves dividing the data into $k$ folds before assigning the initial fold as the test data and the rest as the training data. After each iteration of training, the test data assignment is then incremented until its position has permeated through all of the positions. However, with sequential data, this method causes disjoints in the training data since training for fold $n+1$ will be involve information from $n-1$ rather than $n$. In 2015, Bergmeir et al. introduced a new method\cite{Bergmeir} to handle cross validation for time-series data. Their system involved a forward chaining concept such that training data is never interrupted. Although it resolves the issue, the generalisation error is then affected by the change in training data size. Below is a heuristic for the method: 
@@ -244,6 +248,17 @@ An exciting application of LSTM networks can be found in one of Google Deepmind'
 \includegraphics[width=12.5cm]{draw_results.png}
 \caption{LHS: Single digits generated from the MNIST database, with the right-most column depicting original images from the database. RHS: DRAW's attempts at generating double digit values.}
 \end{figure}
+
+Groundbreaking work can often be produced and found in competitions. The primarily example for time-series datasets was the M4 competition held in June by Makridakis of the University of Nicosia. This was the forth competition of a series which focussed on forecasting for 100,000 time-series datasets, spanning different time intervals and domains. A key objective of the task was to evaluate the performance of machine learning models compared to other statistical methodologies. Makridakis et al.\cite{Makridakis} published their findings after the competition. Below are a few of their major findings in the report:
+
+\begin{itemize}
+	\item Combination of methods performed well in the M4 competition - 12 of the 17 most accurate methods were combinations of mostly statistical approaches.
+	\item The best performing approach utilised both statistical and ML features. This method produced the most accurate forecasts as well as the most precise Prediction Intervals and was submitted by Smyl, Data Scientist at Uber Technologies. According to competition error metric, Symmetric Mean Absolute Percent Error (sMAPE), it was close to 10\% more accurate than the Combination benchmark of the Competition. It is noted that in the M3 Competition (Makridakis \& Hibon, 2000) the best method was 4\% more accurate than the same benchmark.
+	\item The second most accurate method was a combination of seven statistical methods and one ML one submitted jointly by Spain’s University of A Coruña and Australia’s Monash University.
+	\item The six pure ML methods submitted performed poorly, none of them being more accurate than the benchmark.
+\end{itemize}
+
+
 
 \subsection{Review of Machine Learning Research in Investing}  \label{ML_research}
 
@@ -309,6 +324,7 @@ Rather than predicting the prices directly, which could rely on a multitude of f
 Additionally, normalisation of the inputs is carried out with two methods. The first involves ranking the performance of stocks against a certain ratio, such as $\frac{Book Value}{Market Capitalisation}$. The percentiles of their rankings are then inputted alongside the raw scores in order to produce a more comparable set of features between various stocks. The second involves transforming all data points into a specified domain for ease-of-use to the learning algorithm whilst maintaining the same relative fundamental values between companies. Alberg achieves this by dividing the input feature by the L2 norm of all the features ($x_{i} \rightarrow \frac{x_{i}}{||x||}$). This is in contrast with two of the more popular methods of normalisation: z-score ($x_{i} \rightarrow \frac{x_{i}-\mu_{x}}{\sigma_{x}}$) where $\mu$ and $\sigma$ are the mean and standard deviation and min-max scaling ($x_{i} \rightarrow \frac{x_{i}-x_{min}}{x_{max}-x_{i}})$.
 
 Finally, in 2019, a summary of the literature\cite{Henrique} that had been written about financial prediction applications using machine learning was produced by Henrique et al. They constructed a table comprehensively detailing the various attributes and methods used in the papers they reviewed. This provides a very general overview into how the academic field is generally designing experiments for this problem domain.
+
 \begin{itemize}
 	\item Assets Evaluated: Typically stocks or indices. These fall into the same region as the problem tackled by this project. Interestingly, many index models were focused on predicting the prices of the index itself whereas stocks typically offered more dynamic evaluation metrics such as selecting good stocks and calculating their returns.
 	\item Predictive Variables: Predominately technical analysis or prices, with a few fundamentals and one text and news. It is understandable that most models which predict price use technical analysis indicators given that the perceived relationship between these is fairly strong. Technical analysis was designed for price analysis whereas fundamental data looks at the valuation of stocks, which is a slightly different task. However, this project focuses on a long term investment horizon and so is hoped that fundamental features will be more significant in this time domain. The text and news cases were used to analyse sentiment, which often affects price on a very short time horizon.
@@ -318,21 +334,13 @@ Finally, in 2019, a summary of the literature\cite{Henrique} that had been writt
 \end{itemize}
 
 %-------------------------------------------------------------------------
+\newpage
 
-\section{Implementation Plan} % RENAME Requirements Capture AFTER INTERIM
+\section{Requirements Capture} 
 
-%Following from section \ref{Report Structure}, we will highlight the key objectives that should be achieved in order to fulfill the previous stated problem. These will be broken down into both expected physical deliverables and analysis requirements: \\
+The key objective for the project is to deliver a tool that will assist in answering the fundamental problem of whether it is possible to predict price changes in stocks based on the fundamental's data of a company. This primary objective is then divided into sub-sectional physical deliverables, as briefly mentioned in section \ref{Intended Deliverables}. Fallback plans were established for each deliverable to prioritise certain essential functionalities if problems in software development and debugging cause significant time delays. 
 
-The preliminary breakdown of the work expected to be required and achieved through the project are listed in the below Gantt charts. Thus far, focus has mainly been on building knowledge and theory in order to develop a viable solution to the problem. After the interim deadline report, the majority of time will be spent on completing the physical deliverables. It should also be noted that since the project is still at a fairly early stage with respect to the technical aspects, the initial estimates of the tasks may not be entirely accurate and will be adjusted accordingly as time goes on to reflect a more accurate representation of the progress. Fallback plans have been established for each deliverable if problems in software development and debugging cause significant time delays. If necessary, major adjustments will be made to the proposals to ensure that the project is delivered to schedule. 
-
-\begin{figure}[!hbt!]
-\centering
-\includegraphics[width=17.5cm]{past_gantt.png}
-\caption{Gantt chart indicating completed tasks to interim report deadline.}
-\end{figure}
-
-\subsection{Scheduled Tasks}
-
+\subsection{Tasks}
 \begin{enumerate}
 	\item Data Preprocessing: Using methods that have been researched and understood, the datasets supplied by Giano Capital will be cleaned and formatted in an appropriate fashion for use as the inputs of the LSTM model. This is a vital element of the project and it can be argued that the quality of model performance is critically dependent on this deliverable. However, it is important to observe the schedule as this is the initial deliverable and going overtime would put the other components in jeopardy. In a worst case scenario, priorities will be made to certain fundamentals that are theorised to be the most important and the others discarded to reduce workload.
 	 \item Building and Testing Benchmark: The design for a suitable industry-standard benchmark is mentioned in section \ref{benchmark}. Going forwards, the objective will be to build the tools necessary to compare the benchmark with the output data from the model. Similar to the fallback plan in Data Preprocessing, efforts will be solely concentrated on the key benchmark criteria (the most important being absolute returns) if there are heavy time constraints. 
@@ -341,15 +349,242 @@ The preliminary breakdown of the work expected to be required and achieved throu
 	\item Hyperparameter Optimisation: To improve the performance of the model with respect to the benchmark, various modifications can be applied to areas of the algorithm such as the training method, network depth, learning rate optimisers etc. A significant proportion of time has been allocated to this since it involves the lengthy process of retesting and reevaluating the results and performance given every adjustment made. This final deliverable is arbitrarily long, given the fact that analysis of components can be inexhaustibly extensive and so it will be flexible in the sense that as much experimentation will be performed as allowed for by time. 
 \end{enumerate}
 
+\newpage
+
+\section{Design and Analysis}
+Give a good high-level overview of your design.
+
+Final design may be different from that originally envisaged. Write about interesting differences, and why the changes were made. Discoveries during the project may have changed the direction of work, or invalidated prior work, in which case you get credit for the design process, if it is principled, as well as the end product.
+
+If your design was not implemented fully, describe which parts you did implement, and which you didn't. If the reason you didn't implement everything is interesting (eg it turned out to be difficult for unexpected reasons), write about it.
+
+Note that the Project Report is written at the end of project work and must describe the project work, but need not do this chronologically. Often the best description of design, in retrospect, is far from the way in which you developed it. Where the evolution of ideas is interesting or relevant it can be described, as above, but otherwise the order in which things were done need not be documented.
+
+The Examiners are just as interested in the engineering process you went through in performing your project work as the results you finally produced. 
+
+Report identifies when design choices have to be made, what were the possibilities, and why you made the particular choices and
+decisions that you did. They are looking for principled rational arguments and for critical assessment. Engineering involves trade-offs and the reasons for a design decision may be various, and may in some cases be out of your control. Explicit understanding of this, and the ability to communicate it, is important.
+
+\subsection{Overview}
+
+Figure \ref{pipeline_design} depicts the intended diagrammatic pipeline of the tool that was developed. 
+
 \begin{figure}[!hbt!]
 \centering
-\includegraphics[width=17.5cm]{future_gantt.png}
-\caption{Gantt chart indicating future tasks after the interim report deadline.}
+\includegraphics[width=14.5cm]{design_pipeline.png}
+\caption{High-level overview of the tool pipeline design}
+\label{pipeline_design}
 \end{figure}
 
-Additional to the software deliverables, the required report writing, poster presentation and logistical meetings are also accounted for in the Gantt chart. Estimates for these tasks are fairly fixed since, unlike the software elements, it is unlikely that there will be significant, unforeseen problems and errors that will be time consuming. 
+\subsection{Data Preprocessing}
 
-\section{Evaluation Plan} \label{benchmark} 
+\subsubsection{Overview}
+
+Initially, sample formats were distributed in csv formats. However, when the entire dataset was actually provided, the file was stored in a .rds file because the firm mainly operated in R. It was then necessary to study the data storage structure in order to extract the relevant information that could be used for the project. 
+
+The data is structured in lists of features. These are separated into 5 categories, two of which will be useful to this project. These will be \textit{Fundamentals} and \textit{Prices}. \textit{Fundamentals} is data about the company itself, such as book value or sales whereas \textit{Prices} is data regarding how the behavioural characteristics of the stock itself trades on the exchange. Each company is labelled with their unique ticker. Example: CNHI:IM which is the CNH Industrial NV. 
+
+\textit{Fundamentals} is divided into two categories: Last Twelve Months (LTM) and Next Twelve Months (NTM). LTMs are the historical data points for the past year of a specific feature whereas NTMs are the predictions of those features for the next year. LTM contains 16 features and NTM contains 31 features. We are working with a subset of the Euro Stoxx 600 Index (SXXP) and so will only focus on companies that are categorised as Industrial Goods and Services. The Index ID for this is SXNP. There are 203 companies that fit this category. For each feature, there are 6313 data points, starting from 1995-01-03 (Y-D-M). 
+
+\textit{Prices} is divided into two categories: Local and Euros which indicates the denomination that the values of the stocks are presented in. Because Local introduces an external factor of currency value fluctuation into the problem, it will be ignored and Euros will be used for its standardised format. Euros contains 14 features related to the technical indicators of the stock. Again, there are 203 companies for each of these features and the number of datapoints is 6313, starting from 1995-01-03 (Y-D-M). 
+
+The other 3 categories are \textit{Mapping}, \textit{Signals} and \textit{Indices}. \textit{Mapping} provides the keys of the dataset and so can be used to select a specific subset that is of interest. This is what is used to filter out the original number of companies (1184) to the Industrials subset (203). \textit{Signals} provides 3 sets which looks at the investor sentiment. \textit{Indices} provides the pricing data of worldwide indices.  
+
+\begin{figure}[!hbt!]
+\centering
+\includegraphics[width=14.5cm]{database.png}
+\caption{Diagram overview of the database hierarchy.}
+\end{figure}
+
+\subsubsection{Handling Sparsity} \label{data_analysis}
+
+\subsubsection{Data Transformation}
+
+In order to have some directional predictive power, the delta of the attributes will be measured over rather than the absolute values i.e. $\frac{x_{t}}{x_{t+1}}$. This means that the underlying assumption is that the price of stock changes given changes in the \textit{Fundamentals} and \textit{Price} features. Unfortunately, given the sporadic nature of fundamental data reporting, which is often quarterly or longer, technical data is required to supplement the model. All missing data or deltas which are 0 will be masked and thus not affect the model. 
+
+
+\subsection{Architectural Design} 
+
+\subsubsection{Overview}
+
+The design of the architecture was implemented in an iterative process, starting initially with the most basic baseline design consisting of one hidden layer. The idea was to evaluate the results of the designs and then modify or redesign them to improve the performance and accuracy. In order to identify the sets of models that could be used, the initial process involved identifying the inputs, outputs and target function that were suitable for the fundamental problem.
+
+\subsubsection{Inputs}
+
+The inputs for the model were initially intended be all of the usable features in the \textit{Fundamentals} category. This totalled approximately $15+16=32$. However, a section of the NTM category was labelled as original (e.g. EpsOriginal and Eps) and this was decided to be too raw a format for usage. It would also have caused duplications in the input vector, unintentionally giving some attributes double the weighting. At least one of the Price category attributes will be missing as it is the variable that needs to be predicted - namely the closing price.   
+
+Although the project was initially intended to be based solely on analysing fundamental data, the lack of data reported as depicted in section \ref{data_analysis} resulted in concerns relating to the feasibility of learning in such a small dataset. This lack of data was attributed to the fact that values may not have been measured or recorded as much historically (1990s) and also that values are often only reported on a quarterly basis, resulting in only 4 data points each year compared to the 252 data points of the price. 
+
+\subsubsection{Output}
+
+\subsubsection{Loss Function}
+
+\subsubsection{Design Interations}
+
+\subsection{Benchmark Design} \label{benchmark}.
+
+Our selected benchmark performance metric will be derived from the naive diversification choice heuristic. This means that for a given universe of $N$ stocks, a portfolio will be constructed by allocating a $\frac{1}{N}$ weighting to each stock. The interest here is in the efficiency of such a portfolio compared to those which are optimised to favour certain stocks achieved by overweighting them such that their allocations are greater than $\frac{1}{N}$. DeMiguel et al. conducted investigations\cite{DeMiguel} regarding 14 mean-variance optimisation models and found that there was no statistically significant improved performance relative to $\frac{1}{N}$ diversification. As such, it is of interest for investment managers to construct mathematical models that can outperform the simplistic model often utilised by less sophisticated investors for its ease-of-use. 
+
+In order to evaluate this, the output values will be ordered and a theoretical portfolio constructed with respect to the percentage of the total sum of the outputs ($weighting(i) = \frac{output_{i} }{\sum_{i=1}^{N} output_{i}}$). It should be noted that the architecture of the network will be devised such that a larger output is better e.g. implies a higher return, lower volatility etc. Although this portfolio layout is by no means optimised for best performance, it succinctly describes and roughly equates to what stocks the model has selected to over and underweight. It is then possible to evaluate this portfolio with respect to three basic performance measure and compare and contrast to those of the naive diversification heuristic. 
+
+\begin{itemize}
+	\item Absolute Return: This is the most basic method of evaluation - observing how much return is generated by a portfolio over a given period of time. The simplicity of the measure allows it to be easily implemented and direct comparisons can be made between the model generated and benchmark figures. It is calculated by $100\times \frac{V_{end} - V_{start}}{V_{start}}$ where $V$ is the value of the portfolio and $start$ and $end$ are the beginning and finish times of the investment. A higher absolute return indicates better performance. 
+	\item	Sharpe Ratio: First introduced by William Sharpe\cite{Sharpe} in 1966, this is a commonly used method of measuring risk adjusted return. Since a more risky investment should in theory offer a greater potential reward, a more insightful method of evaluation is judging whether the returns received are in line with the risk taken in a given portfolio. A simplified version will be used that does not account for the risk free rate to reduce complexity in calculations: $Simple Sharpe Ratio = \frac{R_{p}}{\sigma_{p}}$ where $R_{p}$ and $\sigma_p$ are the return and its standard deviation of the portfolio respectively. A higher Sharpe Ratio indicates better performance.  
+	\item Portfolio Turnover: This measures how often the stocks within the portfolio have to be bought and sold to rebalance and maintain the model's strategy. Although it does not theoretically affect the performance, the transaction costs of buying and selling in a real world scenario can significantly affect a portfolio's profitability. Therefore a lower turnover is preferred. It is calculated with the following equation: $turnover = \frac{min(s_{b}, s_{s})}{NAV}$ where $NAV$ is the Net Asset Value and $s_{b}$ and $s_{s}$ are the cost of stocks bought and sold respectively.  
+\end{itemize}
+
+\subsection{Training and Testing} 
+
+\subsection{Hyperparameter Optimisation} 
+
+%-------------------------------------------------------------------------
+\newpage
+
+\section{Implementation}
+
+
+Give code details - descriptions of key parts, annotated to help the reader understand what they are looking at. Good reasons for including code could be to illustrate algorithmic flow, or highlight an interesting optimisation, demonstrate interactions with a data-structure, or give an example of input for a tool that has been designed.
+
+Discuss the most important or interesting aspects, and anything that was surprising or difficult. It probably won't be possible or relevant to discuss everything – state clearly what you leave out.
+
+If you cannot explain what message or point a code fragment is conveying,  it probably should not be in the report, and if you cannot justify why a line of code in the fragment helps convey that point, it maybe it shouldn’t be in the code fragment.
+
+For similar reasons, pasting screen-shots is unlikely to be a good use of space, unless it serves a particular purpose. Screen-shots are sometimes used instead of drawing a picture (for example as a “cheap” way of showing wave-forms or state machines), or in order to capture the results of running a tool (which will often be text anyway), and tend to look unprofessional and lazy. They are also sometimes used as page filler, or as “proof” that a tool was launched and something compiled, which is not necessary: your marker’s default position will be to believe your claims. Use a screen-shot if it is demonstrating a particular point, such as a failure mode in a tool, or a particular interaction that is difficult/impossible to highlight, but make sure you edit and annotate the figure to show and highlight the important parts.
+
+When discussing the implementation, it is generally best to focus on the conceptual and logical design, and only then dive into details for interesting parts or to highlight important decisions. Well thought-out figures and diagrams are often much more effective at conveying your design than source code, whether that is a data-structure, a client-server interaction, a design-flow, or a circuit hierarchy. For example, a diagram of a block-diagram of digital circuit can be used to communicate to the reader most of the important high-level  decisions you have made, then VHDL fragments (or another diagram) could be used to focus on specific parts and demonstrate any interesting local details.
+
+Complete listings may be included as appendices of your report but this is not normally appropriate, unless the appendix is documentation, or describes an API. Software may be provided on a CD-ROM given to your supervisor or in a cloud repositories such as Github. No marks are awarded for the mass or page count of a report, and reports which contain 50 pages of printed code are more likely to be seen as showing poor judgement
+
+\subsection{Data structuring}
+ 
+Given the large number of csv files, there was a necessity to store the resulting dataframes in a systematic method so that functions that needed to be performed on method could be done so efficiently. This was achieved by dividing the respective csv files first into input and traget variables. Of course, only one file was needed for the target variable, being the close price dataset. 
+
+\begin{lstlisting}[language=Python, breaklines=true]
+price_close = pd.read_csv('/content/drive/My Drive/thw116_FYP/data/price_close.csv')
+\end{lstlisting}
+
+However, given that there were much more input datasets, it was decided to store these dataframes in lists, based on the categories that they were originally allocated in the raw .rds file. 
+
+\begin{lstlisting}[language=Python, breaklines=true]
+ltm_book = pd.read_csv('/content/drive/My Drive/thw116_FYP/data/ltm_book.csv')
+ltm_div = pd.read_csv('/content/drive/My Drive/thw116_FYP/data/ltm_div.csv')
+........................
+ltm_inputs = [ltm_book, ltm_div, ltm_ebit, ltm_ebitda, ltm_ebitda, ltm_eps, ltm_fcf, ltm_pbook, ltm_sales] 
+ntm_inputs = [ntm_book, ntm_div, ntm_ebit, ntm_ebitda, ntm_ebitda, ntm_eps, ntm_fcf, ntm_pbook, ntm_sales]
+tech_inputs = [price_high, price_low, price_open, volume, enterprise_val]
+\end{lstlisting} 
+
+This then made functions far easier to implement across all the data, such as in this instance where the dataframes were allocated a \textit{datetime} index. 
+
+\begin{lstlisting}[language=Python, breaklines=true]
+def time_index_generator(dataframe):
+  dataframe['Date'] = pd.to_datetime(dataframe['Date'], dayfirst=True)
+  dataframe.set_index('Date', inplace=True)
+
+for i in range(0,len(ltm_inputs)):
+  time_index_generator(ltm_inputs[i])
+\end{lstlisting} 
+
+After preprocessing across the dataset, it was necessary to reformat the data into an input form acceptable to the Keras model architecture. For this all of the lists of dataframes had to be iterated through and the appropriate datapoint extracted to create another list that would represent the input vector. 
+
+\begin{lstlisting}[language=Python, breaklines=true]
+trainInput = []
+trainTarget = []
+
+# Check that the indices are of the same length 
+if len(ltm_trainInputs[0]) != len(returns_trainOutput):
+  assert False, "Incompatible dataframe index lengths!"
+
+for company in range(0, len(ltm_trainInputs[0][:1][0])):
+  
+  for time_unit in range(0, len(ltm_trainInputs[0])): 
+    input_unit = []
+    
+    for ltm_attribute in range(0, len(ltm_trainInputs)): 
+      input_unit.append(ltm_trainInputs[ltm_attribute][time_unit:time_unit+1][0][company])
+                        
+    for ntm_attribute in range(0, len(ntm_trainInputs)):
+      input_unit.append(ntm_trainInputs[ntm_attribute][time_unit:time_unit+1][0][company])
+                        
+    for tech_attribute in range(0, len(tech_trainInputs)): 
+      input_unit.append(tech_trainInputs[tech_attribute][time_unit:time_unit+1][0][company])
+                        
+    trainInput.append(input_unit)
+    
+for company in range(0, len(returns_trainOutput.columns)):
+  for time_unit in range(0, len(returns_trainOutput.index)): 
+    trainTarget.append(returns_trainOutput[anon_tickers[company]][time_unit])
+\end{lstlisting} 
+
+These lists were then converted into \textit{numpy} arrays. This provided the use of \textit{reshape} functionality only accessible to arrays as well as the fact that they are more memory and computationally efficient. Keras requires a Since this is the immediate step before inputting into the architecture, there is no more need for the flexibility offered by lists. 
+
+\begin{lstlisting} 
+trainInput, trainTarget = np.array(trainInput), np.array(trainTarget)
+trainInput = np.reshape(trainInput, (trainInput.shape[0], trainInput.shape[1], 1))
+\end{lstlisting} 
+
+
+
+
+
+\subsection{Architecture} 
+
+\begin{lstlisting}[language=Python, breaklines=true]
+data_dim = trainInput.shape[1]
+timesteps = trainInput.shape[0]
+
+# Sample Code
+# model parameters:
+
+def create_model(train_X, train_Y, data_dim):
+  lstm_units = 128
+  
+#   print('Build baseline binary model...')
+#   model = Sequential()
+#   model.add(Masking(mask_value=0., input_shape=(data_dim, 1)))
+#   model.add(LSTM(lstm_units))
+#   model.add(Dense(1))
+#   model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+  
+  
+  print('Build stacked binary model')
+  model = Sequential()
+  model.add(Masking(mask_value=0., input_shape=(data_dim, 1)))
+  model.add(LSTM(lstm_units, return_sequences=True))
+  model.add(Dropout(0.2))
+  model.add(LSTM(lstm_units, return_sequences=True))
+  model.add(Dropout(0.2))
+
+  model.add(LSTM(lstm_units))
+  model.add(Dense(1))
+  model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+  
+  #   model.compile(loss='mean_squared_error', optimizer='adam', metrics=['accuracy'])
+
+  return(model)
+
+  
+baseline_model = create_model(trainInput, trainTarget, data_dim)
+SVG(model_to_dot(baseline_model, show_shapes=True).create(prog='dot', format='svg'))
+\end{lstlisting} 
+
+
+\subsection{Benchmark} 
+
+
+
+%-------------------------------------------------------------------------
+\newpage
+
+\section{Testing}
+Put the actual test results in an Appendix if they are repetitive but relevant. 
+Detailed test data may be omitted from the report if not relevant, however an accurate summary of tests should be included in the Report itself. 
+Sometimes non-working designs are described in project reports as though they work, when in reality they don’t, or only partially work. Therefore a precise description of what works and how this has been established is important. Examiners may try to compile, use, or test deliverables themselves (even after your report is submitted), and your report should accurately reflect
+the state of the project.
+This section is normally useful for software or hardware deliverables and less relevant in analytical projects.
+
+\subsection{Test Plan} 
 
 \begin{figure}[!hbt!]
 \centering
@@ -372,190 +607,13 @@ The next level up involves integration testing, which focuses on the correctness
 \caption{Flow diagram of how an integrated test may be executed.}
 \end{figure}
 
-System testing will involve evaluating the realised performance of the whole system. This will then allow for the model to be comparable to other methodologies developed in the field and industry. Our selected benchmark performance metric will be derived from the naive diversification choice heuristic. This means that for a given universe of $N$ stocks, a portfolio will be constructed by allocating a $\frac{1}{N}$ weighting to each stock. The interest here is in the efficiency of such a portfolio compared to those which are optimised to favour certain stocks achieved by overweighting them such that their allocations are greater than $\frac{1}{N}$. DeMiguel et al. conducted investigations\cite{DeMiguel} regarding 14 mean-variance optimisation models and found that there was no statistically significant improved performance relative to $\frac{1}{N}$ diversification. As such, it is of interest for investment managers to construct mathematical models that can outperform the simplistic model often utilised by less sophisticated investors for its ease-of-use. 
+System testing will involve evaluating the realised performance of the whole system. This will then allow for the model to be comparable to other methodologies developed in the field and industry.
 
-In order to evaluate this, the output values will be ordered and a theoretical portfolio constructed with respect to the percentage of the total sum of the outputs ($weighting(i) = \frac{output_{i} }{\sum_{i=1}^{N} output_{i}}$). It should be noted that the architecture of the network will be devised such that a larger output is better e.g. implies a higher return, lower volatility etc. Although this portfolio layout is by no means optimised for best performance, it succinctly describes and roughly equates to what stocks the model has selected to over and underweight. It is then possible to evaluate this portfolio with respect to three basic performance measure and compare and contrast to those of the naive diversification heuristic. 
-
-\begin{itemize}
-	\item Absolute Return: This is the most basic method of evaluation - observing how much return is generated by a portfolio over a given period of time. The simplicity of the measure allows it to be easily implemented and direct comparisons can be made between the model generated and benchmark figures. It is calculated by $100\times \frac{V_{end} - V_{start}}{V_{start}}$ where $V$ is the value of the portfolio and $start$ and $end$ are the beginning and finish times of the investment. A higher absolute return indicates better performance. 
-	\item	Sharpe Ratio: First introduced by William Sharpe\cite{Sharpe} in 1966, this is a commonly used method of measuring risk adjusted return. Since a more risky investment should in theory offer a greater potential reward, a more insightful method of evaluation is judging whether the returns received are in line with the risk taken in a given portfolio. A simplified version will be used that does not account for the risk free rate to reduce complexity in calculations: $Simple Sharpe Ratio = \frac{R_{p}}{\sigma_{p}}$ where $R_{p}$ and $\sigma_p$ are the return and its standard deviation of the portfolio respectively. A higher Sharpe Ratio indicates better performance.  
-	\item Portfolio Turnover: This measures how often the stocks within the portfolio have to be bought and sold to rebalance and maintain the model's strategy. Although it does not theoretically affect the performance, the transaction costs of buying and selling in a real world scenario can significantly affect a portfolio's profitability. Therefore a lower turnover is preferred. It is calculated with the following equation: $turnover = \frac{min(s_{b}, s_{s})}{NAV}$ where $NAV$ is the Net Asset Value and $s_{b}$ and $s_{s}$ are the cost of stocks bought and sold respectively.  
-\end{itemize}
-
-
-\section{Ethical, Legal, and Safety Plan}
-
-This section details the issues relevant to the project and the best practices that will be taken. Principally, in order to conduct appropriate research, a common values and ethics code will be observed for the entire duration of the project. The following common areas were evaluated for this project: 
-
-\begin{itemize}
-	\item Carefulness: Mistakes in the research will be mitigated by frequently requesting feedback and reviews from the supervisor. Any mistakes identified and their subsequent results will be swiftly rectified as to maintain correctness within the research. 
-	\item Confidentiality: The privacy of the data that is provided by external parties will be upheld given the sensitivity of the information. This will be achieved by storing it in a private drive only accessible to the researcher and supervisor. 
-	\item Honesty: Results will be clearly stated and the methodology used to arrive at them clearly explained. This will improve the reproducibility of data, ensuring that nothing is fabricated or misconstrued. 
-	\item Human Subjects Protection: Any conflicts of interest between external parties and those at the College will be managed with clear communication so as to arrive at appropriate agreements.
-	\item Integrity: All methods and subject matters that are sensitive will be screened for viability by the supervisor so that the public reputation of the College is not damaged. 
-	\item Objectivity: Biases in the results and research will be avoided by using a wide range of literature that offer differing opinions and perspectives. 
-	\item Respect for Intellectual Property: References will be used to acknowledge the work of others. Care will be taken to ask for permission when using unpublished results, methods or tools so as to avoid any chance of unintentional plagiarism. 
-\end{itemize}
-
-Additionally, some legal issues that may arise were accounted for: 
-
-\begin{itemize}
-	\item Patent Infringement: Since there is a potential for the project to become commercialised, care must be taken to attempt to avoid infringing patents. If any issues arise, the supervisor will help advise the situation. A logbook will be kept to document the timeline of the project. 
-	\item Privacy: Given the sensitive nature of the data, consent will be requested from the provider before any formal publications are made. 
-\end{itemize}
-
-Finally, below details a list of potential safety issues with plans of action to mitigate the potential of them occurring: 
-
-\begin{itemize}
-	\item Appliance Safety: It is not expected for portable appliances to be used as part of the project. However, if this were to occur, laboratory staff will be contacted for guidance and equipment to be PAT tested for safety. 
-	\item Biological Safety: No biologically hazardous materials are used as part of the project. 
-	\item Chemical Safety: No poisonous, irritant or allergenic materials are used as part of the project. 
-	\item Data Infrastructure Safety: The likelihood of viruses will be reduced through careful file management and software usage. Cloud storage will be used in place of USB flash drives to prevent the opportunity of physical tampering. Preventing excess use of computation resources is achieved externally by the Google Colaboratory environment, which offers up to 12 hours of continuous access and 13GB of usage per period. 
-	\item Electrical Safety: Care will be taken when plugging in desktops or laptop chargers whilst working on the project. Precautions will be made so as not to tamper with the wiring of desktops in the laboratory and to ensure that the casing of personal laptop chargers are well insulated and not damaged. 
-	\item Fire Safety: Although there are few sources from within the project itself that could cause fire, care will be taken to observe evacuation routes in shared environments so as to prevent any harm or injuries. 
-	\item Physical Safety: Due to the software centric nature of the project, there are no interactions with large or fast moving physical objects that could potentially cause harm. 
-	\item Study Participant Safety: Tests and surveys will not be used as part of this project. 
-\end{itemize}
-
-%-------------------------------------------------------------------------
-\iffalse
-%-------------------------------------------------------------------------
-
-\section{Analysis and Design}
-
-If your project involves designing a system, give a
-good high-level overview of your design.
-In many projects, the final design is different from
-that originally envisaged. If the differences are
-interesting, write about them, and why the changes
-were made. Discoveries during the project may have
-changed the direction of work, or invalidated prior
-work, in which case you get credit for the design
-process, if it is principled, as well as the end product.
-If your design was not implemented fully, describe
-which parts you did implement, and which you didn't.
-If the reason you didn't implement everything is
-interesting (eg it turned out to be difficult for
-unexpected reasons), write about it.
-Note that the Project Report is written at the end of
-project work and must describe the project work, but
-need not do this chronologically. Often the best
-description of design, in retrospect, is far from the
-way in which you developed it. Where the evolution
-of ideas is interesting or relevant it can be described,
-as above, but otherwise the order in which things
-were done need not be documented.
-The Examiners are just as interested in the
-engineering process you went through in performing
-your project work as the results you finally produced.
-So make sure your report identifies when design
-choices have to be made, what were the possibilities,
-and why you made the particular choices and
-decisions that you did. They are looking for principled
-rational arguments and for critical assessment.
-Engineering involves trade-offs and the reasons for a
-design decision may be various, and may in some
-cases be out of your control. Explicit understanding of
-this, and the ability to communicate it, is important.
-
-\subsection{Data Preprocessing}
-
-\subsection{Architectural Design} 
-
-\subsection{Benchmark Design}
-
-\subsection{Training and Testing} 
-
-\subsection{Hyperparameter Optimisation} 
-
-%-------------------------------------------------------------------------
-
-\section{Implementation}
-
-In projects with a software element give code details
-(not a complete listing, but descriptions of key parts).
-Discuss the most important or interesting aspects, and
-anything that was surprising or difficult. It probably
-won't be possible or relevant to discuss everything –
-state clearly what you leave out.
-Pasting verbatim code from your project into the
-report is rarely a good idea; usually it should be edited
-down to remove extraneous details and often
-annotated to help the reader understand what they
-are looking at. Good reasons for including code could
-be to illustrate algorithmic flow, or highlight an
-interesting optimisation, demonstrate interactions
-with a data-structure, or give an example of input for
-a tool that has been designed. If you cannot explain
-what message or point a code fragment is conveying, 
-TJWC Final Year Projects 3
-it probably should not be in the report, and if you
-cannot justify why a line of code in the fragment helps
-convey that point, it maybe it shouldn’t be in the code
-fragment.
-For similar reasons, pasting screen-shots is unlikely to
-be a good use of space, unless it serves a particular
-purpose. Screen-shots are sometimes used instead of
-drawing a picture (for example as a “cheap” way of
-showing wave-forms or state machines), or in order to
-capture the results of running a tool (which will often
-be text anyway), and tend to look unprofessional and
-lazy. They are also sometimes used as page filler, or as
-“proof” that a tool was launched and something
-compiled, which is not necessary: your marker’s
-default position will be to believe your claims. Use a
-screen-shot if it is demonstrating a particular point,
-such as a failure mode in a tool, or a particular
-interaction that is difficult/impossible to highlight, but
-make sure you edit and annotate the figure to show
-and highlight the important parts.
-When discussing the implementation, it is generally
-best to focus on the conceptual and logical design,
-and only then dive into details for interesting parts or
-to highlight important decisions. Well thought-out
-figures and diagrams are often much more effective at
-conveying your design than source code, whether that
-is a data-structure, a client-server interaction, a
-design-flow, or a circuit hierarchy. For example, a
-diagram of a block-diagram of digital circuit can be
-used to communicate to the reader most of the
-important high-level decisions you have made, then
-VHDL fragments (or another diagram) could be used
-to focus on specific parts and demonstrate any
-interesting local details.
-Complete listings may be included as appendices of
-your report but this is not normally appropriate,
-unless the appendix is documentation, or describes an
-API. Software may be provided on a CD-ROM given to
-your supervisor or in a cloud repositories such as
-Github. No marks are awarded for the mass or page count of a report, and reports which contain 50 pages
-of printed code are more likely to be seen as showing
-poor judgement
+\subsection{Test Results} 
 
 
 %-------------------------------------------------------------------------
-
-\section{Testing}
-
-Describe your Test Plan -- how the program or system
-was verified. Put the actual test results in an Appendix
-if they are repetitive but relevant. Detailed test data
-may be omitted from the report if not relevant,
-however an accurate summary of tests should be
-included in the Report itself. Sometimes non-working
-designs are described in project reports as though
-they work, when in reality they don’t, or only partially
-work. Therefore a precise description of what works
-and how this has been established is important.
-Examiners may try to compile, use, or test
-deliverables themselves (even after your report is
-submitted), and your report should accurately reflect
-the state of the project.
-This section is normally useful for software or
-hardware deliverables and less relevant in analytical
-projects.
-
-%-------------------------------------------------------------------------
+\newpage
 
 \section{Results}
 
@@ -590,68 +648,42 @@ be put in the Appendix, but it is generally
 better to keep these close to the text they
 illustrate, as this is easier for the reader.
 
+\subsection{Baseline}
+
 %-------------------------------------------------------------------------
+\newpage
 
 \section{Evaluation}
-This Chapter (or possibly section of the conclusions) is
-distinct from your results. It must contain your critical
-evaluation of your work as compared to previous
-analysis, algorithms, products, and when related to
-your original objectives. To what extent have your
-original objectives been fulfilled? If they have
-changed, what is your rationale for this? What are the
-advantages, disadvantages of your approach
-compared with related work? How does the scope of
-your work differ from related work? Examiners expect
-your project report to show evidence of your ability to
-think as an engineer, and that includes the ability to
-critically reflect on your own work and evaluate its
-significance.
-Material here will compare project outcomes with
-initial objectives and requirements captured. Usually
-your Interim Report will contain these. Where these
-have changed significantly over the course of the
-project this should be explained and reasons given.
-This section should not require examiners to read
-your Interim Report, and will not reference it. Changes
-between final and initial objectives should be
-explained in a self-contained manner.
-Note that here you will reference and summarise,
-rather than repeat, your description of Requirements
-Capture earlier in the Final Report.
+This Chapter (or possibly section of the conclusions) is distinct from your results
+
+critical evaluation of your work as compared to previous analysis, algorithms, products, and when related to your original objectives.
+To what extent have your original objectives been fulfilled? 
+
+If they have changed, what is your rationale for this? What are the advantages, disadvantages of your approach compared with related work? 
+
+How does the scope of your work differ from related work? Examiners expect your project report to show evidence of your ability to think as an engineer, and that includes the ability to critically reflect on your own work and evaluate its significance. 
+
+Material here will compare project outcomes with initial objectives and requirements captured. Usually your Interim Report will contain these. Where these have changed significantly over the course of the project this should be explained and reasons given. 
+
+This section should not require examiners to read your Interim Report, and will not reference it. Changes between final and initial objectives should be explained in a self-contained manner. Note that here you will reference and summarise, rather than repeat, your description of Requirements Capture earlier in the Final Report.
 
 %-------------------------------------------------------------------------
+\newpage
 
-\section{Conclusions and Further Work}
+\section{Conclusions}
 
-How successful have you been? What have you achieved? How could the work be taken further given more time (perhaps by another student next year)? It is important here to identify positively what is
-worthwhile in your work. At the same time, honesty,
-and a clear description of the limits of your work, is
-equally important. It is often most appropriate to
-describe work you did not have time to complete as
-further work.
-Your readers will not be clear where, in your long
-report, are your most significant achievements. In the
-conclusions you must summarise this, referring as
-necessary to other sections for more detail.
-What design choices did you have along the
-way, and why did you make the choices you
-made?
-What was the most difficult and/or clever part
-of the project?
-Why was it difficult?
-How did you overcome the difficulties?
+
+How successful have you been? What have you achieved? How could the work be taken further given more time. It is important here to identify positively what is worthwhile in your work. At the same time, honesty, and a clear description of the limits of your work, is equally important. It is often most appropriate to describe work you did not have time to complete as further work.
+Your readers will not be clear where, in your long report, are your most significant achievements. In the conclusions you must summarise this, referring as necessary to other sections for more detail.
+What design choices did you have along the way, and why did you make the choices you made?
+What was the most difficult and/or clever part of the project?
+Why was it difficult? How did you overcome the difficulties?
 Did you discover or invent anything novel?
 What did you learn?
-Note that “difficult” does not necessarily mean the
-thing that took you the longest amount of time. Note
-also that the conclusions must concisely summarise
-this material, and refer to other sections for the
-details.
+Note that “difficult” does not necessarily mean the thing that took you the longest amount of time. Note also that the conclusions must concisely summarise this material, and refer to other sections for the details.
 
-%-------------------------------------------------------------------------
-\fi
-%-------------------------------------------------------------------------
+\subsection{Future Work} 
+
 \newpage
 
 \section{Bibliography}
@@ -659,43 +691,22 @@ details.
 {
 \small
 \bibliographystyle{ieee}
-\bibliography{thw116_interimbib}
+\bibliography{thw116bib}
 }
 
-%-------------------------------------------------------------------------
-\iffalse
-%-------------------------------------------------------------------------
-\section{Appendix}
-Please use appendices as necessary for material that
-is tangentially relevant, or necessary to preserve
-project value, but that you do not expect Examiners to
-read. Note that software projects with significant code
-should normally provide electronic versions of the
-code on USB stick, CDROM, or cloud repository. In
-that case the Appendix should state where the code
-may be found.
+\newpage
 
-Related material possibly but not directly
-relevant to the project work. E.g. manuals of
-test equipment used. (There is no
-requirement to include such, but in some
-cases, where they have some tangential
-relevance, it might be appropriate).
+\section{Appendix}
+Please use appendices as necessary for material that is tangentially relevant, or necessary to preserve project value, but that you do not expect Examiners to read.
+
+Related material possibly but not directly relevant to the project work. E.g. manuals of test equipment used. (There is no requirement to include such, but in some cases, where they have some tangential relevance, it might be appropriate).
 
 \subsection{Source Code}
+TC: The Appendix should normally include, or refer to, all the technical details needed for another user to continue code development.
 Github repository
-
- The Appendix should normally
-include, or refer to, all the technical details needed
-for another user to continue code development.
 
 \subsection{Test data}
+TC: The report itself will contain concise summaries of the test data in a human readable form.
 Github repository
 
-The report itself will contain
-concise summaries of the test data in a
-human readable form.
-%-------------------------------------------------------------------------
-\fi
-%-------------------------------------------------------------------------
 \end{document}

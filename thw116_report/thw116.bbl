@@ -64,6 +64,17 @@ K.~jae Kim.
   machines}.
 \newblock Neurocomputing, 2003.
 
+\bibitem{Janocha}
+K.~Janocha and W.~M. Czarnecki.
+\newblock {\em On Loss Functions for Deep Neural Networks in Classification}.
+\newblock arXiv, 2017.
+
+\bibitem{Makridakis}
+S.~Makridakis, E.~Spiliotis, and V.~Assimakopoulos.
+\newblock {\em The M4 Competition: Results, findings, conclusion and way
+  forward}.
+\newblock International Journal of Forecasting, 2018.
+
 \bibitem{Merz}
 T.~Merz and P.~Janus.
 \newblock {\em Low-Volatility Investing: Empirical evidence of the defensive
