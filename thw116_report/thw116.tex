@@ -123,7 +123,7 @@ Cloud services will be used for the computational power and elements of data sto
 
 \subsection{Report Structure} \label{Report Structure}
 
-This report begins with a background outline to provide more colour into the problem by highlighting historical approaches. It will then establish a benchmark evaluation metric for the problem to objectively measure performances. This will be followed by a detailed discussion of the design processes of our approaches. Afterwards, the challenges of the actual implementation of the various models will be discussed, with comments about how their designs were modified from the initial specification to build the final solution. Finally, we will test and analyse the systems against our self-developed metrics, noting down all the key discoveries and findings learned throughout the project before concluding the direction in which the project could be further developed in the future. 
+This report begins with a background outline to provide more colour into the problem by highlighting alternate approaches to investing and uses of the LSTM RNN. It will then establish the software deliverables and requirements expected from this project. This will then be followed by a detailed description of the iterative design processes used to construct models for the problem, with comments about how they were modified from the initial specification to build the final solution. Afterwards, the implementation and testing methodology for the software will be explained, with highlights of any interesting challenges. Then, the system be benchmarked against the self-developed metrics before a final section of evaluation and reflection of the key discoveries and findings learned throughout the project and the direction in which the project could be further developed in the future. 
 
 \newpage
 
@@ -154,7 +154,7 @@ LSTM networks are derived from RNN models, which were first introduced into lite
 
 \begin{figure}[!hbt!]
 \centering
-\includegraphics[width=17.5cm]{mlp_rnn_comparison.png}
+\includegraphics[width=14.5cm]{mlp_rnn_comparison.png}
 \caption{A classical MLP (LHS) simply generates an output with respect to its input whereas in the RNN (RHS), the output is governed by the input and previous input.}
 \end{figure}
 
@@ -166,8 +166,10 @@ The use cases of RNNs have since expanded to multiple, practical domains that he
 \caption{Numerous varying topologies for specific sequential data tasks.}
 \end{figure}
 
+\subsubsection{The Exploding and Vanishing Gradient Problem in RNNs}
+
 An issue with RNNs stem from the inherent property of operating with a sequential nature. The time difference between multiple cell often causes issues during backpropogation involving repeated multiplication of the gradient signal. This means that if the partial derivatives of the error gradient are either too large or small, they can explode or vanish respectively during the procedure. Exploding gradients cause the learning to diverge whereas vanishing ones can cause the learning rate to become very slow and eventually stop, as it tends to 0.
- 
+\vskip -1cm
 \begin{proof}\renewcommand{\qedsymbol}{}
 Let $x, y, h,  \theta, f $ be the input, output, hidden state, weights and basis function respectively: (Bengio et al.)
 	\begin{align*}
@@ -185,6 +187,13 @@ Let $x, y, h,  \theta, f $ be the input, output, hidden state, weights and basis
 \vskip -0.5cm
 This implies that if $\gamma_{\theta}\gamma_{f} > 1$ or very small, the gradient will explode or vanish given a large $t-k$. LSTMs were first introduced by Hockreiter et al.\cite{Hockreiter} in 1997 and were effective at correcting the vanishing gradient problem. LSTMs use gating, also known as component-wise multiplication, which allows for more control over the gradient flow and thus enables better preservation of long term dependencies. Three gates exist in the LSTM cell forget, input and update, which are mathematically defined as following: 
 
+\begin{figure}[!hbt!]
+\centering
+\includegraphics[width=4cm]{lstm_unit.png}
+\caption{Breakdown of a LSTM cell depicting the input, forget and update gates.}
+\end{figure}
+
+\vskip -0.5cm
 \begin{gather*}
  	\text{Forget gate}: f_{t} =  \sigma(W_{f}(h_{t-1},x_{t}) + b_{f}) \\
 	\text{Input gate}: i_{t} =  \sigma(W_{i}(h_{t-1},x_{t}) + b_{i}) \\
@@ -196,19 +205,19 @@ This implies that if $\gamma_{\theta}\gamma_{f} > 1$ or very small, the gradient
 	y_{t} = u_{t} \times tanh(C_{t})
 \end{gather*}
 
-\begin{figure}[!hbt!]
-\centering
-\includegraphics[width=4.5cm]{lstm_unit.png}
-\caption{Breakdown of a LSTM cell depicting the input, forget and update gates.}
-\end{figure}
-
 \subsubsection{Loss Functions} \label{loss functions}
 
 The loss function is important in the feedback mechanism of general neural networks and vary given the task at hand. They typically fall into two categories depending on the problem itself: classification and regression. These domains treat discrete and continuous value labelling problems. 
 
 For regression problems, two of the most common loss functions used are mean squared error (MSE) and mean absolute error (MAE). Mathematically, there are defined as following: $MSE = \frac{1}{N}\sum_{i = 1}^{N}(x_{i}-y_{i})^2$, $MAE = \frac{1}{N}\sum_{i = 1}^{N}|x_{i}-y_{i}|$. The difference in the behaviour of the loss functions can be observed with large errors, with MSE putting much more emphasis on learning and correcting from those data points. Interestingly, Janocha et al.\cite{Janocha} suggested that these loss functions also perform surprisingly well in deep net classification objectives as a means of providing a probabilistic interpretation in terms of expected misclassification.
 
-A popular example of a classification problem is the a binary classifier. These take input data and assign one of two possible output values. An example would be the binary cross-entropy loss function, expressed as $\frac{1}{N}\sum_{i = 1}^{N}log(p(y_{i}))-(1-y_{i})(log(p(1-y_{i})))$ where $y_{i}$ is the target label. 
+A popular example of a classification problem is the a binary classifier. These take input data and assign one of two possible output values. An example would be the binary cross-entropy loss function, expressed as $\frac{1}{N}\sum_{i = 1}^{N}log(p(y_{i}))-(1-y_{i})(log(p(1-y_{i})))$ where $y_{i}$ is the target label and $p(y_{i})$ is the probability of a correct prediction. This error function is then derived from the probability of a correct result, with it being an exponentially larger loss for a weaker predictor.  
+
+\begin{figure}[!hbt!]
+\centering
+\includegraphics[width=4.5cm]{binary_log_loss.png}
+\caption{Graph showing the loss given the probability of a correct prediction}
+\end{figure}
 
 \subsubsection{Cross Validation} \label{cross validation}
 
@@ -249,18 +258,9 @@ An exciting application of LSTM networks can be found in one of Google Deepmind'
 \caption{LHS: Single digits generated from the MNIST database, with the right-most column depicting original images from the database. RHS: DRAW's attempts at generating double digit values.}
 \end{figure}
 
-Groundbreaking work can often be produced and found in competitions. The primarily example for time-series datasets was the M4 competition held in June by Makridakis of the University of Nicosia. This was the forth competition of a series which focussed on forecasting for 100,000 time-series datasets, spanning different time intervals and domains. A key objective of the task was to evaluate the performance of machine learning models compared to other statistical methodologies. Makridakis et al.\cite{Makridakis} published their findings after the competition. Below are a few of their major findings in the report:
-
-\begin{itemize}
-	\item Combination of methods performed well in the M4 competition - 12 of the 17 most accurate methods were combinations of mostly statistical approaches.
-	\item The best performing approach utilised both statistical and ML features. This method produced the most accurate forecasts as well as the most precise Prediction Intervals and was submitted by Smyl, Data Scientist at Uber Technologies. According to competition error metric, Symmetric Mean Absolute Percent Error (sMAPE), it was close to 10\% more accurate than the Combination benchmark of the Competition. It is noted that in the M3 Competition (Makridakis \& Hibon, 2000) the best method was 4\% more accurate than the same benchmark.
-	\item The second most accurate method was a combination of seven statistical methods and one ML one submitted jointly by Spain’s University of A Coruña and Australia’s Monash University.
-	\item The six pure ML methods submitted performed poorly, none of them being more accurate than the benchmark.
-\end{itemize}
-
-
-
 \subsection{Review of Machine Learning Research in Investing}  \label{ML_research}
+
+\subsubsection{Overview}
 
 Machine learning research in finance applications often span two domains; applied research in financial firms often has a more pragmatic approach and a more theoretical approach is usually observed in academic institutions. Man Group, a quantitative investment management firm, have been conducting research\cite{Man_Group} within the machine learning domain for decades but have only in the past five years begun actively applying models in a live environment. This is because there have only been enough developments recently in infrastructural support to help scale these models onto a production level. They separate their approaches into two major categories:
 \begin{itemize}
@@ -274,10 +274,15 @@ The model used in the project falls under the deep learning categorisation and i
 	\item Encoding Additional Information: Adding human derived formulas such as $\frac{sales}{assets}$ can be seen as generating human bias or assisting the model with classification depending on perspective. 
 	\item Cross Validation (Section \ref{cross validation}): A problem with time series structures is the autocorrelation of data points. This means that typically cross validation methods such as leave-one-out introduce issues by missing information in the series and leaking information from the future. 
 \end{itemize}
+
+\subsubsection{Initial Usage}
+
 One of the earliest published papers\cite{Ahmadi} regarding the subject matter was written by Ahmadi in 1990. It was primarily focused on sourcing an alternate approach to generating a more comprehensive system to analyse factors in the APT model. This was done as following: Given a $N\times T$ matrix, $r_{N,T}$ is defined as the return of asset $N$ at time period $T$. For this matrix, there is a smaller one of $K\times T$, where $f_{K,T}$ represents the $K$th factor score for time period $T$. Thus, the return of a given asset is: 
 $R_{N} = E_{N} + b_{N,1}F_{1} ... + b_{N,K}F_{K} + e_{N}$ where $E_{N}$ is the expected return, $e_{N}$ is a random zero mean error term and  $b_{N,K}$ are the estimated coefficients for each factor. Using the coefficient estimates, it is possible to employ another variable, $\lambda$, to determine whether it is statistically significant and thus whether the factor is significant. This is done with the following equation: $E_{N} = \lambda_{0} + b_{N,1}\lambda_{1} ... + b_{N,K}\lambda_{K}$.
 
 The problem Ahmadi wanted to resolve was the heavy dependency on the sample that factor analysis relied on. There was a significant chance that, given 42 groups of 30 stocks each, different significant factors would be discovered in each group. He therefore employed a neural network so that, rather than optimising and identifying the statistically significance in each feature individually, the patterns stem from analysing the whole vector space. Ahmadi provides some details about the network, highlighting that the inputs used were the unemployment and inflation rates, rate of returns of assets, rate of change in the stock market and the change in gross national product (GNP). He also specifies that the inputs were normalised, two hidden layers offered the best optimal performance and the learning plateaued after 5000 iterations. 
+
+\subsubsection{Formalisation of Experimentation}
 
 As machine learning research became more formalised, the structure of experimentation was more defined. Kim published a paper\cite{Kim} in 2003, focused on understanding how support vector machines (SVMs) fared at predicting the Korea Composite Stock Price Index (KOSPI). Performance, $P$, was measured using the following equation: 
 
@@ -303,8 +308,10 @@ He tested the structure with both the polynomial and Gaussian radial basis funct
 \includegraphics[width=14.5cm]{Kim_results.png}
 \caption{Kim's results of SVM compared to BP and CBR.}
 \end{figure}
+
+\subsubsection{Methodologies} \label{Alberg}
  
-An interesting alternative approach\cite{Alberg} is demonstrated by Alberg et al. who tackles the problem from a different perspective and adapts the classical problem from predicting prices to predicting how the fundamentals of a company will change. These predictions could then be used in turn to indirectly predict the price at that future time point. Alberg then backtested this idea, accessing existing fundamentals data as the 'future predicted fundamental', equating its price and evaluating the performance of the model. The paper goes into great depth about the set up of the experiment. A key area of interest is the methodology used to establish the binary output classifier: 
+An interesting alternative approach\cite{Alberg} is demonstrated by Alberg et al. who tackle the problem from a different perspective and adapts the classical problem from predicting prices to predicting how the fundamentals of a company will change. These predictions could then be used in turn to indirectly predict the price at that future time point. Alberg then backtested this idea, accessing existing fundamentals data as the 'future predicted fundamental', equating its price and evaluating the performance of the model. The paper goes into great depth about the set up of the experiment. A key area of interest is the methodology used to establish the binary output classifier: 
 
 \[f(x)= 
 \begin{cases}
@@ -322,6 +329,40 @@ An interesting alternative approach\cite{Alberg} is demonstrated by Alberg et al
 Rather than predicting the prices directly, which could rely on a multitude of factors outside just fundamental data, the model is structured so that it is interested in learning about what makes a company outperform the median return. A weakness of this classifier is that, in economic downturns, the median return could still be negative and so the model is not learning what fundamentally drives 'good' returns in an absolute sense. It also does not predict the degree to which the chosen stocks will outperform. However, this is in interesting structure for this project given the relative nature of the evaluation metric selected as mentioned in section \ref{benchmark}.
 
 Additionally, normalisation of the inputs is carried out with two methods. The first involves ranking the performance of stocks against a certain ratio, such as $\frac{Book Value}{Market Capitalisation}$. The percentiles of their rankings are then inputted alongside the raw scores in order to produce a more comparable set of features between various stocks. The second involves transforming all data points into a specified domain for ease-of-use to the learning algorithm whilst maintaining the same relative fundamental values between companies. Alberg achieves this by dividing the input feature by the L2 norm of all the features ($x_{i} \rightarrow \frac{x_{i}}{||x||}$). This is in contrast with two of the more popular methods of normalisation: z-score ($x_{i} \rightarrow \frac{x_{i}-\mu_{x}}{\sigma_{x}}$) where $\mu$ and $\sigma$ are the mean and standard deviation and min-max scaling ($x_{i} \rightarrow \frac{x_{i}-x_{min}}{x_{max}-x_{i}})$.
+
+\subsubsection{Related Works}
+
+Groundbreaking work can often be produced and found in competitions. The primarily example for time-series datasets was the M4 competition held in June by Makridakis of the University of Nicosia. This was the forth competition of a series which focussed on forecasting for 100,000 time-series datasets, spanning different time intervals and domains. Although not directly related to investing, there are various similarities and use of applications. A key objective of the task was to evaluate the performance of machine learning models compared to other statistical methodologies. Makridakis et al.\cite{Makridakis} published their findings after the competition. Below are a few of their major findings in the report:
+
+\begin{itemize}
+	\item Combination of methods performed well in the M4 competition - 12 of the 17 most accurate methods were combinations of mostly statistical approaches.
+	\item The best performing approach utilised both statistical and ML features. This method produced the most accurate forecasts as well as the most precise Prediction Intervals and was submitted by Smyl, Data Scientist at Uber Technologies. According to competition error metric, Symmetric Mean Absolute Percent Error (sMAPE), it was close to 10\% more accurate than the Combination benchmark of the Competition. It is noted that in the M3 Competition (Makridakis \& Hibon, 2000) the best method was 4\% more accurate than the same benchmark.
+	\item The second most accurate method was a combination of seven statistical methods and one ML one submitted jointly by Spain’s University of A Coruña and Australia’s Monash University.
+	\item The six pure ML methods submitted performed poorly, none of them being more accurate than the benchmark.
+\end{itemize}
+
+Smyl et al. published an overview of their methodology online\cite{Smyl}. In it, he highlights the use of using both neural networks and triple exponential smoothing as part of the forecasting algorithm. This was introduced into literature by Winters\cite{Winters} in 1960 and involves a weighted moving average, trend and seasonal component. Mathematically, they are described as following: 
+\vskip -0.5cm
+\begin{gather*}
+ 	\text{Level}: l_{t} = a(x_{t}-s_{t-L}+(1-a)(l_{t-1}+b_{t-1}) \\
+	\text{Trend}: b_{t} =  \beta(l_{t}-l_{t-1})+(1-\beta)b_{t-1} \\
+	\text{Seasonal}: s_{t} =  \gamma(x_{t}-l_{t})+(1-\gamma)s_{t-L} \\
+	\text{Forecast}: x_{t+m} =  l_{t} + mb_{t} + s_{t-L+1+(m-1)modL} \\
+	\text{where $a$, $\beta$ and $\gamma$ are selected coefficients and $L$ is the seasonal length.}
+\end{gather*}
+Level offers a smoothed version of $x$, Trend observes the local linear trend and seasonality the cyclical general nature of the data. The components can be both additive where $b = x_{t}-x_{t-1}$ or multiplicative where $b = \frac{x_{t}}{x_{t-1}}$ but multiplicative predictors are seen to be more stable in practice. Smyl used a multiplicative seasonality coefficient. This approach works well independently, but there is no need to assume that the trend component should be linear. Additionally, since each trend is fitted to a respective series, there is no opportunity for cross-series learning. Multiple steps ahead, nonlinear forecasting can be achieved via a neural networks trained on all series. 
+
+The general architecture that Smyl relied on was the dilated RNN, first introduced by Chang et al. in 2017. This model helps efficiently resolve issues in multi scale problems without increasing the dimensionality of the network significantly. Multi scale problems require a balance between evaluating the relationship between neighbouring cells whilst also integrating a general, globalised learning context. This is resolved in the model by structuring the cells so that they have dilated skip connections as shown in figure \ref{chang_architecture}. 
+
+
+\begin{figure}[!hbt!]
+\centering
+\includegraphics[width=14.5cm]{smyl_architecture.png}
+\caption{LHS: Different architectures that Smyl used with respect to time horizon of data. RHS: General structure of 3 layered dilated RNN.}
+\label{chang_architecture}
+\end{figure}
+
+\subsubsection{Summary}
 
 Finally, in 2019, a summary of the literature\cite{Henrique} that had been written about financial prediction applications using machine learning was produced by Henrique et al. They constructed a table comprehensively detailing the various attributes and methods used in the papers they reviewed. This provides a very general overview into how the academic field is generally designing experiments for this problem domain.
 
@@ -352,6 +393,8 @@ The key objective for the project is to deliver a tool that will assist in answe
 \newpage
 
 \section{Design and Analysis}
+
+\iffalse 
 Give a good high-level overview of your design.
 
 Final design may be different from that originally envisaged. Write about interesting differences, and why the changes were made. Discoveries during the project may have changed the direction of work, or invalidated prior work, in which case you get credit for the design process, if it is principled, as well as the end product.
@@ -364,10 +407,11 @@ The Examiners are just as interested in the engineering process you went through
 
 Report identifies when design choices have to be made, what were the possibilities, and why you made the particular choices and
 decisions that you did. They are looking for principled rational arguments and for critical assessment. Engineering involves trade-offs and the reasons for a design decision may be various, and may in some cases be out of your control. Explicit understanding of this, and the ability to communicate it, is important.
+\fi
 
 \subsection{Overview}
 
-Figure \ref{pipeline_design} depicts the intended diagrammatic pipeline of the tool that was developed. 
+Figure \ref{pipeline_design} depicts the intended diagrammatic pipeline of the tool that was developed. Each of the blocks consists of various functions combined to achieve the intended result. A behavioural driven development (BDD) philosophy was used to develop these subsystems, meaning that functions were implemented based on what was needed and so there was no detailed initial plan of the functions. The following subsections highlight each of the individual blocks. Program flow diagrams can be found in section \ref{implementation}.
 
 \begin{figure}[!hbt!]
 \centering
@@ -376,11 +420,16 @@ Figure \ref{pipeline_design} depicts the intended diagrammatic pipeline of the t
 \label{pipeline_design}
 \end{figure}
 
-\subsection{Data Preprocessing}
+\begin{figure}[!hbt!]
+\centering
+\includegraphics[width=14.5cm]{process_overview.png}
+\caption{Overview of the processes involved in iterative designing and testing of models for the problem}
+\label{pipeline_design}
+\end{figure}
 
-\subsubsection{Overview}
+\subsection{Data Structuring}
 
-Initially, sample formats were distributed in csv formats. However, when the entire dataset was actually provided, the file was stored in a .rds file because the firm mainly operated in R. It was then necessary to study the data storage structure in order to extract the relevant information that could be used for the project. 
+\subsubsection{Data Description} \label{data_description}
 
 The data is structured in lists of features. These are separated into 5 categories, two of which will be useful to this project. These will be \textit{Fundamentals} and \textit{Prices}. \textit{Fundamentals} is data about the company itself, such as book value or sales whereas \textit{Prices} is data regarding how the behavioural characteristics of the stock itself trades on the exchange. Each company is labelled with their unique ticker. Example: CNHI:IM which is the CNH Industrial NV. 
 
@@ -396,11 +445,55 @@ The other 3 categories are \textit{Mapping}, \textit{Signals} and \textit{Indice
 \caption{Diagram overview of the database hierarchy.}
 \end{figure}
 
-\subsubsection{Handling Sparsity} \label{data_analysis}
+\subsubsection{Data Formatting}
 
-\subsubsection{Data Transformation}
+Initially, sample formats were distributed in csv formats. However, when the entire dataset was actually provided, the file was stored in a .rds file because the firm mainly operated in R. By studying the data storage structure as described in section \ref{data_description}, it was possible to extract the relevant information into individual csv files. These were then read into dataframes in the Jupyter notebook where the pipeline was built. 
 
-In order to have some directional predictive power, the delta of the attributes will be measured over rather than the absolute values i.e. $\frac{x_{t}}{x_{t+1}}$. This means that the underlying assumption is that the price of stock changes given changes in the \textit{Fundamentals} and \textit{Price} features. Unfortunately, given the sporadic nature of fundamental data reporting, which is often quarterly or longer, technical data is required to supplement the model. All missing data or deltas which are 0 will be masked and thus not affect the model. 
+A few issues arose due to a the deprecated state of various aspects of the initial dataset. It was found that some datasets had not been filtered down to the 203 companies that formed part of the Industrial Goods and Services sector but still contained 1184 companies that formed the entire STOXX Europe 600 Index. Additionally, some attributes did not have a date key. It was therefore necessary to standardise all of the feature datasets with the same date index and companies. The company tickers were then anonymised simply for ease of use in terms of readability and iterating through tickers. 
+
+\subsection{Data Preprocessing}
+
+\subsubsection{Data Transformation} \label{data transformation}
+
+A number of techniques were employed to manipulate the data into a suitable state for the machine learning algorithm. These were different for input and output variables. A min-max scaler, as previously defined in section \ref{Alberg}, was used in order to sort each input feature into a suitable range between 0 and 1. The choice was mainly based on speed of implementation, with it already built into the \textit{scikit-learn} library. Concerns were raised about whether a min-max scaler was appropriate for each of the attributes but it was decided that evaluation of the performance consequence of the scaler would be evaluated after a functional learning algorithm was implemented. 
+
+The output was first changed from the raw \textit{price\_close} nature to \textit{returns}, which essentially looked at the multiplicative differences between a time interval and the previous time interval: ($\frac{x_{t}}{x_{t-1}}$). The outputs were then binarised, with +1 equating to a positive return and 0 indicating equal or negative returns. Although this was known to be a weak learner, the literature review suggested it was better to use this than focus on a regressive problem which may not produce any useful results. If more time was available, there was the suggestion that other binary learners could also be used, such as +1 equating to returns higher than the median across the companies and 0 being lower or equal to. 
+
+There was then a choice of selecting the time step. Although daily change was perceived to be highly susceptible to noise, the justification for its use came from the fact that it was deemed unviable to sacrifice a large proportion of the dataset. For example, assuming a complete time series, weekly intervals would reduce the number of datapoints from 6313 to approximately 1260. It was decided that, given enough time, a dilated RNN may be implemented to evaluate whether generalisation and noise reduction could be improved. 
+
+The use of time step multiplicative difference in the output raised questions about whether this would also be useful in the input variables, since most problems analysing a derivative evaluate the change in y given the change in x. Section \ref{data_analysis} answers why this was not used. Additionally, the absolute values of a company's fundamental values have been used to predict the future stock price.
+
+\subsubsection{Sparsity} \label{data_analysis}
+
+The major concern within the project stemmed from the quality and completeness of the dataset. Initially, the features and outputs were evaluated to see whether how much of the dataset was complete. Figure \ref{input_counts} shows that \textit{Fundamentals} data alone was relatively poor and so it was decided to supplement the model with \textit{Technical} inputs as well to improve performance. 
+
+\begin{figure}[!hbt!]
+\centering
+\includegraphics[width=\columnwidth]{input_counts.png}
+\caption{Box plot indicating the approximate average underlying count numbers for each type of input. Green triangles indicate the mean counts.}
+\label{input_counts}
+\end{figure}
+
+\begin{figure}[!hbt!]
+\centering
+\includegraphics[width=\columnwidth]{output_counts.png}
+\caption{LHS: Individual ticker breakdown of datapoint counts. RHS: Boxplot of returns output count.}
+\end{figure}
+
+As mentioned in section \ref{data transformation}, one idea revolved around the concept that in order to have some directional predictive power, the delta of the attributes will be measured over rather than the absolute values i.e. $\frac{x_{t}}{x_{t+1}}$. This means that the underlying assumption is that the price of stock changes given changes in the \textit{Fundamentals} and \textit{Price} features. Analysis was done on evaluating whether this was a viable transformation. It was discovered that because fundamental data is often quarterly reported, deltas that were not either NaN or 0 were very few in sample size and so the idea was abandoned. 
+
+\begin{figure}[!hbt!]
+\centering
+\includegraphics[width=\columnwidth]{input_delta_counts.png}
+\caption{Box plot indicating the approximate average underlying delta counts for each type of input. Green triangles indicate the mean counts. As seen, LTM is particularly lower than the others.}
+\label{input_delta_counts}
+\end{figure}
+
+Multiple solutions were considered in resolving how to handle missing values. These fell into three main categories: deletion, masking and generating values. As experienced with the initial architecture, deletion results in a non standardised sequential input which causes very poor performance by the LSTM as the dataset loses its Markovian property. In order to decide whether a masking or prediction approach should be used, the amount of data was also considered. Given the short duration of the project and limited resources, a huge number of input points was time consuming to train. Therefore, some further analysis of the data was carried out.  
+
+
+
+
 
 
 \subsection{Architectural Design} 
@@ -409,17 +502,51 @@ In order to have some directional predictive power, the delta of the attributes 
 
 The design of the architecture was implemented in an iterative process, starting initially with the most basic baseline design consisting of one hidden layer. The idea was to evaluate the results of the designs and then modify or redesign them to improve the performance and accuracy. In order to identify the sets of models that could be used, the initial process involved identifying the inputs, outputs and target function that were suitable for the fundamental problem.
 
-\subsubsection{Inputs}
+\subsubsection{Inputs and Outputs}
 
-The inputs for the model were initially intended be all of the usable features in the \textit{Fundamentals} category. This totalled approximately $15+16=32$. However, a section of the NTM category was labelled as original (e.g. EpsOriginal and Eps) and this was decided to be too raw a format for usage. It would also have caused duplications in the input vector, unintentionally giving some attributes double the weighting. At least one of the Price category attributes will be missing as it is the variable that needs to be predicted - namely the closing price.   
+Not all the features of the dataset were appropriate for the task and so some were discarded. Of the original 61 features, 21 were selected. There were several reasons for discarding some attributes: for example, a section of the NTM category was labelled as original (e.g. EpsOriginal and Eps) and this was decided to be too raw a format for usage. It would also have caused duplications in the input vector, unintentionally giving some attributes double the weighting. Additionally, for the same reason, a choice was made regarding using Earnings before Interest and Tax (EBIT) or Earnings before Interest, Tax, Depreciation and Amortisation (EBITDA). In industrial sectors, companies are often much more capital intensive and so the former is often employed since depreciation and amortisation unintentionally captures a portion of past capital expenditures.
 
-Although the project was initially intended to be based solely on analysing fundamental data, the lack of data reported as depicted in section \ref{data_analysis} resulted in concerns relating to the feasibility of learning in such a small dataset. This lack of data was attributed to the fact that values may not have been measured or recorded as much historically (1990s) and also that values are often only reported on a quarterly basis, resulting in only 4 data points each year compared to the 252 data points of the price. 
+Below is a list of descriptions for the 20 input attributes. These form a vector that is passed into the model: 
 
-\subsubsection{Output}
+\begin{itemize}
+	\item LTMs and NTMs: 
+	\begin{itemize}
+		\item Book Value: A company's net value as calculated by its total tangible assets on the balance sheet.  
+		\item Dividends: A distribution of part of the company's earnings to its shareholders.
+		\item EBIT: This is evaluated by looking at the revenue of a company and subtracting the cost of goods sold and operating expenses. 
+		\item Earnings per Share: This ratio assesses how profitable a company is by calculating the net income minus dividends over the outstanding number of shares.  
+		\item Free Cash Flow: The amount of cash a company generates after accounting for capital expenditures. 
+		\item Relative Price to Book Ratio: The ratio of market price per share over the book value per share relative to other companies within the same sector. 
+		\item Sales: The total sum of prices paid by customers for products. 
+		
+	\end{itemize}
+	\item Prices
+	\begin{itemize}
+		\item Enterprise Value: Equivalent to the sum of the market capitalisation and total debt minus cash equivalents available to the company.
+		\item Market Capitalisation: The stock price multiplied by the number of outstanding shares. 
+		\item Price High: The highest price a company's stock reaches within the trading day. 
+		\item Price Low: The lowest price a company's stock reaches within the trading day. 
+		\item Price Open: The initial price of a company's stock when the trading day begins. 
+		\item Volume: The amount of company stock traded within the trading day.
+	\end{itemize}
+\end{itemize}
+
+Although multiple designs for outputs were iterated through, the most focused on is highlighted below. Our model focused on predicting both a target output label and the next input vector : $x_{t} \rightarrow y_{t}, x_{t} \rightarrow x_{t+1}$. The target output label was defined as following:
+
+\begin{itemize}
+		\item Price Close: The end price of a company's stock at the finish of the trading day. 
+\end{itemize}
+
 
 \subsubsection{Loss Function}
 
-\subsubsection{Design Interations}
+Although the idea of designing a specific loss function for the problem was considered, there were concerns that it may cause more issues. Therefore, it was decided to first attempt the model with a standard binary cross entropy loss function as described in section \ref{loss functions}.
+
+\subsubsection{Design Iterations}
+
+\subsection{Training and Testing} 
+
+\subsection{Hyperparameter Optimisation} 
 
 \subsection{Benchmark Design} \label{benchmark}.
 
@@ -433,16 +560,13 @@ In order to evaluate this, the output values will be ordered and a theoretical p
 	\item Portfolio Turnover: This measures how often the stocks within the portfolio have to be bought and sold to rebalance and maintain the model's strategy. Although it does not theoretically affect the performance, the transaction costs of buying and selling in a real world scenario can significantly affect a portfolio's profitability. Therefore a lower turnover is preferred. It is calculated with the following equation: $turnover = \frac{min(s_{b}, s_{s})}{NAV}$ where $NAV$ is the Net Asset Value and $s_{b}$ and $s_{s}$ are the cost of stocks bought and sold respectively.  
 \end{itemize}
 
-\subsection{Training and Testing} 
-
-\subsection{Hyperparameter Optimisation} 
 
 %-------------------------------------------------------------------------
 \newpage
 
-\section{Implementation}
+\section{Implementation} \label{implementation}
 
-
+\iffalse
 Give code details - descriptions of key parts, annotated to help the reader understand what they are looking at. Good reasons for including code could be to illustrate algorithmic flow, or highlight an interesting optimisation, demonstrate interactions with a data-structure, or give an example of input for a tool that has been designed.
 
 Discuss the most important or interesting aspects, and anything that was surprising or difficult. It probably won't be possible or relevant to discuss everything – state clearly what you leave out.
@@ -454,8 +578,16 @@ For similar reasons, pasting screen-shots is unlikely to be a good use of space,
 When discussing the implementation, it is generally best to focus on the conceptual and logical design, and only then dive into details for interesting parts or to highlight important decisions. Well thought-out figures and diagrams are often much more effective at conveying your design than source code, whether that is a data-structure, a client-server interaction, a design-flow, or a circuit hierarchy. For example, a diagram of a block-diagram of digital circuit can be used to communicate to the reader most of the important high-level  decisions you have made, then VHDL fragments (or another diagram) could be used to focus on specific parts and demonstrate any interesting local details.
 
 Complete listings may be included as appendices of your report but this is not normally appropriate, unless the appendix is documentation, or describes an API. Software may be provided on a CD-ROM given to your supervisor or in a cloud repositories such as Github. No marks are awarded for the mass or page count of a report, and reports which contain 50 pages of printed code are more likely to be seen as showing poor judgement
+\fi
 
-\subsection{Data structuring}
+\subsection{Data Structuring}
+ 
+\begin{figure}[!hbt!]
+\centering
+\includegraphics[width=\columnwidth]{data_structuring.png}
+\caption{Program flow diagram of data structuring processes.}
+\label{data_structuring}
+\end{figure}
  
 Given the large number of csv files, there was a necessity to store the resulting dataframes in a systematic method so that functions that needed to be performed on method could be done so efficiently. This was achieved by dividing the respective csv files first into input and traget variables. Of course, only one file was needed for the target variable, being the close price dataset. 
 
@@ -484,6 +616,8 @@ def time_index_generator(dataframe):
 for i in range(0,len(ltm_inputs)):
   time_index_generator(ltm_inputs[i])
 \end{lstlisting} 
+
+\subsection{Data Preprocessing}
 
 After preprocessing across the dataset, it was necessary to reformat the data into an input form acceptable to the Keras model architecture. For this all of the lists of dataframes had to be iterated through and the appropriate datapoint extracted to create another list that would represent the input vector. 
 
@@ -578,11 +712,14 @@ SVG(model_to_dot(baseline_model, show_shapes=True).create(prog='dot', format='sv
 \newpage
 
 \section{Testing}
+
+\iffalse
 Put the actual test results in an Appendix if they are repetitive but relevant. 
 Detailed test data may be omitted from the report if not relevant, however an accurate summary of tests should be included in the Report itself. 
 Sometimes non-working designs are described in project reports as though they work, when in reality they don’t, or only partially work. Therefore a precise description of what works and how this has been established is important. Examiners may try to compile, use, or test deliverables themselves (even after your report is submitted), and your report should accurately reflect
 the state of the project.
 This section is normally useful for software or hardware deliverables and less relevant in analytical projects.
+\fi
 
 \subsection{Test Plan} 
 
@@ -617,43 +754,40 @@ System testing will involve evaluating the realised performance of the whole sys
 
 \section{Results}
 
-This covers an area different from the 'Testing'
-chapter, and relates to the understanding and analysis
-of the algorithm, program, or hardware behaviour.
-Where the deliverable is a product with easily
-quantified performance then the previous Chapter
-shows how functional correctness is established,
-while this Chapter shows qualitatively or
-quantitatively how well the product works. The list
-below shows typical content, not all of this will be
-applicable to all projects.
-An empirical relationship between
-parameters and results may be investigated,
-typically through the use of appropriate
-graphs.
-Where theory predicts aspects of
-performance the results can be compared
-with expectation and differences noted and (if
+\iffalse
+This covers an area different from the 'Testing' chapter, and relates to the understanding and analysis of the algorithm, program, or hardware behaviour.
+Where the deliverable is a product with easily quantified performance then the previous Chapter shows how functional correctness is established, while this Chapter shows qualitatively or quantitatively how well the product works. The list below shows typical content, not all of this will be applicable to all projects.
+An empirical relationship between parameters and results may be investigated, typically through the use of appropriate graphs.
+Where theory predicts aspects of performance the results can be compared with expectation and differences noted and (if
 possible) explained.
-Semi-empirical models of behaviour may be
-developed, justified, and tested.
-The types of experiments/simulations that
-were carried out should be described. Why
-were certain experiments carried out but not
-others? What were the important parameters
-in the simulation and how did they affect the
-results? If there are very many graphs and
-tables associated with this chapter they may
-be put in the Appendix, but it is generally
-better to keep these close to the text they
-illustrate, as this is easier for the reader.
+Semi-empirical models of behaviour may be developed, justified, and tested. The types of experiments/simulations that were carried out should be described. Why were certain experiments carried out but not others? What were the important parameters in the simulation and how did they affect the results? If there are very many graphs and tables associated with this chapter they may be put in the Appendix, but it is generally better to keep these close to the text they illustrate, as this is easier for the reader.
+\fi
 
 \subsection{Baseline}
 
 %-------------------------------------------------------------------------
 \newpage
 
-\section{Evaluation}
+
+%-------------------------------------------------------------------------
+\newpage
+
+\section{Conclusions}
+
+\iffalse
+
+How successful have you been? What have you achieved? How could the work be taken further given more time. It is important here to identify positively what is worthwhile in your work. At the same time, honesty, and a clear description of the limits of your work, is equally important. It is often most appropriate to describe work you did not have time to complete as further work.
+Your readers will not be clear where, in your long report, are your most significant achievements. In the conclusions you must summarise this, referring as necessary to other sections for more detail.
+What design choices did you have along the way, and why did you make the choices you made?
+What was the most difficult and/or clever part of the project?
+Why was it difficult? How did you overcome the difficulties?
+Did you discover or invent anything novel?
+What did you learn?
+Note that “difficult” does not necessarily mean the thing that took you the longest amount of time. Note also that the conclusions must concisely summarise this material, and refer to other sections for the details.
+\fi
+
+\subsection{Evaluation}
+\iffalse
 This Chapter (or possibly section of the conclusions) is distinct from your results
 
 critical evaluation of your work as compared to previous analysis, algorithms, products, and when related to your original objectives.
@@ -666,21 +800,8 @@ How does the scope of your work differ from related work? Examiners expect your 
 Material here will compare project outcomes with initial objectives and requirements captured. Usually your Interim Report will contain these. Where these have changed significantly over the course of the project this should be explained and reasons given. 
 
 This section should not require examiners to read your Interim Report, and will not reference it. Changes between final and initial objectives should be explained in a self-contained manner. Note that here you will reference and summarise, rather than repeat, your description of Requirements Capture earlier in the Final Report.
+\fi
 
-%-------------------------------------------------------------------------
-\newpage
-
-\section{Conclusions}
-
-
-How successful have you been? What have you achieved? How could the work be taken further given more time. It is important here to identify positively what is worthwhile in your work. At the same time, honesty, and a clear description of the limits of your work, is equally important. It is often most appropriate to describe work you did not have time to complete as further work.
-Your readers will not be clear where, in your long report, are your most significant achievements. In the conclusions you must summarise this, referring as necessary to other sections for more detail.
-What design choices did you have along the way, and why did you make the choices you made?
-What was the most difficult and/or clever part of the project?
-Why was it difficult? How did you overcome the difficulties?
-Did you discover or invent anything novel?
-What did you learn?
-Note that “difficult” does not necessarily mean the thing that took you the longest amount of time. Note also that the conclusions must concisely summarise this material, and refer to other sections for the details.
 
 \subsection{Future Work} 
 
@@ -702,8 +823,8 @@ Please use appendices as necessary for material that is tangentially relevant, o
 Related material possibly but not directly relevant to the project work. E.g. manuals of test equipment used. (There is no requirement to include such, but in some cases, where they have some tangential relevance, it might be appropriate).
 
 \subsection{Source Code}
-TC: The Appendix should normally include, or refer to, all the technical details needed for another user to continue code development.
-Github repository
+
+The project repository, which contains the codebase can be found on GitHub with the link \href{https://github.com/twutang/SXNP-Factor-Models}{here}. The code can be found in both its original Jupyter Notebook (.ipynb) and python file (.py) formats. It is suggested to use the Google Colaboratory environment, which integrates all of the required libraries. The original file can be found \href{https://colab.research.google.com/drive/1IHPEI-sPNSS0rKdFThywR4LTpeOt0Z_y}{here}. Please see the README file and notebook text cells within the GitHub repository for documentation on the functionality of the codebase. 
 
 \subsection{Test data}
 TC: The report itself will contain concise summaries of the test data in a human readable form.

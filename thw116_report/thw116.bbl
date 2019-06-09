@@ -123,9 +123,19 @@ A.~Shaw.
 \newblock Getting started with testing in python.
 \newblock https://realpython.com/python-testing/.
 
+\bibitem{Smyl}
+S.~Smyl, J.~Ranganathan, and A.~Pasqua.
+\newblock M4 forecasting competition: Introducing a new hybrid es-rnn model.
+\newblock https://eng.uber.com/m4-forecasting-competition/, 2018.
+
 \bibitem{Treynor}
 J.~L. Treynor.
 \newblock {\em Market Value, Time, and Risk}.
 \newblock 1961.
+
+\bibitem{Winters}
+P.~R. Winters.
+\newblock {\em Forecasting Sales by Exponentially Weighted Moving Averages}.
+\newblock Management Science, 1960.
 
 \end{thebibliography}

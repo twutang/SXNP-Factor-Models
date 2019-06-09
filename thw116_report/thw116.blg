@@ -6,45 +6,45 @@ Database file #1: thw116bib.bib
 Warning--to sort, need author, editor, or key in jupyter_notebook
 Warning--empty author and editor in jupyter_notebook
 Warning--empty publisher in Treynor
-You've used 24 entries,
+You've used 26 entries,
             2120 wiz_defined-function locations,
-            629 strings with 6767 characters,
-and the built_in function-call counts, 5956 in all, are:
-= -- 513
-> -- 296
+            640 strings with 7048 characters,
+and the built_in function-call counts, 6446 in all, are:
+= -- 557
+> -- 321
 < -- 0
-+ -- 122
-- -- 94
-* -- 300
-:= -- 1046
-add.period$ -- 71
-call.type$ -- 24
-change.case$ -- 96
++ -- 132
+- -- 102
+* -- 323
+:= -- 1131
+add.period$ -- 77
+call.type$ -- 26
+change.case$ -- 105
 chr.to.int$ -- 0
-cite$ -- 27
-duplicate$ -- 284
-empty$ -- 531
-format.name$ -- 94
-if$ -- 1246
+cite$ -- 29
+duplicate$ -- 303
+empty$ -- 575
+format.name$ -- 102
+if$ -- 1350
 int.to.chr$ -- 0
-int.to.str$ -- 24
-missing$ -- 45
-newline$ -- 122
-num.names$ -- 46
-pop$ -- 216
+int.to.str$ -- 26
+missing$ -- 47
+newline$ -- 132
+num.names$ -- 50
+pop$ -- 234
 preamble$ -- 1
-purify$ -- 95
+purify$ -- 103
 quote$ -- 0
-skip$ -- 152
+skip$ -- 165
 stack$ -- 0
-substring$ -- 124
-swap$ -- 24
+substring$ -- 134
+swap$ -- 26
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 50
+type$ -- 56
 warning$ -- 3
-while$ -- 46
-width$ -- 26
-write$ -- 238
+while$ -- 50
+width$ -- 28
+write$ -- 258
 (There were 3 warnings)
