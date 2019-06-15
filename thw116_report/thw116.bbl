@@ -21,6 +21,14 @@ C.~Bergmeir, R.~J. Hyndman, and B.~Koo.
   Autoregressive Time Series Prediction}.
 \newblock Elsevier, 2017.
 
+\bibitem{brownlee_activation}
+J.~Brownlee.
+\newblock {\em A Gentle Introduction to the Rectified Linear Unit (ReLU) for
+  Deep Learning Neural Networks}.
+\newblock
+  https://machinelearningmastery.com/rectified-linear-activation-function-for-deep-learning-neural-networks/,
+  2019.
+
 \bibitem{DeMiguel}
 V.~DeMiguel, L.~Garlappi, and R.~Uppal.
 \newblock {\em Optimal Versus Naive Diversification: How Inefficient is the 1/N
@@ -37,6 +45,12 @@ E.~F. Fama and K.~R. French.
 \newblock {\em Common risk factors in the returns on stocks and bonds}.
 \newblock Journal of Financial Economics, 1993.
 
+\bibitem{Gal}
+Y.~Gal and Z.~Ghahramani.
+\newblock {\em A Theoretically Grounded Application of Dropout in Recurrent
+  Neural Networks}.
+\newblock arXiv, 2016.
+
 \bibitem{Graham}
 B.~Graham and D.~Dodd.
 \newblock {\em Security Analysis}.
@@ -46,6 +60,11 @@ B.~Graham and D.~Dodd.
 K.~Gregor, I.~Danihelka, A.~Graves, D.~J. Rezende, and D.~Wierstra.
 \newblock {\em DRAW: A Recurrent Neural Network For Image Generation}.
 \newblock arXiv, 2015.
+
+\bibitem{Hagan}
+M.~T. Hagan, H.~B. Demuth, M.~H. Beale, and O.~D. Jesus.
+\newblock {\em Neural Network Design}.
+\newblock Martin Hagan, 2014.
 
 \bibitem{Henrique}
 B.~M. Henrique, V.~A. Sobreiro, and H.~Kimura.
@@ -69,6 +88,11 @@ K.~Janocha and W.~M. Czarnecki.
 \newblock {\em On Loss Functions for Deep Neural Networks in Classification}.
 \newblock arXiv, 2017.
 
+\bibitem{Adam}
+D.~P. Kingma and J.~L. Ba.
+\newblock {\em ADAM: A METHOD FOR STOCHASTIC OPTIMIZATION}.
+\newblock arXiv, 2014.
+
 \bibitem{Makridakis}
 S.~Makridakis, E.~Spiliotis, and V.~Assimakopoulos.
 \newblock {\em The M4 Competition: Results, findings, conclusion and way
@@ -86,11 +110,22 @@ C.~Olah.
 \newblock {\em Understanding LSTM Networks}.
 \newblock colah.github.io., 2015.
 
+\bibitem{Pascanu}
+R.~Pascanu, T.~Mikolov, and Y.~Bengio.
+\newblock {\em On the difficulty of training Recurrent Neural Networks}.
+\newblock arXiv, 2013.
+
 \bibitem{Racine}
 J.~Racine.
 \newblock {\em Consistent cross-validatory model-selection for dependent data:
   hv-block cross-validation}.
 \newblock Journal of Econometrics, 2000.
+
+\bibitem{Reimers}
+N.~Reimers and I.~Gurevych.
+\newblock {\em Optimal Hyperparameters for Deep LSTM-Networks for Sequence
+  Labeling Tasks}.
+\newblock arXiv, 2017.
 
 \bibitem{Man_Group}
 G.~Robertson.
@@ -108,10 +143,21 @@ G.~Rouwenhorst and W.~N. Goetzmann.
   Modern Capital Markets}.
 \newblock Oxford University Press, 2005.
 
+\bibitem{Ruder}
+Ruder.
+\newblock {\em An overview of gradient descent optimization algorithms}.
+\newblock arXiv, 2017.
+
 \bibitem{Rumelhart}
 D.~E. Rumelhart, P.~Smolensky, J.~L. McClelland, and G.~E. Hinton.
 \newblock {\em Schemata and Sequential Thought Processes in PDP Models}.
 \newblock Morgan Kaufmann Publishers, 1986.
+
+\bibitem{Sak}
+H.~Sak, A.~Senior, and F.~Beaufays.
+\newblock {\em Long Short-Term Memory Recurrent Neural Network Architectures
+  for Large Scale Acoustic Modeling}.
+\newblock Interspeech, 2014.
 
 \bibitem{Sharpe}
 W.~F. Sharpe.
@@ -120,12 +166,13 @@ W.~F. Sharpe.
 
 \bibitem{python_testing}
 A.~Shaw.
-\newblock Getting started with testing in python.
+\newblock {\em Getting Started With Testing in Python}.
 \newblock https://realpython.com/python-testing/.
 
 \bibitem{Smyl}
 S.~Smyl, J.~Ranganathan, and A.~Pasqua.
-\newblock M4 forecasting competition: Introducing a new hybrid es-rnn model.
+\newblock {\em M4 Forecasting Competition: Introducing a New Hybrid ES-RNN
+  Model}.
 \newblock https://eng.uber.com/m4-forecasting-competition/, 2018.
 
 \bibitem{Treynor}

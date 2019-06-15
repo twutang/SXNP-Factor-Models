@@ -48,15 +48,17 @@
 \citation{Hockreiter}
 \citation{Olah}
 \citation{Olah}
+\citation{Pascanu}
 \@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Breakdown of a LSTM cell depicting the input, forget and update gates.}}{8}{figure.3}}
+\citation{Reimers}
 \citation{Janocha}
 \citation{Bergmeir}
-\citation{Racine}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {2.2.3}Loss Functions}{9}{subsubsection.2.2.3}}
 \newlabel{loss functions}{{2.2.3}{9}{Loss Functions}{subsubsection.2.2.3}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Graph showing the loss given the probability of a correct prediction}}{9}{figure.4}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Graph showing the binary cross entropy loss function given the probability of a correct prediction}}{9}{figure.4}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {2.2.4}Cross Validation}{9}{subsubsection.2.2.4}}
 \newlabel{cross validation}{{2.2.4}{9}{Cross Validation}{subsubsection.2.2.4}{}}
+\citation{Racine}
 \citation{Gregor}
 \citation{Man_Group}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {2.2.5}Applications}{10}{subsubsection.2.2.5}}
@@ -84,6 +86,7 @@
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {2.3.6}Summary}{14}{subsubsection.2.3.6}}
 \@writefile{toc}{\contentsline {section}{\numberline {3}\hskip -1em.\nobreakspace  {}Requirements Capture}{16}{section.3}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.1}\hskip -1em.\nobreakspace  {}Tasks}{16}{subsection.3.1}}
+\newlabel{tasks}{{3.1}{16}{\hskip -1em.~Tasks}{subsection.3.1}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {4}\hskip -1em.\nobreakspace  {}Design and Analysis}{17}{section.4}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.1}\hskip -1em.\nobreakspace  {}Overview}{17}{subsection.4.1}}
 \@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces High-level overview of the tool pipeline design}}{17}{figure.10}}
@@ -98,72 +101,98 @@
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.3}\hskip -1em.\nobreakspace  {}Data Preprocessing}{18}{subsection.4.3}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.1}Data Transformation}{18}{subsubsection.4.3.1}}
 \newlabel{data transformation}{{4.3.1}{18}{Data Transformation}{subsubsection.4.3.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces Histogram plots of returns (LHS) and log returns (RHS) distributions.}}{18}{figure.13}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.2}Sparsity}{19}{subsubsection.4.3.2}}
 \newlabel{data_analysis}{{4.3.2}{19}{Sparsity}{subsubsection.4.3.2}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces Box plot indicating the approximate average underlying count numbers for each type of input. Green triangles indicate the mean counts.}}{19}{figure.13}}
-\newlabel{input_counts}{{13}{19}{Box plot indicating the approximate average underlying count numbers for each type of input. Green triangles indicate the mean counts}{figure.13}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {14}{\ignorespaces LHS: Individual ticker breakdown of datapoint counts. RHS: Boxplot of returns output count.}}{19}{figure.14}}
-\@writefile{lof}{\contentsline {figure}{\numberline {15}{\ignorespaces Box plot indicating the approximate average underlying delta counts for each type of input. Green triangles indicate the mean counts. As seen, LTM is particularly lower than the others.}}{20}{figure.15}}
-\newlabel{input_delta_counts}{{15}{20}{Box plot indicating the approximate average underlying delta counts for each type of input. Green triangles indicate the mean counts. As seen, LTM is particularly lower than the others}{figure.15}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}\hskip -1em.\nobreakspace  {}Architectural Design}{20}{subsection.4.4}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.1}Overview}{20}{subsubsection.4.4.1}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.2}Inputs and Outputs}{20}{subsubsection.4.4.2}}
+\@writefile{lof}{\contentsline {figure}{\numberline {14}{\ignorespaces Box plot indicating the approximate average underlying count numbers for each type of input. Green triangles indicate the mean counts.}}{19}{figure.14}}
+\newlabel{input_counts}{{14}{19}{Box plot indicating the approximate average underlying count numbers for each type of input. Green triangles indicate the mean counts}{figure.14}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {15}{\ignorespaces LHS: Individual ticker breakdown of datapoint counts. RHS: Boxplot of returns output count.}}{19}{figure.15}}
+\@writefile{lof}{\contentsline {figure}{\numberline {16}{\ignorespaces Box plot indicating the approximate average underlying delta counts for each type of input. Green triangles indicate the mean counts. As seen, LTM is particularly lower than the others.}}{20}{figure.16}}
+\newlabel{input_delta_counts}{{16}{20}{Box plot indicating the approximate average underlying delta counts for each type of input. Green triangles indicate the mean counts. As seen, LTM is particularly lower than the others}{figure.16}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {17}{\ignorespaces Heatmaps of nan values (depicted in white) of a few datasets.}}{20}{figure.17}}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Percentages of used and complete input vectors with respect to the entire dataset.}}{21}{table.1}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}\hskip -1em.\nobreakspace  {}Architectural Design}{21}{subsection.4.4}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.1}Overview}{21}{subsubsection.4.4.1}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.2}Inputs and Outputs}{21}{subsubsection.4.4.2}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.3}Loss Function}{22}{subsubsection.4.4.3}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.4}Design Iterations}{22}{subsubsection.4.4.4}}
+\newlabel{design iterations}{{4.4.4}{22}{Design Iterations}{subsubsection.4.4.4}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {18}{\ignorespaces LHS: Architectural overview of the intial model. RHS: Model summary with number of parameters.}}{22}{figure.18}}
+\@writefile{lof}{\contentsline {figure}{\numberline {19}{\ignorespaces Demonstration of errors introduced into output function of LSTM by missing values.}}{23}{figure.19}}
+\@writefile{lof}{\contentsline {figure}{\numberline {20}{\ignorespaces Overview of the architecture of the multi output model.}}{23}{figure.20}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5}\hskip -1em.\nobreakspace  {}Training and Testing}{23}{subsection.4.5}}
+\citation{Ruder}
+\citation{Adam}
+\citation{brownlee_activation}
+\citation{Gal}
+\citation{Sak}
+\citation{Hagan}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.6}\hskip -1em.\nobreakspace  {}Hyperparameter Optimisation}{24}{subsection.4.6}}
 \citation{DeMiguel}
 \citation{Sharpe}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.3}Loss Function}{21}{subsubsection.4.4.3}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.4}Design Iterations}{21}{subsubsection.4.4.4}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.5}\hskip -1em.\nobreakspace  {}Training and Testing}{21}{subsection.4.5}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.6}\hskip -1em.\nobreakspace  {}Hyperparameter Optimisation}{21}{subsection.4.6}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.7}\hskip -1em.\nobreakspace  {}Benchmark Design}{21}{subsection.4.7}}
-\newlabel{benchmark}{{4.7}{21}{\hskip -1em.~Benchmark Design}{subsection.4.7}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {5}\hskip -1em.\nobreakspace  {}Implementation}{23}{section.5}}
-\newlabel{implementation}{{5}{23}{\hskip -1em.~Implementation}{section.5}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}\hskip -1em.\nobreakspace  {}Data Structuring}{23}{subsection.5.1}}
-\@writefile{lof}{\contentsline {figure}{\numberline {16}{\ignorespaces Program flow diagram of data structuring processes.}}{23}{figure.16}}
-\newlabel{data_structuring}{{16}{23}{Program flow diagram of data structuring processes}{figure.16}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}\hskip -1em.\nobreakspace  {}Data Preprocessing}{23}{subsection.5.2}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}\hskip -1em.\nobreakspace  {}Architecture}{24}{subsection.5.3}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.4}\hskip -1em.\nobreakspace  {}Benchmark}{25}{subsection.5.4}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.7}\hskip -1em.\nobreakspace  {}Benchmark Design}{25}{subsection.4.7}}
+\newlabel{benchmark}{{4.7}{25}{\hskip -1em.~Benchmark Design}{subsection.4.7}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}\hskip -1em.\nobreakspace  {}Implementation}{26}{section.5}}
+\newlabel{implementation}{{5}{26}{\hskip -1em.~Implementation}{section.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}\hskip -1em.\nobreakspace  {}Data Structuring}{26}{subsection.5.1}}
+\@writefile{lof}{\contentsline {figure}{\numberline {21}{\ignorespaces Program flow diagram of data structuring processes.}}{26}{figure.21}}
+\newlabel{data_structuring}{{21}{26}{Program flow diagram of data structuring processes}{figure.21}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}\hskip -1em.\nobreakspace  {}Data Preprocessing}{26}{subsection.5.2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}\hskip -1em.\nobreakspace  {}Architecture}{27}{subsection.5.3}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.3.1}Single Output Model}{27}{subsubsection.5.3.1}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.3.2}Multi output Model}{28}{subsubsection.5.3.2}}
 \citation{python_testing}
-\@writefile{toc}{\contentsline {section}{\numberline {6}\hskip -1em.\nobreakspace  {}Testing}{26}{section.6}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}\hskip -1em.\nobreakspace  {}Test Plan}{26}{subsection.6.1}}
-\@writefile{lof}{\contentsline {figure}{\numberline {17}{\ignorespaces Levels of software testing from high (Top) to low (Bottom)}}{26}{figure.17}}
-\@writefile{lof}{\contentsline {figure}{\numberline {18}{\ignorespaces Flow diagram of how an integrated test may be executed.}}{26}{figure.18}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}\hskip -1em.\nobreakspace  {}Test Results}{26}{subsection.6.2}}
-\@writefile{toc}{\contentsline {section}{\numberline {7}\hskip -1em.\nobreakspace  {}Results}{27}{section.7}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.1}\hskip -1em.\nobreakspace  {}Baseline}{27}{subsection.7.1}}
-\@writefile{toc}{\contentsline {section}{\numberline {8}\hskip -1em.\nobreakspace  {}Conclusions}{28}{section.8}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {8.1}\hskip -1em.\nobreakspace  {}Evaluation}{28}{subsection.8.1}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {8.2}\hskip -1em.\nobreakspace  {}Future Work}{28}{subsection.8.2}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}\hskip -1em.\nobreakspace  {}Testing}{30}{section.6}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}\hskip -1em.\nobreakspace  {}Test Plan}{30}{subsection.6.1}}
+\@writefile{lof}{\contentsline {figure}{\numberline {22}{\ignorespaces Levels of software testing from high (Top) to low (Bottom)}}{30}{figure.22}}
+\@writefile{lof}{\contentsline {figure}{\numberline {23}{\ignorespaces Flow diagram of how an integrated test may be executed.}}{30}{figure.23}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}\hskip -1em.\nobreakspace  {}Test Results}{30}{subsection.6.2}}
+\@writefile{toc}{\contentsline {section}{\numberline {7}\hskip -1em.\nobreakspace  {}Results}{31}{section.7}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.1}\hskip -1em.\nobreakspace  {}Baseline}{31}{subsection.7.1}}
+\@writefile{toc}{\contentsline {section}{\numberline {8}\hskip -1em.\nobreakspace  {}Conclusions}{32}{section.8}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.1}\hskip -1em.\nobreakspace  {}Evaluation}{32}{subsection.8.1}}
+\@writefile{lof}{\contentsline {figure}{\numberline {24}{\ignorespaces Feature selection and forecast models by Uber.}}{32}{figure.24}}
+\newlabel{data_structuring}{{24}{32}{Feature selection and forecast models by Uber}{figure.24}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.2}\hskip -1em.\nobreakspace  {}Objective Completion}{32}{subsection.8.2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.3}\hskip -1em.\nobreakspace  {}Future Work}{33}{subsection.8.3}}
 \bibstyle{ieee}
 \bibdata{thw116bib}
 \bibcite{jupyter_notebook}{1}
 \bibcite{Ahmadi}{2}
 \bibcite{Alberg}{3}
 \bibcite{Bergmeir}{4}
-\bibcite{DeMiguel}{5}
-\bibcite{Eun}{6}
-\bibcite{Fama}{7}
-\bibcite{Graham}{8}
-\bibcite{Gregor}{9}
-\bibcite{Henrique}{10}
-\bibcite{Hockreiter}{11}
-\bibcite{Kim}{12}
-\bibcite{Janocha}{13}
-\bibcite{Makridakis}{14}
-\bibcite{Merz}{15}
-\bibcite{Olah}{16}
-\bibcite{Racine}{17}
-\bibcite{Man_Group}{18}
-\bibcite{Ross}{19}
-\bibcite{Rouwenhorst}{20}
-\bibcite{Rumelhart}{21}
-\bibcite{Sharpe}{22}
-\bibcite{python_testing}{23}
-\bibcite{Smyl}{24}
-\bibcite{Treynor}{25}
-\bibcite{Winters}{26}
-\@writefile{toc}{\contentsline {section}{\numberline {9}\hskip -1em.\nobreakspace  {}Bibliography}{29}{section.9}}
-\@writefile{toc}{\contentsline {section}{\numberline {10}\hskip -1em.\nobreakspace  {}Appendix}{30}{section.10}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {10.1}\hskip -1em.\nobreakspace  {}Source Code}{30}{subsection.10.1}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {10.2}\hskip -1em.\nobreakspace  {}Test data}{30}{subsection.10.2}}
+\bibcite{brownlee_activation}{5}
+\bibcite{DeMiguel}{6}
+\bibcite{Eun}{7}
+\bibcite{Fama}{8}
+\bibcite{Gal}{9}
+\bibcite{Graham}{10}
+\bibcite{Gregor}{11}
+\bibcite{Hagan}{12}
+\bibcite{Henrique}{13}
+\bibcite{Hockreiter}{14}
+\bibcite{Kim}{15}
+\bibcite{Janocha}{16}
+\bibcite{Adam}{17}
+\bibcite{Makridakis}{18}
+\bibcite{Merz}{19}
+\bibcite{Olah}{20}
+\bibcite{Pascanu}{21}
+\bibcite{Racine}{22}
+\bibcite{Reimers}{23}
+\bibcite{Man_Group}{24}
+\bibcite{Ross}{25}
+\bibcite{Rouwenhorst}{26}
+\bibcite{Ruder}{27}
+\bibcite{Rumelhart}{28}
+\bibcite{Sak}{29}
+\bibcite{Sharpe}{30}
+\bibcite{python_testing}{31}
+\bibcite{Smyl}{32}
+\bibcite{Treynor}{33}
+\bibcite{Winters}{34}
+\@writefile{toc}{\contentsline {section}{\numberline {9}\hskip -1em.\nobreakspace  {}Bibliography}{34}{section.9}}
+\@writefile{toc}{\contentsline {section}{\numberline {10}\hskip -1em.\nobreakspace  {}Appendix}{35}{section.10}}
+\newlabel{libraries}{{10}{35}{}{lstlisting.-10}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {10.1}\hskip -1em.\nobreakspace  {}Source Code}{35}{subsection.10.1}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {10.2}\hskip -1em.\nobreakspace  {}Test data}{35}{subsection.10.2}}

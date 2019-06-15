@@ -5,46 +5,47 @@ The style file: ieee.bst
 Database file #1: thw116bib.bib
 Warning--to sort, need author, editor, or key in jupyter_notebook
 Warning--empty author and editor in jupyter_notebook
+Warning--empty year in python_testing
 Warning--empty publisher in Treynor
-You've used 26 entries,
+You've used 34 entries,
             2120 wiz_defined-function locations,
-            640 strings with 7048 characters,
-and the built_in function-call counts, 6446 in all, are:
-= -- 557
-> -- 321
+            675 strings with 8072 characters,
+and the built_in function-call counts, 8531 in all, are:
+= -- 733
+> -- 433
 < -- 0
-+ -- 132
-- -- 102
-* -- 323
-:= -- 1131
-add.period$ -- 77
-call.type$ -- 26
-change.case$ -- 105
++ -- 179
+- -- 138
+* -- 437
+:= -- 1501
+add.period$ -- 101
+call.type$ -- 34
+change.case$ -- 137
 chr.to.int$ -- 0
-cite$ -- 29
-duplicate$ -- 303
-empty$ -- 575
-format.name$ -- 102
-if$ -- 1350
+cite$ -- 38
+duplicate$ -- 409
+empty$ -- 751
+format.name$ -- 138
+if$ -- 1780
 int.to.chr$ -- 0
-int.to.str$ -- 26
-missing$ -- 47
-newline$ -- 132
-num.names$ -- 50
-pop$ -- 234
+int.to.str$ -- 34
+missing$ -- 67
+newline$ -- 172
+num.names$ -- 66
+pop$ -- 310
 preamble$ -- 1
-purify$ -- 103
+purify$ -- 137
 quote$ -- 0
-skip$ -- 165
+skip$ -- 212
 stack$ -- 0
-substring$ -- 134
-swap$ -- 26
+substring$ -- 177
+swap$ -- 34
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 56
-warning$ -- 3
-while$ -- 50
-width$ -- 28
-write$ -- 258
-(There were 3 warnings)
+type$ -- 68
+warning$ -- 4
+while$ -- 66
+width$ -- 36
+write$ -- 338
+(There were 4 warnings)

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.11.12)  10 JUN 2019 00:35
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.11.12)  15 JUN 2019 18:02
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -340,6 +340,9 @@ Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 
 LaTeX Warning: Label `pipeline_design' multiply defined.
 
+
+LaTeX Warning: Label `data_structuring' multiply defined.
+
 )
 \openout1 = `thw116.aux'.
 
@@ -459,182 +462,218 @@ LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 103.
  [4] [5]
 [6]
-<mlp_rnn_comparison.png, id=175, 812.03375pt x 265.99374pt>
+<mlp_rnn_comparison.png, id=180, 707.64375pt x 214.8025pt>
 File: mlp_rnn_comparison.png Graphic file (type png)
 <use mlp_rnn_comparison.png>
 Package pdftex.def Info: mlp_rnn_comparison.png  used on input line 157.
-(pdftex.def)             Requested size: 412.56496pt x 135.13954pt.
-<rnn_topologies.png, id=177, 629.35126pt x 222.8325pt>
+(pdftex.def)             Requested size: 412.56496pt x 125.2345pt.
+<rnn_topologies.png, id=182, 629.35126pt x 222.8325pt>
 File: rnn_topologies.png Graphic file (type png)
 <use rnn_topologies.png>
 Package pdftex.def Info: rnn_topologies.png  used on input line 165.
 (pdftex.def)             Requested size: 412.56496pt x 146.07365pt.
  [7 <./mlp_rnn_comparison.png> <./rnn_topologies.png>]
-<lstm_unit.png, id=191, 244.915pt x 255.95625pt>
+<lstm_unit.png, id=195, 244.915pt x 255.95625pt>
 File: lstm_unit.png Graphic file (type png)
 <use lstm_unit.png>
 Package pdftex.def Info: lstm_unit.png  used on input line 192.
 (pdftex.def)             Requested size: 113.81102pt x 118.9403pt.
  [8 <./lstm_unit.png>]
-<binary_log_loss.png, id=207, 468.75125pt x 329.23pt>
+<binary_log_loss.png, id=213, 468.75125pt x 329.23pt>
 File: binary_log_loss.png Graphic file (type png)
 <use binary_log_loss.png>
-Package pdftex.def Info: binary_log_loss.png  used on input line 218.
+Package pdftex.def Info: binary_log_loss.png  used on input line 222.
 (pdftex.def)             Requested size: 128.0374pt x 89.92313pt.
 [9 <./binary_log_loss.png>]
-<draw_network.png, id=220, 662.475pt x 181.67876pt>
+<draw_network.png, id=227, 662.475pt x 181.67876pt>
 File: draw_network.png Graphic file (type png)
 <use draw_network.png>
-Package pdftex.def Info: draw_network.png  used on input line 251.
+Package pdftex.def Info: draw_network.png  used on input line 255.
 (pdftex.def)             Requested size: 412.56496pt x 113.14142pt.
-<draw_results.png, id=221, 328.22626pt x 156.585pt>
+<draw_results.png, id=228, 328.22626pt x 156.585pt>
 File: draw_results.png Graphic file (type png)
 <use draw_results.png>
-Package pdftex.def Info: draw_results.png  used on input line 257.
+Package pdftex.def Info: draw_results.png  used on input line 261.
 (pdftex.def)             Requested size: 355.65944pt x 169.67554pt.
  [10 <./draw_network.png>] [11 <./draw_results.png>]
-<Kim_results.png, id=243, 494.84875pt x 89.33376pt>
+<Kim_results.png, id=251, 494.84875pt x 89.33376pt>
 File: Kim_results.png Graphic file (type png)
 <use Kim_results.png>
-Package pdftex.def Info: Kim_results.png  used on input line 308.
+Package pdftex.def Info: Kim_results.png  used on input line 312.
 (pdftex.def)             Requested size: 412.56496pt x 74.47958pt.
-<alberg_intro.png, id=245, 427.5975pt x 160.6pt>
+<alberg_intro.png, id=253, 427.5975pt x 160.6pt>
 File: alberg_intro.png Graphic file (type png)
 <use alberg_intro.png>
-Package pdftex.def Info: alberg_intro.png  used on input line 325.
+Package pdftex.def Info: alberg_intro.png  used on input line 329.
 (pdftex.def)             Requested size: 412.56496pt x 154.9535pt.
 [12 <./Kim_results.png>] [13 <./alberg_intro.png>]
-<smyl_architecture.png, id=269, 627.34375pt x 157.58875pt>
+<smyl_architecture.png, id=277, 627.34375pt x 157.58875pt>
 File: smyl_architecture.png Graphic file (type png)
 <use smyl_architecture.png>
-Package pdftex.def Info: smyl_architecture.png  used on input line 360.
+Package pdftex.def Info: smyl_architecture.png  used on input line 365.
 (pdftex.def)             Requested size: 412.56496pt x 103.64098pt.
  [14 <./smyl_architecture.png>] [15] [16]
-<design_pipeline.png, id=298, 487.8225pt x 96.36pt>
+<design_pipeline.png, id=306, 487.8225pt x 96.36pt>
 File: design_pipeline.png Graphic file (type png)
 <use design_pipeline.png>
-Package pdftex.def Info: design_pipeline.png  used on input line 418.
+Package pdftex.def Info: design_pipeline.png  used on input line 423.
 (pdftex.def)             Requested size: 412.56496pt x 81.49467pt.
-<process_overview.png, id=299, 629.35126pt x 109.40875pt>
+<process_overview.png, id=307, 629.35126pt x 109.40875pt>
 File: process_overview.png Graphic file (type png)
 <use process_overview.png>
-Package pdftex.def Info: process_overview.png  used on input line 425.
+Package pdftex.def Info: process_overview.png  used on input line 430.
 (pdftex.def)             Requested size: 412.56496pt x 71.72083pt.
-<database.png, id=300, 664.4825pt x 143.53625pt>
+<database.png, id=308, 664.4825pt x 143.53625pt>
 File: database.png Graphic file (type png)
 <use database.png>
-Package pdftex.def Info: database.png  used on input line 444.
+Package pdftex.def Info: database.png  used on input line 449.
 (pdftex.def)             Requested size: 412.56496pt x 89.11858pt.
- [17 <./design_pipeline.png> <./process_overview.png>] [18 <./database.png>]
-<input_counts.png, id=321, 556.0775pt x 116.435pt>
+ [17 <./design_pipeline.png> <./process_overview.png>]
+<returns_distribution.png, id=319, 835.12pt x 221.82875pt>
+File: returns_distribution.png Graphic file (type png)
+<use returns_distribution.png>
+Package pdftex.def Info: returns_distribution.png  used on input line 469.
+(pdftex.def)             Requested size: 496.85625pt x 131.97787pt.
+ [18 <./database.png> <./returns_distribution.png>]
+<input_counts.png, id=332, 556.0775pt x 116.435pt>
 File: input_counts.png Graphic file (type png)
 <use input_counts.png>
-Package pdftex.def Info: input_counts.png  used on input line 472.
+Package pdftex.def Info: input_counts.png  used on input line 483.
 (pdftex.def)             Requested size: 496.85625pt x 104.03722pt.
-<output_counts.png, id=322, 543.02875pt x 269.005pt>
+<output_counts.png, id=333, 543.02875pt x 269.005pt>
 File: output_counts.png Graphic file (type png)
 <use output_counts.png>
-Package pdftex.def Info: output_counts.png  used on input line 479.
+Package pdftex.def Info: output_counts.png  used on input line 490.
 (pdftex.def)             Requested size: 496.85625pt x 246.14125pt.
-<input_delta_counts.png, id=324, 574.145pt x 124.465pt>
+ [19 <./input_counts.png> <./output_counts.png>]
+<input_delta_counts.png, id=343, 574.145pt x 124.465pt>
 File: input_delta_counts.png Graphic file (type png)
 <use input_delta_counts.png>
-Package pdftex.def Info: input_delta_counts.png  used on input line 487.
+Package pdftex.def Info: input_delta_counts.png  used on input line 498.
 (pdftex.def)             Requested size: 496.85625pt x 107.712pt.
- [19 <./input_counts.png> <./output_counts.png>] [20 <./input_delta_counts.png>
-] [21] [22]
-<data_structuring.png, id=353, 438.63875pt x 112.42pt>
+<heatmaps.png, id=344, 461.725pt x 268.00125pt>
+File: heatmaps.png Graphic file (type png)
+<use heatmaps.png>
+Package pdftex.def Info: heatmaps.png  used on input line 507.
+(pdftex.def)             Requested size: 496.85625pt x 288.39423pt.
+ [20 <./input_delta_counts.png> <./heatmaps.png>] [21]
+<first_model.png, id=360, 827.09pt x 372.39125pt>
+File: first_model.png Graphic file (type png)
+<use first_model.png>
+Package pdftex.def Info: first_model.png  used on input line 578.
+(pdftex.def)             Requested size: 412.56496pt x 185.75763pt.
+<rnn_missingval_perception.png, id=361, 668.4975pt x 279.0425pt>
+File: rnn_missingval_perception.png Graphic file (type png)
+<use rnn_missingval_perception.png>
+Package pdftex.def Info: rnn_missingval_perception.png  used on input line 586.
+
+(pdftex.def)             Requested size: 469.47046pt x 195.97134pt.
+<multi_output.png, id=362, 784.9325pt x 477.785pt>
+File: multi_output.png Graphic file (type png)
+<use multi_output.png>
+Package pdftex.def Info: multi_output.png  used on input line 593.
+(pdftex.def)             Requested size: 412.56496pt x 251.13249pt.
+ [22 <./first_model.png>] [23 <./rnn_missingval_perception.png> <./multi_output
+.png>]
+Overfull \hbox (2.53894pt too wide) in paragraph at lines 609--610
+[]\OT1/ptm/m/n/10 Ruder anal-y-ses the ad-van-tages and dis-ad-van-tages of var
+-i-ous gra-di-ent de-scent op-ti-mi-sa-tion al-go-rithms in his 2017 paper[[]].
+
+ []
+
+[24] [25]
+<data_structuring.png, id=404, 438.63875pt x 112.42pt>
 File: data_structuring.png Graphic file (type png)
 <use data_structuring.png>
-Package pdftex.def Info: data_structuring.png  used on input line 587.
+Package pdftex.def Info: data_structuring.png  used on input line 668.
 (pdftex.def)             Requested size: 496.85625pt x 127.3436pt.
-
-(/usr/local/texlive/2018/texmf-dist/tex/latex/listings/lstlang1.sty
+ (/usr/local/texlive/2018/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2015/06/04 1.6 listings language file
 )
-LaTeX Font Info:    Try loading font information for OT1+pcr on input line 594.
+LaTeX Font Info:    Try loading font information for OT1+pcr on input line 675.
 
 
 (/usr/local/texlive/2018/texmf-dist/tex/latex/psnfss/ot1pcr.fd
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
 )
 LaTeX Font Info:    Font shape `OT1/pcr/bx/n' in size <10> not available
-(Font)              Font shape `OT1/pcr/b/n' tried instead on input line 612.
- [23 <./data_structuring.png>]
+(Font)              Font shape `OT1/pcr/b/n' tried instead on input line 693.
+ [26 <./data_structuring.png>]
 LaTeX Font Info:    Font shape `OT1/pcr/m/it' in size <10> not available
-(Font)              Font shape `OT1/pcr/m/sl' tried instead on input line 628.
- [24] [25]
-<evaluation.png, id=457, 189.70876pt x 289.08pt>
+(Font)              Font shape `OT1/pcr/m/sl' tried instead on input line 709.
+ [27] [28] [29]
+<evaluation.png, id=567, 189.70876pt x 289.08pt>
 File: evaluation.png Graphic file (type png)
 <use evaluation.png>
-Package pdftex.def Info: evaluation.png  used on input line 728.
+Package pdftex.def Info: evaluation.png  used on input line 868.
 (pdftex.def)             Requested size: 99.58464pt x 151.75162pt.
-<integrated_testing.png, id=459, 498.86375pt x 127.47626pt>
+<integrated_testing.png, id=569, 498.86375pt x 127.47626pt>
 File: integrated_testing.png Graphic file (type png)
 <use integrated_testing.png>
-Package pdftex.def Info: integrated_testing.png  used on input line 743.
+Package pdftex.def Info: integrated_testing.png  used on input line 883.
 (pdftex.def)             Requested size: 441.01772pt x 112.69879pt.
- [26 <./evaluation.png> <./integrated_testing.png>]
-[27] [28] (./thw116.bbl
-Underfull \hbox (badness 3098) in paragraph at lines 127--130
-[]\OT1/ptm/m/n/9 S. Smyl, J. Ran-ganathan, and A. Pasqua.  M4 fore-cast-ing com
--pe-ti-tion: In-tro-duc-ing a new hy-brid es-rnn model.
+ [30 <./evaluation.png> <./integrated_testing.png>] [31]
+<uber_architecture.png, id=587, 522.95375pt x 358.33875pt>
+File: uber_architecture.png Graphic file (type png)
+<use uber_architecture.png>
+Package pdftex.def Info: uber_architecture.png  used on input line 948.
+(pdftex.def)             Requested size: 284.52756pt x 194.96541pt.
+ [32 <./uber_architecture.png>] [33] (./thw116.bbl
+Underfull \hbox (badness 4927) in paragraph at lines 25--31
+[]\OT1/ptm/m/n/9 J. Brown-lee.  \OT1/ptm/m/it/9 A Gen-tle In-tro-duc-tion to th
+e Rec-ti-fied Lin-ear Unit (ReLU) for Deep Learn-ing Neu-ral Net-works\OT1/ptm/
+m/n/9 .
  []
 
-) [29]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 833.
- [30]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 833.
+
+Underfull \hbox (badness 1577) in paragraph at lines 173--177
+[]\OT1/ptm/m/n/9 S. Smyl, J. Ran-ganathan, and A. Pasqua.  \OT1/ptm/m/it/9 M4 F
+ore-cast-ing Com-pe-ti-tion: In-tro-duc-ing a New Hy-brid ES-RNN Model\OT1/ptm/
+m/n/9 .
+ []
+
+) [34]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1024.
+ [35]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1024.
  (./thw116.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 833.
-Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 833.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1024.
+Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 1024.
 
 
 LaTeX Warning: There were multiply-defined labels.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 833.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1024.
  ) 
 Here is how much of TeX's memory you used:
- 8987 strings out of 492649
- 128606 string characters out of 6129621
- 360303 words of memory out of 5000000
- 12501 multiletter control sequences out of 15000+600000
+ 9181 strings out of 492649
+ 131423 string characters out of 6129621
+ 377681 words of memory out of 5000000
+ 12592 multiletter control sequences out of 15000+600000
  22187 words of font info for 48 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  32i,13n,42p,1512b,1875s stack positions out of 5000i,500n,10000p,200000b,80000s
-pdfTeX warning (dest): name{subsection.11.2} has been referenced but does not
- exist, replaced by a fixed one
-
-pdfTeX warning (dest): name{subsection.11.1} has been referenced but does not e
-xist, replaced by a fixed one
-
-pdfTeX warning (dest): name{section.11} has been referenced but does not exist,
- replaced by a fixed one
-
-pdfTeX warning (dest): name{subsection.9.1} has been referenced but does not ex
-ist, replaced by a fixed one
-
-{/usr/local/texlive/2018/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/tex
-live/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texl
-ive/2018/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex7.pfb></usr/local/t
-exlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/te
-xlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/local/texl
-ive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texliv
-e/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/
-2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/local/texlive/201
-8/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2018/t
-exmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2018/te
-xmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/local/texlive/2018/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2018/texmf-
-dist/fonts/type1/urw/courier/ucrb8a.pfb></usr/local/texlive/2018/texmf-dist/fon
-ts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1
-/urw/courier/ucrro8a.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/urw/ti
-mes/utmb8a.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/urw/times/utmr8a
-.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on thw116.pdf (31 pages, 2748519 bytes).
+{/usr/local/texlive/2018/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
+exlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/te
+xlive/2018/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex7.pfb></usr/local
+/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/
+texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/local/te
+xlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texl
+ive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texliv
+e/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/local/texlive/2
+018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2018
+/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2018/
+texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/local/texlive/2018/te
+xmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2018/texm
+f-dist/fonts/type1/urw/courier/ucrb8a.pfb></usr/local/texlive/2018/texmf-dist/f
+onts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/2018/texmf-dist/fonts/typ
+e1/urw/courier/ucrro8a.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/urw/
+times/utmb8a.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/urw/times/utmr
+8a.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on thw116.pdf (36 pages, 3455525 bytes).
 PDF statistics:
- 603 PDF objects out of 1000 (max. 8388607)
- 509 compressed objects within 6 object streams
- 234 named destinations out of 1000 (max. 500000)
- 96 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 762 PDF objects out of 1000 (max. 8388607)
+ 650 compressed objects within 7 object streams
+ 331 named destinations out of 1000 (max. 500000)
+ 126 words of extra memory for PDF output out of 10000 (max. 10000000)
 
