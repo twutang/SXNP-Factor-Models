@@ -102,6 +102,7 @@
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.1}Data Transformation}{18}{subsubsection.4.3.1}}
 \newlabel{data transformation}{{4.3.1}{18}{Data Transformation}{subsubsection.4.3.1}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces Histogram plots of returns (LHS) and log returns (RHS) distributions.}}{18}{figure.13}}
+\newlabel{returns}{{13}{18}{Histogram plots of returns (LHS) and log returns (RHS) distributions}{figure.13}{}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.2}Sparsity}{19}{subsubsection.4.3.2}}
 \newlabel{data_analysis}{{4.3.2}{19}{Sparsity}{subsubsection.4.3.2}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {14}{\ignorespaces Box plot indicating the approximate average underlying count numbers for each type of input. Green triangles indicate the mean counts.}}{19}{figure.14}}
@@ -117,44 +118,53 @@
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.3}Loss Function}{22}{subsubsection.4.4.3}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.4}Design Iterations}{22}{subsubsection.4.4.4}}
 \newlabel{design iterations}{{4.4.4}{22}{Design Iterations}{subsubsection.4.4.4}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {18}{\ignorespaces LHS: Architectural overview of the intial model. RHS: Model summary with number of parameters.}}{22}{figure.18}}
-\@writefile{lof}{\contentsline {figure}{\numberline {19}{\ignorespaces Demonstration of errors introduced into output function of LSTM by missing values.}}{23}{figure.19}}
-\@writefile{lof}{\contentsline {figure}{\numberline {20}{\ignorespaces Overview of the architecture of the multi output model.}}{23}{figure.20}}
+\@writefile{lof}{\contentsline {figure}{\numberline {18}{\ignorespaces LHS: Architectural overview of the initial one hidden layer model. RHS: Model summary with number of parameters.}}{22}{figure.18}}
+\@writefile{lof}{\contentsline {figure}{\numberline {19}{\ignorespaces LHS: Architectural overview of the stacked LSTM model. RHS: Model summary with number of parameters.}}{23}{figure.19}}
+\@writefile{lof}{\contentsline {figure}{\numberline {20}{\ignorespaces Demonstration of errors introduced into output function of LSTM by missing values.}}{23}{figure.20}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.5}\hskip -1em.\nobreakspace  {}Training and Testing}{23}{subsection.4.5}}
 \citation{Ruder}
 \citation{Adam}
 \citation{brownlee_activation}
+\@writefile{lof}{\contentsline {figure}{\numberline {21}{\ignorespaces Overview of the architecture of the multi output model.}}{24}{figure.21}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.6}\hskip -1em.\nobreakspace  {}Hyperparameter Optimisation}{24}{subsection.4.6}}
 \citation{Gal}
 \citation{Sak}
 \citation{Hagan}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.6}\hskip -1em.\nobreakspace  {}Hyperparameter Optimisation}{24}{subsection.4.6}}
 \citation{DeMiguel}
 \citation{Sharpe}
+\@writefile{lof}{\contentsline {figure}{\numberline {22}{\ignorespaces Screenshot indicating an issue with no decreasing loss function during training due to an incorrectly selected activation function.}}{25}{figure.22}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.7}\hskip -1em.\nobreakspace  {}Benchmark Design}{25}{subsection.4.7}}
 \newlabel{benchmark}{{4.7}{25}{\hskip -1em.~Benchmark Design}{subsection.4.7}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {5}\hskip -1em.\nobreakspace  {}Implementation}{26}{section.5}}
-\newlabel{implementation}{{5}{26}{\hskip -1em.~Implementation}{section.5}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}\hskip -1em.\nobreakspace  {}Data Structuring}{26}{subsection.5.1}}
-\@writefile{lof}{\contentsline {figure}{\numberline {21}{\ignorespaces Program flow diagram of data structuring processes.}}{26}{figure.21}}
-\newlabel{data_structuring}{{21}{26}{Program flow diagram of data structuring processes}{figure.21}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}\hskip -1em.\nobreakspace  {}Data Preprocessing}{26}{subsection.5.2}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}\hskip -1em.\nobreakspace  {}Architecture}{27}{subsection.5.3}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.3.1}Single Output Model}{27}{subsubsection.5.3.1}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.3.2}Multi output Model}{28}{subsubsection.5.3.2}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}\hskip -1em.\nobreakspace  {}Implementation}{27}{section.5}}
+\newlabel{implementation}{{5}{27}{\hskip -1em.~Implementation}{section.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}\hskip -1em.\nobreakspace  {}Data Structuring}{27}{subsection.5.1}}
+\@writefile{lof}{\contentsline {figure}{\numberline {23}{\ignorespaces Program flow diagram of data structuring processes.}}{27}{figure.23}}
+\newlabel{data_structuring}{{23}{27}{Program flow diagram of data structuring processes}{figure.23}{}}
+\newlabel{file_mount}{{5.1}{27}{}{lstlisting.-1}{}}
+\newlabel{datetime_index}{{5.1}{27}{}{lstlisting.-3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}\hskip -1em.\nobreakspace  {}Data Preprocessing}{28}{subsection.5.2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}\hskip -1em.\nobreakspace  {}Architecture}{30}{subsection.5.3}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.3.1}Single Output Model}{30}{subsubsection.5.3.1}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.3.2}Multi output Model}{31}{subsubsection.5.3.2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4}\hskip -1em.\nobreakspace  {}Evaluation Metrics}{32}{subsection.5.4}}
 \citation{python_testing}
-\@writefile{toc}{\contentsline {section}{\numberline {6}\hskip -1em.\nobreakspace  {}Testing}{30}{section.6}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}\hskip -1em.\nobreakspace  {}Test Plan}{30}{subsection.6.1}}
-\@writefile{lof}{\contentsline {figure}{\numberline {22}{\ignorespaces Levels of software testing from high (Top) to low (Bottom)}}{30}{figure.22}}
-\@writefile{lof}{\contentsline {figure}{\numberline {23}{\ignorespaces Flow diagram of how an integrated test may be executed.}}{30}{figure.23}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}\hskip -1em.\nobreakspace  {}Test Results}{30}{subsection.6.2}}
-\@writefile{toc}{\contentsline {section}{\numberline {7}\hskip -1em.\nobreakspace  {}Results}{31}{section.7}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.1}\hskip -1em.\nobreakspace  {}Baseline}{31}{subsection.7.1}}
-\@writefile{toc}{\contentsline {section}{\numberline {8}\hskip -1em.\nobreakspace  {}Conclusions}{32}{section.8}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {8.1}\hskip -1em.\nobreakspace  {}Evaluation}{32}{subsection.8.1}}
-\@writefile{lof}{\contentsline {figure}{\numberline {24}{\ignorespaces Feature selection and forecast models by Uber.}}{32}{figure.24}}
-\newlabel{data_structuring}{{24}{32}{Feature selection and forecast models by Uber}{figure.24}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {8.2}\hskip -1em.\nobreakspace  {}Objective Completion}{32}{subsection.8.2}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {8.3}\hskip -1em.\nobreakspace  {}Future Work}{33}{subsection.8.3}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}\hskip -1em.\nobreakspace  {}Testing}{34}{section.6}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}\hskip -1em.\nobreakspace  {}Test Plan}{34}{subsection.6.1}}
+\@writefile{lof}{\contentsline {figure}{\numberline {24}{\ignorespaces Levels of software testing from high (Top) to low (Bottom)}}{34}{figure.24}}
+\@writefile{lof}{\contentsline {figure}{\numberline {25}{\ignorespaces Flow diagram of how an integrated test may be executed.}}{34}{figure.25}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}\hskip -1em.\nobreakspace  {}Test Results}{35}{subsection.6.2}}
+\@writefile{toc}{\contentsline {section}{\numberline {7}\hskip -1em.\nobreakspace  {}Results}{36}{section.7}}
+\newlabel{results}{{7}{36}{\hskip -1em.~Results}{section.7}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Evaluation metrics of the model performed on hold out test data.}}{36}{table.2}}
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Statistical summary of percentage changes i.e. returns of sets of data.}}{36}{table.3}}
+\@writefile{lof}{\contentsline {figure}{\numberline {26}{\ignorespaces Histogram of the returns and log returns of the selected labels by the model.}}{36}{figure.26}}
+\@writefile{toc}{\contentsline {section}{\numberline {8}\hskip -1em.\nobreakspace  {}Conclusions}{37}{section.8}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.1}\hskip -1em.\nobreakspace  {}Evaluation}{37}{subsection.8.1}}
+\newlabel{evaluation}{{8.1}{37}{\hskip -1em.~Evaluation}{subsection.8.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {27}{\ignorespaces Feature selection and forecast models by Uber.}}{37}{figure.27}}
+\newlabel{data_structuring}{{27}{37}{Feature selection and forecast models by Uber}{figure.27}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.2}\hskip -1em.\nobreakspace  {}Objective Completion}{37}{subsection.8.2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.3}\hskip -1em.\nobreakspace  {}Future Work}{38}{subsection.8.3}}
 \bibstyle{ieee}
 \bibdata{thw116bib}
 \bibcite{jupyter_notebook}{1}
@@ -191,8 +201,7 @@
 \bibcite{Smyl}{32}
 \bibcite{Treynor}{33}
 \bibcite{Winters}{34}
-\@writefile{toc}{\contentsline {section}{\numberline {9}\hskip -1em.\nobreakspace  {}Bibliography}{34}{section.9}}
-\@writefile{toc}{\contentsline {section}{\numberline {10}\hskip -1em.\nobreakspace  {}Appendix}{35}{section.10}}
-\newlabel{libraries}{{10}{35}{}{lstlisting.-10}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {10.1}\hskip -1em.\nobreakspace  {}Source Code}{35}{subsection.10.1}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {10.2}\hskip -1em.\nobreakspace  {}Test data}{35}{subsection.10.2}}
+\@writefile{toc}{\contentsline {section}{\numberline {9}\hskip -1em.\nobreakspace  {}Bibliography}{39}{section.9}}
+\@writefile{toc}{\contentsline {section}{\numberline {10}\hskip -1em.\nobreakspace  {}Appendix}{40}{section.10}}
+\newlabel{libraries}{{10}{40}{}{lstlisting.-15}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {10.1}\hskip -1em.\nobreakspace  {}Source Code}{40}{subsection.10.1}}

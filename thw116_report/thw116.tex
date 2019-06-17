@@ -468,6 +468,7 @@ The output was first changed from the raw \textit{price\_close} nature to \texti
 \centering
 \includegraphics[width=\columnwidth]{returns_distribution.png}
 \caption{Histogram plots of returns (LHS) and log returns (RHS) distributions.}
+\label{returns}
 \end{figure}
 
 There was then a choice of selecting the time step. Although daily change was perceived to be highly susceptible to noise, the justification for its use came from the fact that it was deemed unviable to sacrifice a large proportion of the dataset. For example, assuming a complete time series, weekly intervals would reduce the number of datapoints from 6313 to approximately 1260. It was decided that, given enough time, a dilated RNN may be implemented to evaluate whether generalisation and noise reduction could be improved. 
@@ -576,7 +577,13 @@ The initial model used was the most fundamental LSTM possible, with one hidden l
 \begin{figure}[!hbt!]
 \centering
 \includegraphics[width=14.5cm]{first_model.png}
-\caption{LHS: Architectural overview of the intial model. RHS: Model summary with number of parameters.}
+\caption{LHS: Architectural overview of the initial one hidden layer model. RHS: Model summary with number of parameters.}
+\end{figure}
+
+\begin{figure}[!hbt!]
+\centering
+\includegraphics[width=14.5cm]{stacked_lstm.png}
+\caption{LHS: Architectural overview of the stacked LSTM model. RHS: Model summary with number of parameters.}
 \end{figure}
 
 One of the problematic issues was the model's capability of handling the missing values within the data. In order to reduce the dataset into a practically trainable size, it was chosen to delete missing values input vectors and output values. However, this had the consequence of causing time skips in the model. This meant that the memory cell was heavily biasing much older information and not achieving accurate prediction or performance. 
@@ -588,6 +595,7 @@ One of the problematic issues was the model's capability of handling the missing
 \end{figure}
 
 In order to resolve this, a new architecture was designed where the model predicted both the next input vector and an output value. This would then be able to fill in any missing values and rectify the issue experienced with the initial model. The model would first be trained on the longest continuous time series data available without any missing data so that both predictive models have had an opportunity to train and learn. After each iteration of a series, the model's hidden states will be reset when training begins on a different series that is either unrelated to the previous by time or company. The necessity for predicting the next input values stems from the concern that if this was not implemented, the series would not have enough data to provide actual learning. By using prediction, it would be possible to concatenate two series with minor amounts of missing values into a single, more substantial series. This would only function with relatively small gaps as the error variance increases with increasing numbers of continuous input predictions and this is likely to be detrimental to both the performance of the output prediction and the model's learning.
+
 \begin{figure}[!hbt!]
 \centering
 \includegraphics[width=14.5cm]{multi_output.png}
@@ -612,6 +620,14 @@ Some of the algorithms considered included Adadelta, RMSprop and Adaptive Moment
 
 As mentioned by Brownlee\cite{brownlee_activation}, the activations functions for LSTMs are typically $tanh$ for the cell state and sigmoid for the node output. These are also the default parameter settings in Keras. ReLU applications to the node outputs are typically considered infeasible as they tend to result in exploding gradients due to the potential large values. Although there has been research into designing stable ReLU driven LSTM networks through appropriate weights initialisation, the project will focus on using the default activation functions.    
 
+\begin{figure}[!hbt!]
+\centering
+\includegraphics[width=10.5cm]{problem_tuning.png}
+\caption{Screenshot indicating an issue with no decreasing loss function during training due to an incorrectly selected activation function.}
+\end{figure}
+
+The selection of the batch size mainly revolved around computational time efficiency as the high complexity of the model and size of dataset made iterations very taxing to run. It was therefore decided to initially begin with large batch sizes of 1024 as there are suggestions that powers of 2 can improve computational performance by aligning virtual processors onto the physical processors of the GPU, which are often a power of 2. Smaller batches are often considered better for test accuracy as they provide more frequent updates to the model parameters. However, the counterargument is that very small batches are more susceptible to noise and therefore not converge on the correct minima thus increasing convergence time.
+
 Another hyperparameter to consider was the dropout values for deep networks to avoid overfitting. Gal et al.\cite{Gal} published a paper regarding a variational structure of dropouts which included applying them on the feedforward connections to the next cell. During their experimentation, they derived that an optimal dropout probability for their medium network consisting of approximately 1300 cells was 0.2 and so this was the value used for this project. It is likely that an increase in both depths and numbers of cells is likely to result in a higher optimal dropout value.
 
 It is hard to specify particularly the number of LSTM layers which would be optimal. The number depends on factors such as what the task itself is and the properties of the dataset. There is limited literature exploring this hyperparameter in a financial data analysis context but Sak et al.\cite{Sak} evaluates that approximately 5 layers is optimal for acoustics modelling. In an ideal environment, there would be enough time to test increasing numbers of layers but due to time constraints, it was decided to settle with 4 layers as the deep model. 
@@ -624,9 +640,6 @@ The number of hidden cells per layer was decided by following Hagan's rule of th
 	1190 = \frac{250,000}{10 \times (20+1)}
 \end{gather*}
 
-It was therefore decided to use 1024 cells as there are suggestions that powers of 2 can improve computational performance by aligning virtual processors onto the physical processors of the GPU, which are often a power of 2. 
-
-Mini-batch Size
 
 \subsection{Benchmark Design} \label{benchmark}
 
@@ -640,7 +653,15 @@ In order to evaluate this, the output values will be ordered and a theoretical p
 	\item Portfolio Turnover: This measures how often the stocks within the portfolio have to be bought and sold to rebalance and maintain the model's strategy. Although it does not theoretically affect the performance, the transaction costs of buying and selling in a real world scenario can significantly affect a portfolio's profitability. Therefore a lower turnover is preferred. It is calculated with the following equation: $turnover = \frac{min(s_{b}, s_{s})}{NAV}$ where $NAV$ is the Net Asset Value and $s_{b}$ and $s_{s}$ are the cost of stocks bought and sold respectively.  
 \end{itemize}
 
-As work progressed on the project, it was realised that there was a large inconsistency between translating between the model results and applying it to a real world scenario.
+As work progressed on the project, it was realised that there was a large inconsistency between translating between the model results and applying it to a real world scenario. The project therefore relied heavily on calibration using model evaluation metrics such as accuracy, precision and recall. These are calculated in the following methods: 
+
+\begin{itemize}
+	\item Accuracy: $\frac{TruePos + TrueNeg}{TruePos + TrueNeg + FalsePos + FalseNeg}$. This evaluates the number of correct predictions as a proportion of the total predictions made.
+	\item Precision: $\frac{TruePos}{TruePos + FalsePos}$. This accounts for the number of correctly predicted positive labels with respect to the set of predicted positive labels.
+	\item Recall: $\frac{TruePos}{TruePos + FalseNeg}$. This looks at the number of correctly predicted positive labels with respect to the entire set of actual positive labels. 
+\end{itemize}
+
+It was then decided to simply plot the distribution of predicted higher return values and analyse whether there was a distribution change when compared with the total returns distribution, as previously depicted in figure \ref{returns}.
 
 %-------------------------------------------------------------------------
 \newpage
@@ -670,13 +691,13 @@ Complete listings may be included as appendices of your report but this is not n
 \label{data_structuring}
 \end{figure}
  
-Given the large number of csv files, there was a necessity to store the resulting dataframes in a systematic method so that functions that needed to be performed on method could be done so efficiently. This was achieved by dividing the respective csv files first into input and traget variables. Of course, only one file was needed for the target variable, being the close price dataset. 
+Given the large number of csv files, there was a necessity to store the resulting dataframes in a systematic method so that functions that needed to be performed on method could be done so efficiently. This was achieved by dividing the respective csv files first into input and target variables. Of course, only one file was needed for the target variable, being the close price dataset. The files themselves were stored on a Google Drive account, at the file path as shown in listing \ref{file_mount} 
 
-\begin{lstlisting}[language=Python, breaklines=true]
+\begin{lstlisting}[language=Python, breaklines=true, label = {file_mount}]
 price_close = pd.read_csv('/content/drive/My Drive/thw116_FYP/data/price_close.csv')
 \end{lstlisting}
 
-However, given that there were much more input datasets, it was decided to store these dataframes in lists, based on the categories that they were originally allocated in the raw .rds file. 
+However, the sample data provided was not an accurate representation of the number of attributes actually available in the dataset and so a structure was required to store them. It was decided to store these dataframes in lists, based on the categories that they were originally allocated in the raw .rds file. 
 
 \begin{lstlisting}[language=Python, breaklines=true]
 ltm_book = pd.read_csv('/content/drive/My Drive/thw116_FYP/data/ltm_book.csv')
@@ -687,9 +708,9 @@ ntm_inputs = [ntm_book, ntm_div, ntm_ebit, ntm_ebitda, ntm_ebitda, ntm_eps, ntm_
 tech_inputs = [price_high, price_low, price_open, volume, enterprise_val]
 \end{lstlisting} 
 
-This then made functions far easier to implement across all the data, such as in this instance where the dataframes were allocated a \textit{datetime} index. 
+This structuring of the dataframes made functions far easier to implement across all the data as it only required iteration through the lists. Part of the initial datasets were not standardised, with differing numbers of companies so it was necessary to standardise them before performing any data preprocessing. Additionally, tickers for companies were anonymised so they could be iterated through conveniently and a \textit{datetime} index for each dataframe was created, as shown in listing \ref{datetime_index}
 
-\begin{lstlisting}[language=Python, breaklines=true]
+\begin{lstlisting}[language=Python, breaklines=true, label={datetime_index}]
 def time_index_generator(dataframe):
   dataframe['Date'] = pd.to_datetime(dataframe['Date'], dayfirst=True)
   dataframe.set_index('Date', inplace=True)
@@ -698,7 +719,92 @@ for i in range(0,len(ltm_inputs)):
   time_index_generator(ltm_inputs[i])
 \end{lstlisting} 
 
+Finally, since it was desired to analyse the problem of predicting whether prices would go up or down, the target dataset of closing price was converted to a more appropriate format of returns by taking the difference between neighbouring rows. 
+
 \subsection{Data Preprocessing}
+
+ANALYSIS
+
+DIVISION INTO TRAINING SETS
+\begin{lstlisting}[language=Python, breaklines=true]
+def training_set(train_percentage, dataframe): 
+  train_size = int(train_percentage*len(dataframe.index)) 
+  train_set = dataframe[:train_size]
+  return pd.DataFrame(train_set)  
+
+training_split = 0.6
+
+ltm_trainInputs = []
+ntm_trainInputs = []
+tech_trainInputs = []
+
+for i in range(0,len(ltm_inputs)):
+  ltm_trainInputs.append(training_set(training_split, ltm_inputs[i]))
+  
+for i in range(0,len(ntm_inputs)):
+  ntm_trainInputs.append(training_set(training_split, ntm_inputs[i]))
+
+for i in range(0,len(tech_inputs)):
+  tech_trainInputs.append(training_set(training_split, tech_inputs[i]))
+
+returns_trainOutput = training_set(training_split, returns)
+\end{lstlisting} 
+
+SCALING FUNCTIONS
+
+\begin{lstlisting}[language=Python, breaklines=true]
+def input_scaling(dataframe):
+  
+  # This is the MinMax Scaling function 
+  sc = MinMaxScaler(feature_range = (0, 1))
+  scaled_input_dataframe = sc.fit_transform(dataframe) # This is now an n-dimensional array type
+  
+#   transformer = Normalizer().fit(dataframe)
+#   Normalizer(copy=True, norm='l2')
+#   transformer.transform(X)
+  
+  return scaled_input_dataframe
+
+np.warnings.filterwarnings('ignore', r'All-NaN (slice|axis) encountered')
+
+for i in range(0,len(ltm_inputs)):
+  ltm_trainInputs[i] = input_scaling(ltm_trainInputs[i])
+  ltm_valInputs[i] = input_scaling(ltm_valInputs[i])
+  ltm_testInputs[i] = input_scaling(ltm_testInputs[i])
+  
+for i in range(0,len(ntm_inputs)):
+  ntm_trainInputs[i] = input_scaling(ntm_trainInputs[i])
+  ntm_valInputs[i] = input_scaling(ntm_valInputs[i])
+  ntm_testInputs[i] = input_scaling(ntm_testInputs[i])
+
+for i in range(0,len(tech_inputs)):
+  tech_trainInputs[i] = input_scaling(tech_trainInputs[i])
+  tech_valInputs[i] = input_scaling(tech_valInputs[i])
+  tech_testInputs[i] = input_scaling(tech_testInputs[i])
+\end{lstlisting} 
+
+\begin{lstlisting}[language=Python, breaklines=true]
+def output_classifier(type ,dataframe): 
+  
+  # No adjustments
+  if type == 'raw':
+    scaled_dataframe = dataframe
+  
+  # Binary classifier where return>0 is +1, and return<0 is 0 labels
+  if type == 'binary':
+    pos_returns = dataframe.values > 0
+    neg_returns = dataframe.values <= 0 
+    scaled_dataframe = pd.DataFrame(np.select([pos_returns,neg_returns], [1,0], default='NaN'), index=dataframe.index, columns=dataframe.columns)
+
+  return scaled_dataframe
+
+returns_trainOutput = output_classifier('binary', returns_trainOutput)
+returns_valOutput = output_classifier('binary', returns_valOutput)
+
+raw_testOutput = output_classifier('raw', returns_testOutput)
+returns_testOutput = output_classifier('binary', returns_testOutput)
+\end{lstlisting} 
+
 
 After preprocessing across the dataset, it was necessary to reformat the data into an input form acceptable to the Keras model architecture. For this all of the lists of dataframes had to be iterated through and the appropriate datapoint extracted to create another list that would represent the input vector. 
 
@@ -706,10 +812,20 @@ After preprocessing across the dataset, it was necessary to reformat the data in
 trainInput = []
 trainTarget = []
 
+valInput = []
+valTarget = []
+
+testInput = []
+testTarget = []
+rawtestTarget = []
+
 # Check that the indices are of the same length 
 if len(ltm_trainInputs[0]) != len(returns_trainOutput):
+  print ('training length', len(ltm_trainInputs[0]))
+  print ('target length', len(returns_trainOutput))
   assert False, "Incompatible dataframe index lengths!"
 
+# Training Set
 for company in range(0, len(ltm_trainInputs[0][:1][0])):
   
   for time_unit in range(0, len(ltm_trainInputs[0])): 
@@ -734,8 +850,14 @@ for company in range(0, len(returns_trainOutput.columns)):
 These lists were then converted into \textit{numpy} arrays. This provided the use of \textit{reshape} functionality only accessible to arrays as well as the fact that they are more memory and computationally efficient. Keras requires a Since this is the immediate step before inputting into the architecture, there is no more need for the flexibility offered by lists. 
 
 \begin{lstlisting} 
+# Conversion to numpy array for improved memory, performance and functionality
 trainInput, trainTarget = np.array(trainInput), np.array(trainTarget)
+valInput, valTarget = np.array(valInput), np.array(valTarget)
+testInput, testTarget = np.array(testInput), np.array(testTarget)
+
 trainInput = np.reshape(trainInput, (trainInput.shape[0], trainInput.shape[1], 1))
+valInput = np.reshape(valInput, (valInput.shape[0], valInput.shape[1], 1))
+testInput = np.reshape(testInput, (testInput.shape[0], testInput.shape[1], 1))
 \end{lstlisting} 
 
 
@@ -847,6 +969,41 @@ model.fit(trainInput,{"inPred_result": trainInTarget, "outPred_result": trainTar
 
 \end{lstlisting} 
 
+\subsection{Evaluation Metrics} 
+
+\begin{lstlisting}[language=Python, breaklines=true]
+def evaluation_metrics(prediction, actual):
+  TP = 0
+  TN = 0
+  FP = 0
+  FN = 0
+  for i in range (0, len(actual)):
+    if actual[i][0] == '1':
+      if prediction[i][0] == 1:
+        TP += 1
+      else:
+        FN += 1
+    if actual[i][0] == '0':
+      if prediction[i][0] == 0:
+        TN += 1
+      else: 
+        FP += 1
+     
+  print(TP, TN, FP, FN)
+  return (TP+TN)/(TP+TN+FP+FN), TP/(TP+FP), TP/(TP+FN)
+
+accuracy, precision, recall = evaluation_metrics(stack_classPred, testTarget)
+
+print(accuracy, precision, recall)
+\end{lstlisting} 
+
+\begin{lstlisting}[language=Python, breaklines=true]
+selected = []
+
+for i in range(len(rawtestTarget)):
+  if stack_classPred[i][0] == 1: 
+    selected.append(rawtestTarget[i])
+\end{lstlisting} 
 
 %-------------------------------------------------------------------------
 \newpage
@@ -876,23 +1033,25 @@ def test_sum():
     assert sum([1, 2, 3]) == 6, "not6"
 \end{lstlisting} 
 
-The next level up involves integration testing, which focuses on the correctness of functionality in combined components of the software. An example of this would be examining the outputs of a function which takes as an input a processed dataframe from another function. It is important to test the combined behaviour of these two components after individual unit testing to ensure that it is in line with expectations. Given the data orientated nature of the project, this will mainly be achieved through the development of small, well-defined test datasets to compare and contrast with the outputs of the components.  
+The next level up involves integration testing, which focuses on the correctness of functionality in combined components of the software. An example of this would be examining the outputs of a function which takes as an input a processed dataframe from another function. It is important to test the combined behaviour of these two components after individual unit testing to ensure that it is in line with expectations. Given the data orientated nature of the project, this will mainly be achieved through the development of small, well-defined test datasets to compare and contrast with the outputs of the components. This is known as example testing and is contrasted with batch testing, which focuses on passing through significant amounts of data to evaluate correctness. The latter approach is less appropriate in the context of this project since it is very time consuming both to run tests and generate vast amounts of data.
 
 \begin{figure}[!hbt!]
 \centering
-\includegraphics[width=15.5cm]{integrated_testing.png}
+\includegraphics[width=16.5cm]{integrated_testing.png}
 \caption{Flow diagram of how an integrated test may be executed.}
 \end{figure}
 
-System testing will involve evaluating the realised performance of the whole system. This will then allow for the model to be comparable to other methodologies developed in the field and industry.
+System testing will involve evaluating the realised performance of the whole system. This will then allow for the model to be comparable to other methodologies developed in the field and industry. This will be covered in section \ref{evaluation}.
 
 \subsection{Test Results} 
+
+The following
 
 
 %-------------------------------------------------------------------------
 \newpage
 
-\section{Results}
+\section{Results} \label{results}
 
 \iffalse
 This covers an area different from the 'Testing' chapter, and relates to the understanding and analysis of the algorithm, program, or hardware behaviour.
@@ -906,7 +1065,45 @@ possible) explained.
 Semi-empirical models of behaviour may be developed, justified, and tested. The types of experiments/simulations that were carried out should be described. Why were certain experiments carried out but not others? What were the important parameters in the simulation and how did they affect the results? If there are very many graphs and tables associated with this chapter they may be put in the Appendix, but it is generally better to keep these close to the text they illustrate, as this is easier for the reader.
 \fi
 
-\subsection{Baseline}
+\begin{table}[hbt!]
+\begin{center}
+\begin{tabular}{c|c|c}
+Accuracy & Precision & Recall\\
+\hline
+0.705 & 0.700 & 0.699\\
+\end{tabular}
+\end{center}
+\caption{Evaluation metrics of the model performed on hold out test data.}
+\end{table}
+
+
+\begin{table}[hbt!]
+\begin{center}
+\begin{tabular}{c|c|c|c}
+ & Entire Dataset & Test Dataset & Model-Selected Labels in Test Dataset\\
+\hline
+Mean & 0.000389 & notknown & 0.00764\\
+\hline
+Variance & 0.000546 & notknown & 0.000269\\
+\hline
+Max & 7.098 & notknown & 0.277\\
+\hline
+Min & -0.714 & notknown & -0.368\\
+\hline
+Skewness & 64.114 & notknown & 1.224\\
+\hline
+Kurtosis & 18474.170 & notknown & 31.110\\
+\end{tabular}
+\end{center}
+\caption{Statistical summary of percentage changes i.e. returns of sets of data.}
+\end{table}
+
+\begin{figure}[!hbt!]
+\centering
+\includegraphics[width=16.5cm]{results_distributions.png}
+\caption{Histogram of the returns and log returns of the selected labels by the model.}
+\end{figure}
+
 
 %-------------------------------------------------------------------------
 \newpage
@@ -917,7 +1114,7 @@ Semi-empirical models of behaviour may be developed, justified, and tested. The 
 
 \section{Conclusions}
 
-\subsection{Evaluation}
+\subsection{Evaluation} \label{evaluation}
 \iffalse
 
 How successful have you been? What have you achieved? . It is important here to identify positively what is worthwhile in your work. At the same time, honesty, and a clear description of the limits of your work, is equally important.
@@ -984,12 +1181,12 @@ There are countless future development paths that could be done to improve and g
 }
 
 \newpage
-
+ 
 \section{Appendix}
 Listing \ref{libraries} depicts a list of external packages used to develop the model. These packages are roughly split by use case; mathematical structuring, data visualisation, functionalities required, machine learning tools and miscellaneous. 
 
-\begin{lstlisting}[language=Python, breaklines=true, ,label={libraries},]
-import numpy as np
+\begin{lstlisting}[language=Python, breaklines=true, label={libraries},]
+iimport numpy as np
 import pandas as pd
 import datetime as dt
 
@@ -997,9 +1194,10 @@ import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import MinMaxScaler, Normalizer
+from scipy import stats
 
-from keras.models import Sequential, Model
+from keras.models import Sequential, Model, load_model
 from keras.layers import Activation, Dense, LSTM, Dropout, Masking, Input
 from keras import optimizers
 from keras.utils.vis_utils import model_to_dot
@@ -1007,18 +1205,12 @@ from keras.utils.vis_utils import model_to_dot
 from IPython.display import SVG
 
 from google.colab import files
+
+import os
 \end{lstlisting} 
-
-Please use appendices as necessary for material that is tangentially relevant, or necessary to preserve project value, but that you do not expect Examiners to read.
-
-Related material possibly but not directly relevant to the project work. E.g. manuals of test equipment used. (There is no requirement to include such, but in some cases, where they have some tangential relevance, it might be appropriate).
 
 \subsection{Source Code}
 
 The project repository, which contains the codebase can be found on GitHub with the link \href{https://github.com/twutang/SXNP-Factor-Models}{here}. The code can be found in both its original Jupyter Notebook (.ipynb) and python file (.py) formats. It is suggested to use the Google Colaboratory environment, which integrates all of the required libraries. The original file can be found \href{https://colab.research.google.com/drive/1IHPEI-sPNSS0rKdFThywR4LTpeOt0Z_y}{here}. Please see the README file and notebook text cells within the GitHub repository for documentation on the functionality of the codebase. 
-
-\subsection{Test data}
-TC: The report itself will contain concise summaries of the test data in a human readable form.
-Github repository
 
 \end{document}
