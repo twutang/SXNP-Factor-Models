@@ -9,14 +9,32 @@
 \usepackage{listings}
 \usepackage{amsthm}
 \usepackage{mathtools}
+\usepackage{caption}
 
 \setlength{\parskip}{0.2cm}
 
-\lstset{
-basicstyle=\ttfamily,
-frame=single
+\usepackage{color}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+
+\lstdefinestyle{mystyle}{
+    language = Python,
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{blue},
+    stringstyle=\color{codepurple},
 }
 
+\lstset{
+basicstyle=\normalsize\ttfamily, 
+breaklines=true, 
+xleftmargin=2em, 
+frame=single, 
+framexleftmargin=15pt, 
+belowcaptionskip=8pt,
+style = mystyle
+}
 
 % Include other packages here, before hyperref.
 
@@ -456,7 +474,7 @@ Initially, sample formats were distributed in csv formats. However, when the ent
 
 A few issues arose due to a the deprecated state of various aspects of the initial dataset. It was found that some datasets had not been filtered down to the 203 companies that formed part of the Industrial Goods and Services sector but still contained 1184 companies that formed the entire STOXX Europe 600 Index. Additionally, some attributes did not have a date key. It was therefore necessary to standardise all of the feature datasets with the same date index and companies. The company tickers were then anonymised simply for ease of use in terms of readability and iterating through tickers. 
 
-\subsection{Data Preprocessing}
+\subsection{Data Preprocessing} \label{data preprocess}
 
 \subsubsection{Data Transformation} \label{data transformation}
 
@@ -590,17 +608,19 @@ One of the problematic issues was the model's capability of handling the missing
 
 \begin{figure}[!hbt!]
 \centering
-\includegraphics[width=16.5cm]{rnn_missingval_perception.png}
+\includegraphics[width=14.5cm]{rnn_missingval_perception.png}
 \caption{Demonstration of errors introduced into output function of LSTM by missing values.}
 \end{figure}
 
 In order to resolve this, a new architecture was designed where the model predicted both the next input vector and an output value. This would then be able to fill in any missing values and rectify the issue experienced with the initial model. The model would first be trained on the longest continuous time series data available without any missing data so that both predictive models have had an opportunity to train and learn. After each iteration of a series, the model's hidden states will be reset when training begins on a different series that is either unrelated to the previous by time or company. The necessity for predicting the next input values stems from the concern that if this was not implemented, the series would not have enough data to provide actual learning. By using prediction, it would be possible to concatenate two series with minor amounts of missing values into a single, more substantial series. This would only function with relatively small gaps as the error variance increases with increasing numbers of continuous input predictions and this is likely to be detrimental to both the performance of the output prediction and the model's learning.
 
-\begin{figure}[!hbt!]
+\begin{figure}[!htb]
 \centering
-\includegraphics[width=14.5cm]{multi_output.png}
+\includegraphics[width=17.5cm]{multi_output.png}
 \caption{Overview of the architecture of the multi output model.}
 \end{figure}
+
+\newpage
 
 \subsection{Training and Testing} 
 
@@ -610,7 +630,7 @@ Although multiple ideas of cross validation were explored in section \ref{cross 
 
 A rule of thumb employed in many models is to start by following the Pareto principle and divide the training and test splits into 80/20 respectively. The training data is then usually separated into training and validation in the same 80/20 ration again. Since there is a large amount of data available, it was decided to reduce the amount allocated to training for time saving purposes and so the final splits decided for training, validation and testing was 60/20/20.
 
-\subsection{Hyperparameter Optimisation} 
+\subsection{Hyperparameter Optimisation} \label{hyperparameters}
 
 Hyperparameters were initialised based on some rules of thumb that were discovered during the literature review. It would then be improved upon through adjustment and tuning before being reevaluated to see if any performance boost was achieved. The intended method would be to perform a grid search using the toolkit available in the \textit{scikit-learn} library. Unfortunately, the performance of the model was fundamentally poor and so its responsiveness to optimisation insignificant. This section analyses how the hyperparameters were initialised. 
 
@@ -691,15 +711,15 @@ Complete listings may be included as appendices of your report but this is not n
 \label{data_structuring}
 \end{figure}
  
-Given the large number of csv files, there was a necessity to store the resulting dataframes in a systematic method so that functions that needed to be performed on method could be done so efficiently. This was achieved by dividing the respective csv files first into input and target variables. Of course, only one file was needed for the target variable, being the close price dataset. The files themselves were stored on a Google Drive account, at the file path as shown in listing \ref{file_mount} 
+Given the large number of csv files, there was a necessity to store the resulting dataframes in a systematic method so that functions that needed to be performed on method could be done so efficiently. This was achieved by dividing the respective csv files first into input and target variables. Of course, only one file was needed for the target variable, being the close price dataset. The files themselves were stored on a Google Drive account, at the file path as shown in listing \ref{file_mount}. 
 
-\begin{lstlisting}[language=Python, breaklines=true, label = {file_mount}]
+\begin{lstlisting}[language=Python, breaklines=true, label = {file_mount}, caption={Importing csv file to dataframe.}]
 price_close = pd.read_csv('/content/drive/My Drive/thw116_FYP/data/price_close.csv')
 \end{lstlisting}
 
 However, the sample data provided was not an accurate representation of the number of attributes actually available in the dataset and so a structure was required to store them. It was decided to store these dataframes in lists, based on the categories that they were originally allocated in the raw .rds file. 
 
-\begin{lstlisting}[language=Python, breaklines=true]
+\begin{lstlisting}[language=Python, breaklines=true, caption=Formation of lists of dataframes according to type of input.]
 ltm_book = pd.read_csv('/content/drive/My Drive/thw116_FYP/data/ltm_book.csv')
 ltm_div = pd.read_csv('/content/drive/My Drive/thw116_FYP/data/ltm_div.csv')
 ........................
@@ -708,9 +728,9 @@ ntm_inputs = [ntm_book, ntm_div, ntm_ebit, ntm_ebitda, ntm_ebitda, ntm_eps, ntm_
 tech_inputs = [price_high, price_low, price_open, volume, enterprise_val]
 \end{lstlisting} 
 
-This structuring of the dataframes made functions far easier to implement across all the data as it only required iteration through the lists. Part of the initial datasets were not standardised, with differing numbers of companies so it was necessary to standardise them before performing any data preprocessing. Additionally, tickers for companies were anonymised so they could be iterated through conveniently and a \textit{datetime} index for each dataframe was created, as shown in listing \ref{datetime_index}
+This structuring of the dataframes made functions far easier to implement across all the data as it only required iteration through the lists. Part of the initial datasets were not standardised, with differing numbers of companies so it was necessary to standardise them before performing any data preprocessing. Additionally, tickers for companies were anonymised so they could be iterated through conveniently and a \textit{datetime} index for each dataframe was created, as shown in listing \ref{datetime_index}. 
 
-\begin{lstlisting}[language=Python, breaklines=true, label={datetime_index}]
+\begin{lstlisting}[language=Python, breaklines=true, label={datetime_index}, caption={Function to create datetime index for dataframes.}]
 def time_index_generator(dataframe):
   dataframe['Date'] = pd.to_datetime(dataframe['Date'], dayfirst=True)
   dataframe.set_index('Date', inplace=True)
@@ -723,10 +743,37 @@ Finally, since it was desired to analyse the problem of predicting whether price
 
 \subsection{Data Preprocessing}
 
-ANALYSIS
+\begin{figure}[!hbt!]
+\centering
+\includegraphics[width=\columnwidth]{data_preprocessing.png}
+\caption{Program flow diagram of data preprocessing processes.}
+\label{data_preprocessing}
+\end{figure}
 
-DIVISION INTO TRAINING SETS
-\begin{lstlisting}[language=Python, breaklines=true]
+Before any processing was performed on the data, some of the inherent properties were analysed to establish what could or could not be done. This involved lots of data visualisation, with boxplots and histograms describing attributes of the data. Analysis of this is discussed in section \ref{data preprocess}. Basic \textit{matplotlib} functionalities were used and a small function to analyse the useful datapoints available in the derivative of datasets with respect to time, as shown in \ref{datachange}. 
+
+\begin{lstlisting}[language=Python, breaklines=true, label={datachange}, caption={Identifying the available datapoint counts in differences of $x_{t}$ and $x_{t-1}$.}]
+def data_change(dataframe, column): 
+  noChange_count = 0
+  NaN_count = 0
+  for i in range (0, len(dataframe.index)): 
+    if dataframe[column].diff().iloc[i] == 0:
+      noChange_count += 1
+    if dataframe[column].isna().iloc[i]: 
+      NaN_count += 1
+  
+#   print('Total rows: ', len(dataframe[column]))
+#   print('The number of rows where no change occurs: ', noChange_count)
+#   print('The number of rows which are NaN: ', NaN_count)
+#   print('Useful datapoints:', (len(dataframe[column])-noChange_count-NaN_count))
+
+  return len(dataframe[column])-noChange_count-NaN_count
+\end{lstlisting} 
+
+
+The data was the reduced in size and all old time series before 01/01/2000 was removed following the analysis in section \ref{data_analysis}. The next step involved dividing the output into the training, validation and test splits as specified in section \ref{hyperparameters}. This was achieved by dividing the index of the dataframe accordingly and appending each newly created dataframe to a list, similar to before. The lists were then categorised by set and subcategorised by type of data. This meant that $3\times3=9$ lists were formed for the inputs. The target variable was simply divided into 3 dataframes. 
+
+\begin{lstlisting}[language=Python, breaklines=true, caption= {Functionality to split original entire dataset into allocated training split size.}]
 def training_set(train_percentage, dataframe): 
   train_size = int(train_percentage*len(dataframe.index)) 
   train_set = dataframe[:train_size]
@@ -750,9 +797,9 @@ for i in range(0,len(tech_inputs)):
 returns_trainOutput = training_set(training_split, returns)
 \end{lstlisting} 
 
-SCALING FUNCTIONS
+After dividing the data into sets, the input data was scaled into a range between 0 and 1 for easier processing by the model. It was important to do this after the splitting in order to avoid any data contamination and look ahead bias. The scaling function itself was taken from the \textit{scikit-learn} library. One of the consequences of this was that it converted the data from a dataframe into \textit{numpy} arrays. 
 
-\begin{lstlisting}[language=Python, breaklines=true]
+\begin{lstlisting}[language=Python, breaklines=true, caption={Functionality to scale the input attributes between 0 and 1.}]
 def input_scaling(dataframe):
   
   # This is the MinMax Scaling function 
@@ -783,7 +830,9 @@ for i in range(0,len(tech_inputs)):
   tech_testInputs[i] = input_scaling(tech_testInputs[i])
 \end{lstlisting} 
 
-\begin{lstlisting}[language=Python, breaklines=true]
+The output classification function translated the raw returns into the binary classifier as specified in \ref{data transformation}. There was some difficulty in implementing a classifier using the median returns of a row as this required fairly taxing individual cell comparisons, which was computationally very slow. Due to time constraints, it was decided to use the simpler classifier where negative or 0 return equated to 0 and positive return equated to +1. This avoided the need for individual cell comparisons as there was no longer a need to change the comparison value for each row. The use of an unmodified returns dataset was also needed for analysing the model results.
+
+\begin{lstlisting}[language=Python, breaklines=true, caption=Function to convert the raw output target to a binary label.]
 def output_classifier(type ,dataframe): 
   
   # No adjustments
@@ -805,10 +854,9 @@ raw_testOutput = output_classifier('raw', returns_testOutput)
 returns_testOutput = output_classifier('binary', returns_testOutput)
 \end{lstlisting} 
 
+After preprocessing across the dataset, it was necessary to reformat the data into an input form acceptable to the Keras model architecture. Therefore, the input vectors had to be created by selecting each of the relevant attributes for a datapoint for a company at a specific time. This was achieved by iterating through the lists of dataframes and appending these attributes into a \textit{input\_unit} list which represented a vector input, before appending all of these vectors into another list for the relevant training, validation or test sets.
 
-After preprocessing across the dataset, it was necessary to reformat the data into an input form acceptable to the Keras model architecture. For this all of the lists of dataframes had to be iterated through and the appropriate datapoint extracted to create another list that would represent the input vector. 
-
-\begin{lstlisting}[language=Python, breaklines=true]
+\begin{lstlisting}[language=Python, breaklines=true, caption={Formation of the input vectors for the model.}]
 trainInput = []
 trainTarget = []
 
@@ -847,9 +895,15 @@ for company in range(0, len(returns_trainOutput.columns)):
     trainTarget.append(returns_trainOutput[anon_tickers[company]][time_unit])
 \end{lstlisting} 
 
-These lists were then converted into \textit{numpy} arrays. This provided the use of \textit{reshape} functionality only accessible to arrays as well as the fact that they are more memory and computationally efficient. Keras requires a Since this is the immediate step before inputting into the architecture, there is no more need for the flexibility offered by lists. 
+These lists were then converted back into \textit{numpy} arrays. This provided the use of \textit{reshape} functionality only accessible to arrays as well as the fact that they are more memory and computationally efficient. Keras requires a Since this is the immediate step before inputting into the architecture, there is no more need for the flexibility offered by lists. 
 
-\begin{lstlisting} 
+\begin{figure}[!hbt!]
+\centering
+\includegraphics[width=8cm]{input_structure.png}
+\caption{Diagram of reshaped input structure for Keras.}
+\end{figure}
+
+\begin{lstlisting} [language=Python, breaklines=true, caption=Reshaping the input \textit{numpy} arrays to the correct format.]
 # Conversion to numpy array for improved memory, performance and functionality
 trainInput, trainTarget = np.array(trainInput), np.array(trainTarget)
 valInput, valTarget = np.array(valInput), np.array(valTarget)
@@ -860,78 +914,89 @@ valInput = np.reshape(valInput, (valInput.shape[0], valInput.shape[1], 1))
 testInput = np.reshape(testInput, (testInput.shape[0], testInput.shape[1], 1))
 \end{lstlisting} 
 
-
-
-
-
 \subsection{Architecture} 
 \subsubsection{Single Output Model}
 
-\begin{lstlisting}[language=Python, breaklines=true]
+\begin{lstlisting}[language=Python, breaklines=true, caption={Model creation, compilation and fitting functionality of the single output model. The initial single hidden layer model is commented out.}]
 data_dim = trainInput.shape[1]
 timesteps = trainInput.shape[0]
+
 
 # Sample Code
 # model parameters:
 
 def create_model(train_X, train_Y, data_dim):
-  lstm_units = 128
+  lstm_units = 1024
   
 #   print('Build baseline binary model...')
 #   model = Sequential()
 #   model.add(Masking(mask_value=0., input_shape=(data_dim, 1)))
 #   model.add(LSTM(lstm_units))
-#   model.add(Dense(1))
+#   model.add(Dense(1, activation='sigmoid'))
 #   model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
   
-  
   print('Build stacked binary model')
+  lstm_units = int(lstm_units/4)
+
   model = Sequential()
   model.add(Masking(mask_value=0., input_shape=(data_dim, 1)))
   model.add(LSTM(lstm_units, return_sequences=True))
-  model.add(Dropout(0.2))
+  model.add(Dropout(rate=0.2))
   model.add(LSTM(lstm_units, return_sequences=True))
-  model.add(Dropout(0.2))
-
+  model.add(Dropout(rate=0.2))
+  model.add(LSTM(lstm_units, return_sequences=True))
+  model.add(Dropout(rate=0.2))
   model.add(LSTM(lstm_units))
-  model.add(Dense(1))
+  model.add(Dense(1, activation='sigmoid'))
   model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
-
-  
-  #   model.compile(loss='mean_squared_error', optimizer='adam', metrics=['accuracy'])
 
   return(model)
 
-  
 baseline_model = create_model(trainInput, trainTarget, data_dim)
+print(baseline_model.summary())
 SVG(model_to_dot(baseline_model, show_shapes=True).create(prog='dot', format='svg'))
+
+history = baseline_model.fit(trainInput, trainTarget, epochs = 30, batch_size = 1024, verbose = 1)
+
 \end{lstlisting} 
 
 \subsubsection{Multi output Model}
 
-\begin{lstlisting}[language=Python, breaklines=true]
-data_dim = trainInput.shape[1]
-timesteps = trainInput.shape[0]
-
+\begin{lstlisting}[language=Python, breaklines=true, caption={Structuring of the multi output model, with two forks focused on the separate tasks of predicting the target variable, $y$ and the next input vector, $x_{t+1}$.}]
 class fypNet: 
   @staticmethod
   def build_input_predictor(inputs, data_dim, lstm_units):
-    inPred = Masking(mask_value=0., input_shape = (data_dim, 1))(inputs)
-    inPred = LSTM(lstm_units, return_sequences=True)(inPred)
+    lstm_units = int(lstm_units/8)
+
+    inPred = Masking(mask_value=-1., input_shape = (data_dim, 1))(inputs)
     
-    inPred = Dense(1)(inPred)
+    inPred = LSTM(lstm_units, return_sequences=True)(inputs)
+    inPred = Dropout(rate=0.2)(inPred)
+    inPred = LSTM(lstm_units, return_sequences=True)(inPred)
+    inPred = Dropout(rate=0.2)(inPred)
+    inPred = LSTM(lstm_units, return_sequences=True)(inPred)
+    inPred = Dropout(rate=0.2)(inPred)
+    inPred = LSTM(lstm_units)(inPred)    
+    inPred = Dense(20)(inPred)
+    
     result = Activation('softmax', name= 'inPred_result')(inPred)
     
     return result
     
   @staticmethod
   def build_output_predictor(inputs, data_dim, lstm_units): 
-    outPred = LSTM(lstm_units, return_sequences=True)(inputs)
-    outPred = LSTM(lstm_units)(outPred)
+    lstm_units = int(lstm_units/4)
     
+    outPred = LSTM(lstm_units, return_sequences=True)(inputs)
+    outPred = Dropout(rate=0.2)(outPred)
+    outPred = LSTM(lstm_units, return_sequences=True)(outPred)
+    outPred = Dropout(rate=0.2)(outPred)
+    outPred = LSTM(lstm_units, return_sequences=True)(outPred)
+    outPred = Dropout(rate=0.2)(outPred)
+    outPred = LSTM(lstm_units)(outPred)    
     outPred = Dense(1)(outPred)
-    result = Activation('softmax', name= 'outPred_result')(outPred)
-
+    result = Activation('sigmoid', name= 'outPred_result')(outPred)
+   
     return result
   
   @staticmethod
@@ -971,7 +1036,33 @@ model.fit(trainInput,{"inPred_result": trainInTarget, "outPred_result": trainTar
 
 \subsection{Evaluation Metrics} 
 
-\begin{lstlisting}[language=Python, breaklines=true]
+\begin{figure}[!hbt!]
+\centering
+\includegraphics[width=\columnwidth]{evaluationflow.png}
+\caption{Program flow diagram of evaluation processes.}
+\label{evaluationflow}
+\end{figure}
+
+The final section of the code relates to actually evaluating the predictions of the result. For this, it was first required to generate the predictions from the unseen test data input. Since labels were binary, the Keras function of \textit{predict\_classes} was more suitable as this would generate the appropriate labels. Given more time, the \textit{predict} values would be analysed to evaluate whether the continuous probabilities showed signs of an underlying relationship that higher returns correlated with higher probabilities. 
+
+\begin{lstlisting}[language=Python, breaklines=true, caption= {Keras predict functions to generate predicted labels from test data.}]
+stack_pred = trained_stack.predict(testInput, verbose=1)
+print(stack_pred)
+
+stack_classPred = trained_stack.predict_classes(testInput, verbose=1)
+print(stack_classPred)
+\end{lstlisting} 
+
+As discussed in section \ref{benchmark}, 3 metrics were used to analyse the performance. These were calculated by implementing a function that compared the predictions to the actual labels and then categorising the results as shown in figure \ref{confusion_matrix}. The number of occurrences for each was then counted.
+
+\begin{figure}[!hbt!]
+\centering
+\includegraphics[width=7.5cm]{confusion_matrix.png}
+\caption{Confusion matrix for labelling prediction results.}
+\label{confusion_matrix}
+\end{figure}
+
+\begin{lstlisting}[language=Python, breaklines=true, caption= Implemented function which evaluates the model prediction performance based on accuracy\, precision and recall.]
 def evaluation_metrics(prediction, actual):
   TP = 0
   TN = 0
@@ -997,7 +1088,9 @@ accuracy, precision, recall = evaluation_metrics(stack_classPred, testTarget)
 print(accuracy, precision, recall)
 \end{lstlisting} 
 
-\begin{lstlisting}[language=Python, breaklines=true]
+Finally, the labels that the model predicted to be 1 were selected and filtered into another list. These values were then equated to their original raw returns value to analyse the datapoints that the model had selected. Further evaluation and analysis can be found in section \ref{results}.
+
+\begin{lstlisting}[language=Python, breaklines=true, caption={Filtering out positively labelled predictions to extract related actual return.}]
 selected = []
 
 for i in range(len(rawtestTarget)):
@@ -1028,7 +1121,7 @@ This section is normally useful for software or hardware deliverables and less r
 
 The procedure of evaluating the achievements of the project will vary according to the stage of the software development cycle. On the atomic level is the unit test, which will be used to validate that each of the separate modules and functions of the software are functioning as expected. An example\cite{python_testing} of how unit testing will be implemented is shown below. By using the assert statement in Python, it is possible to determine whether the function, $sum()$, is outputting the expected result of $6$. An incorrect result will raise an $AssertionError$ and output the message $not6$.
 
-\begin{lstlisting}[language=Python]
+\begin{lstlisting}[language=Python, caption=Example Test.]
 def test_sum():
     assert sum([1, 2, 3]) == 6, "not6"
 \end{lstlisting} 

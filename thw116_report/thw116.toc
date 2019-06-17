@@ -13,9 +13,9 @@
 \contentsline {subsubsection}{\numberline {2.2.3}Loss Functions}{9}{subsubsection.2.2.3}
 \contentsline {subsubsection}{\numberline {2.2.4}Cross Validation}{9}{subsubsection.2.2.4}
 \contentsline {subsubsection}{\numberline {2.2.5}Applications}{10}{subsubsection.2.2.5}
-\contentsline {subsection}{\numberline {2.3}\hskip -1em.\nobreakspace {}Review of Machine Learning Research in Investing}{10}{subsection.2.3}
-\contentsline {subsubsection}{\numberline {2.3.1}Overview}{10}{subsubsection.2.3.1}
-\contentsline {subsubsection}{\numberline {2.3.2}Initial Usage}{11}{subsubsection.2.3.2}
+\contentsline {subsection}{\numberline {2.3}\hskip -1em.\nobreakspace {}Review of Machine Learning Research in Investing}{11}{subsection.2.3}
+\contentsline {subsubsection}{\numberline {2.3.1}Overview}{11}{subsubsection.2.3.1}
+\contentsline {subsubsection}{\numberline {2.3.2}Initial Usage}{12}{subsubsection.2.3.2}
 \contentsline {subsubsection}{\numberline {2.3.3}Formalisation of Experimentation}{12}{subsubsection.2.3.3}
 \contentsline {subsubsection}{\numberline {2.3.4}Methodologies}{12}{subsubsection.2.3.4}
 \contentsline {subsubsection}{\numberline {2.3.5}Related Works}{13}{subsubsection.2.3.5}
@@ -30,29 +30,29 @@
 \contentsline {subsection}{\numberline {4.3}\hskip -1em.\nobreakspace {}Data Preprocessing}{18}{subsection.4.3}
 \contentsline {subsubsection}{\numberline {4.3.1}Data Transformation}{18}{subsubsection.4.3.1}
 \contentsline {subsubsection}{\numberline {4.3.2}Sparsity}{19}{subsubsection.4.3.2}
-\contentsline {subsection}{\numberline {4.4}\hskip -1em.\nobreakspace {}Architectural Design}{21}{subsection.4.4}
-\contentsline {subsubsection}{\numberline {4.4.1}Overview}{21}{subsubsection.4.4.1}
+\contentsline {subsection}{\numberline {4.4}\hskip -1em.\nobreakspace {}Architectural Design}{20}{subsection.4.4}
+\contentsline {subsubsection}{\numberline {4.4.1}Overview}{20}{subsubsection.4.4.1}
 \contentsline {subsubsection}{\numberline {4.4.2}Inputs and Outputs}{21}{subsubsection.4.4.2}
 \contentsline {subsubsection}{\numberline {4.4.3}Loss Function}{22}{subsubsection.4.4.3}
 \contentsline {subsubsection}{\numberline {4.4.4}Design Iterations}{22}{subsubsection.4.4.4}
-\contentsline {subsection}{\numberline {4.5}\hskip -1em.\nobreakspace {}Training and Testing}{23}{subsection.4.5}
+\contentsline {subsection}{\numberline {4.5}\hskip -1em.\nobreakspace {}Training and Testing}{24}{subsection.4.5}
 \contentsline {subsection}{\numberline {4.6}\hskip -1em.\nobreakspace {}Hyperparameter Optimisation}{24}{subsection.4.6}
-\contentsline {subsection}{\numberline {4.7}\hskip -1em.\nobreakspace {}Benchmark Design}{25}{subsection.4.7}
+\contentsline {subsection}{\numberline {4.7}\hskip -1em.\nobreakspace {}Benchmark Design}{26}{subsection.4.7}
 \contentsline {section}{\numberline {5}\hskip -1em.\nobreakspace {}Implementation}{27}{section.5}
 \contentsline {subsection}{\numberline {5.1}\hskip -1em.\nobreakspace {}Data Structuring}{27}{subsection.5.1}
 \contentsline {subsection}{\numberline {5.2}\hskip -1em.\nobreakspace {}Data Preprocessing}{28}{subsection.5.2}
-\contentsline {subsection}{\numberline {5.3}\hskip -1em.\nobreakspace {}Architecture}{30}{subsection.5.3}
-\contentsline {subsubsection}{\numberline {5.3.1}Single Output Model}{30}{subsubsection.5.3.1}
-\contentsline {subsubsection}{\numberline {5.3.2}Multi output Model}{31}{subsubsection.5.3.2}
-\contentsline {subsection}{\numberline {5.4}\hskip -1em.\nobreakspace {}Evaluation Metrics}{32}{subsection.5.4}
-\contentsline {section}{\numberline {6}\hskip -1em.\nobreakspace {}Testing}{34}{section.6}
-\contentsline {subsection}{\numberline {6.1}\hskip -1em.\nobreakspace {}Test Plan}{34}{subsection.6.1}
-\contentsline {subsection}{\numberline {6.2}\hskip -1em.\nobreakspace {}Test Results}{35}{subsection.6.2}
-\contentsline {section}{\numberline {7}\hskip -1em.\nobreakspace {}Results}{36}{section.7}
-\contentsline {section}{\numberline {8}\hskip -1em.\nobreakspace {}Conclusions}{37}{section.8}
-\contentsline {subsection}{\numberline {8.1}\hskip -1em.\nobreakspace {}Evaluation}{37}{subsection.8.1}
-\contentsline {subsection}{\numberline {8.2}\hskip -1em.\nobreakspace {}Objective Completion}{37}{subsection.8.2}
-\contentsline {subsection}{\numberline {8.3}\hskip -1em.\nobreakspace {}Future Work}{38}{subsection.8.3}
-\contentsline {section}{\numberline {9}\hskip -1em.\nobreakspace {}Bibliography}{39}{section.9}
-\contentsline {section}{\numberline {10}\hskip -1em.\nobreakspace {}Appendix}{40}{section.10}
-\contentsline {subsection}{\numberline {10.1}\hskip -1em.\nobreakspace {}Source Code}{40}{subsection.10.1}
+\contentsline {subsection}{\numberline {5.3}\hskip -1em.\nobreakspace {}Architecture}{32}{subsection.5.3}
+\contentsline {subsubsection}{\numberline {5.3.1}Single Output Model}{32}{subsubsection.5.3.1}
+\contentsline {subsubsection}{\numberline {5.3.2}Multi output Model}{33}{subsubsection.5.3.2}
+\contentsline {subsection}{\numberline {5.4}\hskip -1em.\nobreakspace {}Evaluation Metrics}{34}{subsection.5.4}
+\contentsline {section}{\numberline {6}\hskip -1em.\nobreakspace {}Testing}{37}{section.6}
+\contentsline {subsection}{\numberline {6.1}\hskip -1em.\nobreakspace {}Test Plan}{37}{subsection.6.1}
+\contentsline {subsection}{\numberline {6.2}\hskip -1em.\nobreakspace {}Test Results}{38}{subsection.6.2}
+\contentsline {section}{\numberline {7}\hskip -1em.\nobreakspace {}Results}{39}{section.7}
+\contentsline {section}{\numberline {8}\hskip -1em.\nobreakspace {}Conclusions}{40}{section.8}
+\contentsline {subsection}{\numberline {8.1}\hskip -1em.\nobreakspace {}Evaluation}{40}{subsection.8.1}
+\contentsline {subsection}{\numberline {8.2}\hskip -1em.\nobreakspace {}Objective Completion}{40}{subsection.8.2}
+\contentsline {subsection}{\numberline {8.3}\hskip -1em.\nobreakspace {}Future Work}{41}{subsection.8.3}
+\contentsline {section}{\numberline {9}\hskip -1em.\nobreakspace {}Bibliography}{42}{section.9}
+\contentsline {section}{\numberline {10}\hskip -1em.\nobreakspace {}Appendix}{43}{section.10}
+\contentsline {subsection}{\numberline {10.1}\hskip -1em.\nobreakspace {}Source Code}{43}{subsection.10.1}
