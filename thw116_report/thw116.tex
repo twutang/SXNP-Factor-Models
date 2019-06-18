@@ -36,6 +36,13 @@ belowcaptionskip=8pt,
 style = mystyle
 }
 
+\newcommand*{\figuretitle}[1]{%
+    {\centering%   <--------  will only affect the title because of the grouping (by the
+    \textbf{#1}%              braces before \centering and behind \medskip). If you remove
+    \par\medskip}%            these braces the whole body of a {figure} env will be centered.
+}
+
+
 % Include other packages here, before hyperref.
 
 % If you comment hyperref and then uncomment it, you should delete
@@ -76,7 +83,7 @@ style = mystyle
                 \vfill
                 \setlength{\tabcolsep}{0pt}
                 \begin{tabular}{p{40mm}p{\dimexpr\columnwidth-40mm}}
-                      	Project Title: & \textbf{Feature Engineering for Fundamental Factor Models} \\[12pt]
+                      	Project Title: & \textbf{Recurrent Networks for Factor Models in Time Series} \\[12pt]
                        	Student: & \textbf{Tim Hung Wu} \\[12pt]
                         	CID: & \textbf{01195701} \\[12pt]
                 	    	Course: & \textbf{EIE3} \\[12pt]
@@ -114,7 +121,7 @@ The process of automating the identification of features which are able to deliv
 
 \subsection{Problem Definition} \label{Problem Definition}
 
-Using the SXNP dataset supplied by Giano Capital, this project aims to establish the key fundamentals that affect the returns of a company's stock price. This is achieved by developing algorithms that can assist in predicting the future prices of the stock. The algorithms utilise several inputs such as book value, sales and profit of the specified company to train and learn a function that correlates with the price. The performance is then benchmarked against an industry standard to see if the algorithms have achieved any outperformance compared to traditional models. This problem falls in the scope of machine learning, which has been frequently used to produce solutions in data-driven problems in recent times. Focus will be directed at RNNs with LSTM units. We choose well established and tested techniques used in literature to extract features from the dataset and attempt to learn patterns in the data. We will then tune the hyperparameters to optimise the model, and evaluate its potential performance in a pseudo-generated real world application. 
+Using the SXNP dataset supplied by Giano Capital, this project aims to establish the key fundamentals that affect the returns of a company's stock price. This is achieved by developing algorithms that can assist in predicting the future prices of the stock. The algorithms utilise several inputs such as book value, sales and profit of the specified company to train and learn a function that correlates with the price. The performance is then benchmarked against an industry standard to see if the algorithms have achieved any outperformance compared to traditional models. This problem falls in the scope of machine learning, which has been frequently used to produce solutions in data-driven problems in recent times. Focus will be directed at RNNs with LSTM units. We will choose well established and tested techniques used in literature to extract features from the dataset and attempt to learn patterns in the data. We will then tune the hyperparameters to optimise the model, and evaluate its potential performance in a pseudo-generated real world application. 
 
 \subsubsection{Intended Deliverables} \label{Intended Deliverables}
 \begin{itemize}
@@ -141,7 +148,7 @@ Cloud services will be used for the computational power and elements of data sto
 
 \subsection{Report Structure} \label{Report Structure}
 
-This report begins with a background outline to provide more colour into the problem by highlighting alternate approaches to investing and uses of the LSTM RNN. It will then establish the software deliverables and requirements expected from this project. This will then be followed by a detailed description of the iterative design processes used to construct models for the problem, with comments about how they were modified from the initial specification to build the final solution. Afterwards, the implementation and testing methodology for the software will be explained, with highlights of any interesting challenges. Then, the system be benchmarked against the self-developed metrics before a final section of evaluation and reflection of the key discoveries and findings learned throughout the project and the direction in which the project could be further developed in the future. 
+This report begins with a background outline to provide more colour into the problem by highlighting alternate approaches to investing and uses of the LSTM RNN. It will then establish the software deliverables and requirements expected from this project. This will then be followed by a detailed description of the iterative design processes used to construct models for the problem, with comments about how they were modified from the initial specification to build the final solution. Afterwards, the implementation and testing methodology for the software will be explained, with highlights of any interesting challenges. Then, the system will be benchmarked against the self-developed metrics before a final section of evaluation and reflection of the key discoveries and findings learned throughout the project and the direction in which the project could be further developed in the future. 
 
 \newpage
 
@@ -186,7 +193,7 @@ The use cases of RNNs have since expanded to multiple, practical domains that he
 
 \subsubsection{The Exploding and Vanishing Gradient Problem in RNNs}
 
-An issue with RNNs stem from the inherent property of operating with a sequential nature. The time difference between multiple cell often causes issues during backpropogation involving repeated multiplication of the gradient signal. This means that if the partial derivatives of the error gradient are either too large or small, they can explode or vanish respectively during the procedure. Exploding gradients cause the learning to diverge whereas vanishing ones can cause the learning rate to become very slow and eventually stop, as it tends to 0.
+One of the issues with RNNs stems from the inherent property of operating with a sequential nature. The time difference between multiple cells often causes issues during backpropogation involving repeated multiplication of the gradient signal. This means that if the partial derivatives of the error gradient are either too large or small, they can explode or vanish respectively during the procedure. Exploding gradients cause the learning to diverge whereas vanishing ones can cause the learning rate to become very slow and eventually stop, as it tends to 0.
 \vskip -1cm
 \begin{proof}\renewcommand{\qedsymbol}{}
 Let $x, y, h,  \theta, f $ be the input, output, hidden state, weights and basis function respectively: (Bengio et al.)
@@ -223,7 +230,7 @@ This implies that if $\gamma_{\theta}\gamma_{f} > 1$ or very small, the gradient
 	y_{t} = u_{t} \times tanh(C_{t})
 \end{gather*}
 
-Although LSTMs offer a method of counteracting vanishing gradients, the problem of exploding gradients still exist. Predominately, there are two main strategies to deal with this: gradient clipping and gradient normalisation, both introduced by Pascanu et al.\cite{Pascanu}. Gradient clipping involves involves reducing a gradient's components if it exceeds a specified threshold, $\tau$. The components form part of a matrix defined as $g_{ij}$ such that the updated matrix element values are $\hat{g_{ij}} = max(-\tau,min(\tau, g_{ij}))$. This is then used for the weight update. 
+Although LSTMs offer a method of counteracting vanishing gradients, the problem of exploding gradients still exists. Predominately, there are two main strategies to deal with this: gradient clipping and gradient normalisation, both introduced by Pascanu et al.\cite{Pascanu}. Gradient clipping involves involves reducing a gradient's components if it exceeds a specified threshold, $\tau$. The components form part of a matrix defined as $g_{ij}$ such that the updated matrix element values are $\hat{g_{ij}} = max(-\tau,min(\tau, g_{ij}))$. This is then used for the weight update. 
 
 Gradient normalisation involves rescaling the gradient rather than reducing its with an absolute value clip. This occurs when the norm $||g||_{2}$ goes over a threshold $\tau$. The gradient is then readjusted as such: $\hat{g} = g(\tau/||g||_{2})$. Reimers et al.\cite{Reimers} explored both of these methods in their paper and concluded that gradient normalisation produced statistically significant performance improvements whereas gradient clipping did not in the context of sequential tagging.
 
@@ -243,7 +250,7 @@ A popular example of a classification problem is the a binary classifier. These 
 
 \subsubsection{Cross Validation} \label{cross validation}
 
-An issue with LSTM networks arises when using classical cross validation methods. K-fold cross validation involves dividing the data into $k$ folds before assigning the initial fold as the test data and the rest as the training data. After each iteration of training, the test data assignment is then incremented until its position has permeated through all of the positions. However, with sequential data, this method causes disjoints in the training data since training for fold $n+1$ will be involve information from $n-1$ rather than $n$. In 2015, Bergmeir et al. introduced a new method\cite{Bergmeir} to handle cross validation for time-series data. Their system involved a forward chaining concept such that training data is never interrupted. Although it resolves the issue, the generalisation error is then affected by the change in training data size. Below is a heuristic for the method: 
+An issue with LSTM networks arises when using classical cross validation methods. K-fold cross validation involves dividing the data into $k$ folds before assigning the initial fold as the test data and the rest as the training data. After each iteration of training, the test data assignment is then incremented until its position has permeated through all of the positions. However, with sequential data, this method causes disjoints in the training data since training for fold $n+1$ would involve information from $n-1$ rather than $n$. In 2015, Bergmeir et al. introduced a new method\cite{Bergmeir} to handle cross validation for time-series data. Their system involved a forward chaining concept such that training data is never interrupted. Although it resolves the issue, the generalisation error is then affected by the change in training data size. Below is a heuristic for the method: 
 
 \begin{itemize}
  	\item Divide the data into $k$ folds. 
@@ -256,10 +263,10 @@ An alternative solution\cite{Racine} was also proposed by Racine. He observed th
 
 \begin{itemize}
  	\item Divide the data into $k$ folds. Assume $h = 1$ 
-	\item 1st iteration: Testing on fold 1. Fold 2 is discard. Training occurs on the rest of the folds. 
+	\item 1st iteration: Testing on fold 1. Fold 2 is discarded. Training occurs on the rest of the folds. 
 	\item 2nd iteration: Training on fold 2.  Folds 1 and 3 are discarded. Training occurs on the rest of the folds. 
 	\item 3rd iteration: Training on fold 3.  Folds 2 and 4 are discarded. Training occurs on the rest of the folds. 
-	\item Repeated to $k$th iteration Testing on fold $k$ (last fold). Fold $k-1$ is discard. Training occurs on the rest of the folds. 
+	\item Repeated to $k$th iteration Testing on fold $k$ (last fold). Fold $k-1$ is discarded. Training occurs on the rest of the folds. 
 \end{itemize}
 
 This does not introduce the generalisation error as in Bergmeir's method. However, it is more complex to measure the $h$ required to approximate a good independence and there is still a consistent inefficiency in data usage given the discarded folds are not trained or tested with. This efficiency is only better than Bergmeir when $h \leq 2\times(\frac{k^{2}}{2}) = k^{2}$. Both methods will be considered during the project to determine which one is optimal.
@@ -302,7 +309,7 @@ The model used in the project falls under the deep learning categorisation and i
 One of the earliest published papers\cite{Ahmadi} regarding the subject matter was written by Ahmadi in 1990. It was primarily focused on sourcing an alternate approach to generating a more comprehensive system to analyse factors in the APT model. This was done as following: Given a $N\times T$ matrix, $r_{N,T}$ is defined as the return of asset $N$ at time period $T$. For this matrix, there is a smaller one of $K\times T$, where $f_{K,T}$ represents the $K$th factor score for time period $T$. Thus, the return of a given asset is: 
 $R_{N} = E_{N} + b_{N,1}F_{1} ... + b_{N,K}F_{K} + e_{N}$ where $E_{N}$ is the expected return, $e_{N}$ is a random zero mean error term and  $b_{N,K}$ are the estimated coefficients for each factor. Using the coefficient estimates, it is possible to employ another variable, $\lambda$, to determine whether it is statistically significant and thus whether the factor is significant. This is done with the following equation: $E_{N} = \lambda_{0} + b_{N,1}\lambda_{1} ... + b_{N,K}\lambda_{K}$.
 
-The problem Ahmadi wanted to resolve was the heavy dependency on the sample that factor analysis relied on. There was a significant chance that, given 42 groups of 30 stocks each, different significant factors would be discovered in each group. He therefore employed a neural network so that, rather than optimising and identifying the statistically significance in each feature individually, the patterns stem from analysing the whole vector space. Ahmadi provides some details about the network, highlighting that the inputs used were the unemployment and inflation rates, rate of returns of assets, rate of change in the stock market and the change in gross national product (GNP). He also specifies that the inputs were normalised, two hidden layers offered the best optimal performance and the learning plateaued after 5000 iterations. 
+The problem Ahmadi wanted to resolve was the heavy dependency on the sample that factor analysis relied on. There was a significant chance that, given 42 groups of 30 stocks each, different significant factors would be discovered in each group. He therefore employed a neural network so that, rather than optimising and identifying the statistical significance in each feature individually, the patterns stem from analysing the whole vector space. Ahmadi provides some details about the network, highlighting that the inputs used were the unemployment and inflation rates, rate of returns of assets, rate of change in the stock market and the change in gross national product (GNP). He also specifies that the inputs were normalised, two hidden layers offered the best optimal performance and the learning plateaued after 5000 iterations. 
 
 \subsubsection{Formalisation of Experimentation}
 
@@ -350,7 +357,7 @@ An interesting alternative approach\cite{Alberg} is demonstrated by Alberg et al
 
 Rather than predicting the prices directly, which could rely on a multitude of factors outside just fundamental data, the model is structured so that it is interested in learning about what makes a company outperform the median return. A weakness of this classifier is that, in economic downturns, the median return could still be negative and so the model is not learning what fundamentally drives 'good' returns in an absolute sense. It also does not predict the degree to which the chosen stocks will outperform. However, this is in interesting structure for this project given the relative nature of the evaluation metric selected as mentioned in section \ref{benchmark}.
 
-Additionally, normalisation of the inputs is carried out with two methods. The first involves ranking the performance of stocks against a certain ratio, such as $\frac{Book Value}{Market Capitalisation}$. The percentiles of their rankings are then inputted alongside the raw scores in order to produce a more comparable set of features between various stocks. The second involves transforming all data points into a specified domain for ease-of-use to the learning algorithm whilst maintaining the same relative fundamental values between companies. Alberg achieves this by dividing the input feature by the L2 norm of all the features ($x_{i} \rightarrow \frac{x_{i}}{||x||}$). This is in contrast with two of the more popular methods of normalisation: z-score ($x_{i} \rightarrow \frac{x_{i}-\mu_{x}}{\sigma_{x}}$) where $\mu$ and $\sigma$ are the mean and standard deviation and min-max scaling ($x_{i} \rightarrow \frac{x_{i}-x_{min}}{x_{max}-x_{i}})$.
+Additionally, normalisation of the inputs is carried out with two methods. The first involves ranking the performance of stocks against a certain ratio, such as $\frac{Book Value}{Market Capitalisation}$. The percentiles of their rankings are then inputted alongside the raw scores in order to produce a more comparable set of features between various stocks. The second involves transforming all data points into a specified domain for ease-of-use to the learning algorithm whilst maintaining the same relative fundamental values between companies. Alberg achieves this by dividing the input feature by the L2 norm of all the features ($x_{i} \rightarrow \frac{x_{i}}{||x||}$). This is in contrast with two of the more popular methods of normalisation: z-score ($x_{i} \rightarrow \frac{x_{i}-\mu_{x}}{\sigma_{x}}$) where $\mu$ and $\sigma$ are the mean and standard deviation and min-max scaling ($x_{i} \rightarrow \frac{x_{i}-x_{min}}{x_{max}-x_{min}})$.
 
 \subsubsection{Related Works}
 
@@ -373,7 +380,7 @@ Smyl et al. published an overview of their methodology online\cite{Smyl}. In it,
 	\text{Forecast}: x_{t+m} =  l_{t} + mb_{t} + s_{t-L+1+(m-1)modL} \\
 	\text{where $a$, $\beta$ and $\gamma$ are selected coefficients and $L$ is the seasonal length.}
 \end{gather*}
-Level offers a smoothed version of $x$, Trend observes the local linear trend and seasonality the cyclical general nature of the data. The components can be both additive where $b = x_{t}-x_{t-1}$ or multiplicative where $b = \frac{x_{t}}{x_{t-1}}$ but multiplicative predictors are seen to be more stable in practice. Smyl used a multiplicative seasonality coefficient. This approach works well independently, but there is no need to assume that the trend component should be linear. Additionally, since each trend is fitted to a respective series, there is no opportunity for cross-series learning. Multiple steps ahead, nonlinear forecasting can be achieved via a neural networks trained on all series. 
+Level offers a smoothed version of $x$, Trend observes the local linear trend and Seasonal evaluates the cyclical general nature of the data. The components can be both additive where $b = x_{t}-x_{t-1}$ or multiplicative where $b = \frac{x_{t}}{x_{t-1}}$ but multiplicative predictors are seen to be more stable in practice. Smyl used a multiplicative seasonality coefficient. This approach works well independently, but there is no need to assume that the trend component should be linear. Additionally, since each trend is fitted to a respective series, there is no opportunity for cross-series learning. Multiple steps ahead, nonlinear forecasting can be achieved via a neural networks trained on all series. 
 
 The general architecture that Smyl relied on was the dilated RNN, first introduced by Chang et al. in 2017. This model helps efficiently resolve issues in multi scale problems without increasing the dimensionality of the network significantly. Multi scale problems require a balance between evaluating the relationship between neighbouring cells whilst also integrating a general, globalised learning context. This is resolved in the model by structuring the cells so that they have dilated skip connections as shown in figure \ref{chang_architecture}. 
 
@@ -447,7 +454,7 @@ Figure \ref{pipeline_design} depicts the intended diagrammatic pipeline of the t
 \centering
 \includegraphics[width=14.5cm]{process_overview.png}
 \caption{Overview of the processes involved in iterative designing and testing of models for the problem}
-\label{pipeline_design}
+\label{process_overview}
 \end{figure}
 
 \subsection{Data Structuring}
@@ -590,7 +597,7 @@ Although the idea of designing a specific loss function for the problem was cons
 
 \subsubsection{Design Iterations} \label{design iterations}
 
-The initial model used was the most fundamental LSTM possible, with one hidden layer. An additionally masking layer was also added in case it was decided that NaN values would be masked instead of predicted or deleted. Afterwards, a stacked LSTM with multiple hidden layers and dropouts between to avoid overfitting was also tested to see if a deeper model could improve the performance of the model. 
+The initial model used was the most fundamental LSTM possible, with one hidden layer. An additional masking layer was also added in case it was decided that NaN values would be masked instead of predicted or deleted. Afterwards, a stacked LSTM with multiple hidden layers and dropouts between to avoid overfitting was also tested to see if a deeper model could improve the performance of the model. 
 
 \begin{figure}[!hbt!]
 \centering
@@ -626,7 +633,7 @@ In order to resolve this, a new architecture was designed where the model predic
 
 The fundamental objective of finding an optimal split for the training and test sets is to minimise the tradeoff between the parameter variance during training and the performance statistic variance during testing. Both of these variances increase with reduced data. However, it is important to remember that the predominant concern is with the absolute number of instances for each category rather than the percentage splits. Since there are a large number of samples available in this problem, there has been less focus on the optimising these percentage divisions. 
 
-Although multiple ideas of cross validation were explored in section \ref{cross validation}, it was decided that there was enough data available to save for a hold out approach. Additionally, there were concerns in terms of time constraint about spending significant time analysing selecting an appropriate size for folds so that the independence assumption of neighbouring folds could be conserved. It was therefore decided discard cross validation methodologies.
+Although multiple ideas of cross validation were explored in section \ref{cross validation}, it was decided that there was enough data available to save for a hold out approach. Additionally, there were concerns in terms of time constraint about spending significant time analysing selecting an appropriate size for folds so that the independence assumption of neighbouring folds could be conserved. It was therefore decided to discard cross validation methodologies.
 
 A rule of thumb employed in many models is to start by following the Pareto principle and divide the training and test splits into 80/20 respectively. The training data is then usually separated into training and validation in the same 80/20 ration again. Since there is a large amount of data available, it was decided to reduce the amount allocated to training for time saving purposes and so the final splits decided for training, validation and testing was 60/20/20.
 
@@ -699,7 +706,6 @@ For similar reasons, pasting screen-shots is unlikely to be a good use of space,
 
 When discussing the implementation, it is generally best to focus on the conceptual and logical design, and only then dive into details for interesting parts or to highlight important decisions. Well thought-out figures and diagrams are often much more effective at conveying your design than source code, whether that is a data-structure, a client-server interaction, a design-flow, or a circuit hierarchy. For example, a diagram of a block-diagram of digital circuit can be used to communicate to the reader most of the important high-level  decisions you have made, then VHDL fragments (or another diagram) could be used to focus on specific parts and demonstrate any interesting local details.
 
-Complete listings may be included as appendices of your report but this is not normally appropriate, unless the appendix is documentation, or describes an API. Software may be provided on a CD-ROM given to your supervisor or in a cloud repositories such as Github. No marks are awarded for the mass or page count of a report, and reports which contain 50 pages of printed code are more likely to be seen as showing poor judgement
 \fi
 
 \subsection{Data Structuring}
@@ -900,7 +906,7 @@ These lists were then converted back into \textit{numpy} arrays. This provided t
 \begin{figure}[!hbt!]
 \centering
 \includegraphics[width=8cm]{input_structure.png}
-\caption{Diagram of reshaped input structure for Keras.}
+\caption{Diagram of reshaped input data structure for Keras.}
 \end{figure}
 
 \begin{lstlisting} [language=Python, breaklines=true, caption=Reshaping the input \textit{numpy} arrays to the correct format.]
@@ -1053,7 +1059,7 @@ stack_classPred = trained_stack.predict_classes(testInput, verbose=1)
 print(stack_classPred)
 \end{lstlisting} 
 
-As discussed in section \ref{benchmark}, 3 metrics were used to analyse the performance. These were calculated by implementing a function that compared the predictions to the actual labels and then categorising the results as shown in figure \ref{confusion_matrix}. The number of occurrences for each was then counted.
+As discussed in section \ref{benchmark}, 3 metrics were used to analyse the performance. This was achieved by implementing a function that compared the predictions to the actual labels and then categorising the results as shown in figure \ref{confusion_matrix}. The number of occurrences for each was then counted and the metrics calculated by the appropriate formulas accordingly, also provided in section \ref{benchmark}.
 
 \begin{figure}[!hbt!]
 \centering
@@ -1098,6 +1104,8 @@ for i in range(len(rawtestTarget)):
     selected.append(rawtestTarget[i])
 \end{lstlisting} 
 
+
+
 %-------------------------------------------------------------------------
 \newpage
 
@@ -1136,9 +1144,68 @@ The next level up involves integration testing, which focuses on the correctness
 
 System testing will involve evaluating the realised performance of the whole system. This will then allow for the model to be comparable to other methodologies developed in the field and industry. This will be covered in section \ref{evaluation}.
 
-\subsection{Test Results} 
+\subsection{Unit Test Results} 
 
-The following
+The results for some unit tests are depicted below, with one for DataFrame assertion and another for a \textit{numpy} assertion. Sample tests were first initialised in lists before being converted into the appropriate format for the function that was being tested. Both correct and incorrect results for the tests were then created in lists and converted appropriately before a function was implemented to carry out the test. Listing \ref{error_message} demonstrates an example of an AssertionError which also returns an error message identifying the problem. These unit tests are not exhaustive in terms of establishing edge cases but provide reasonable effectiveness at building correctly functioning code for the purpose of the project.
+
+\begin{lstlisting}[language=Python, breaklines=true, caption={Example of a DataFrame comparison test.}]
+# Test Set Generator Test
+
+initialframe = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+outputframe1 = [7, 8, 9, 10] # success case
+outputframe2 = [4, 5, 6, 7] # fail case
+outputframe3 = [6, 7, 8, 9, 10] # fail case
+
+testdf1 = pd.DataFrame(initialframe)
+testdf2 = pd.DataFrame(outputframe1)
+testdf2.index += 6
+testdf3 = pd.DataFrame(outputframe2)
+testdf3.index += 6
+testdf4 = pd.DataFrame(outputframe3)
+testdf4.index += 6
+
+def test_SET_GENERATOR(test, benchmark):
+  results = test_set(0.5, 0.1, test)
+  pd.testing.assert_frame_equal(results, benchmark)
+  print('test successful')
+
+test_SET_GENERATOR(testdf1, testdf2)
+test_SET_GENERATOR(testdf1, testdf3)
+test_SET_GENERATOR(testdf1, testdf4)
+\end{lstlisting} 
+
+\begin{lstlisting}[language=Python, breaklines=true, caption={Assertion Error raised by the second fail case of the Test Set Generator Test.}, label={error_message}]
+AssertionError: DataFrame.iloc[:, 0] are different
+
+DataFrame.iloc[:, 0] values are different (100.0 %)
+[left]:  [7, 8, 9, 10]
+[right]: [4, 5, 6, 7]
+\end{lstlisting} 
+
+
+\begin{lstlisting}[language=Python, breaklines=true, caption={Example of a \textit{numpy} comparison test.}]
+# Input Scaling Test
+# for minmax case
+
+inputvals = [1, 2, 3, 4, 5]
+
+minmax1 = np.array([0, 0.25, 0.5, 0.75, 1]) # success case
+minmax1 = np.reshape(minmax1,(5, 1))
+minmax2 = np.array([1, 0.25, 0.75, 0.75, 0]) # fail case
+minmax2 = np.reshape(minmax2,(5, 1))
+
+testdf1 = pd.DataFrame(inputvals)
+
+def test_INPUT_SCALER(test, benchmark):
+  results = input_scaling(test)
+  np.testing.assert_array_equal(results, benchmark)
+  print('test successful')
+
+test_INPUT_SCALER(testdf1, minmax1)
+test_INPUT_SCALER(testdf1, minmax2)
+\end{lstlisting} 
+
+\subsection{Integration Test Results} 
 
 
 %-------------------------------------------------------------------------
@@ -1151,12 +1218,40 @@ This covers an area different from the 'Testing' chapter, and relates to the und
 
 Where the deliverable is a product with easily quantified performance than the previous Chapter shows how functional correctness is established, while this Chapter shows qualitatively or quantitatively how well the product works. The list below shows typical content, not all of this will be applicable to all projects.
 
-An empirical relationship between parameters and results may be investigated, typically through the use of appropriate graphs.
-Where theory predicts aspects of performance the results can be compared with expectation and differences noted and (if
-possible) explained.
+An empirical relationship between parameters and results may be investigated, typically through the use of appropriate graphs. Where theory predicts aspects of performance the results can be compared with expectation and differences noted and (if possible) explained.
 
 Semi-empirical models of behaviour may be developed, justified, and tested. The types of experiments/simulations that were carried out should be described. Why were certain experiments carried out but not others? What were the important parameters in the simulation and how did they affect the results? If there are very many graphs and tables associated with this chapter they may be put in the Appendix, but it is generally better to keep these close to the text they illustrate, as this is easier for the reader.
 \fi
+
+The model was trained through iterations of epochs, with each epoch using the entire training and validation sets. The results for loss and accuracy were calculated after each epoch and plotted, as shown in figure \ref{loss_plots} and \ref{accuracy_plots}. A detailed breakdown can be found in the GitHub repository link located in section \ref{source code}.
+
+\begin{figure}[!hbt!]
+\centering
+\includegraphics[width=\columnwidth]{loss_plots.png}
+\caption{LHS: Plot of multi output model's losses for next input predictor. RHS: Plot of multi output model's losses for target variable predictor.}
+\label{loss_plots}
+\end{figure}
+
+\begin{figure}[!hbt!]
+\centering
+\includegraphics[width=\columnwidth]{accuracy_plots.png}
+\caption{LHS: Plot of multi output model's accuracy for next input predictor. RHS: Plot of multi output model's accuracy for target variable predictor.}
+\label{accuracy_plots}
+\end{figure}
+
+A few interesting observations can be made in both of the models. Surprisingly, for the next input prediction model, the validation loss is actually lower than the training loss. This could possibly be explained by how Keras calculates the training and validation losses. Training loss is recorded after each epoch and is calculated as a moving average with respect to the number of epochs that have been run. Each individual training loss for an epoch is calculated by averaging the losses of each batch across the epoch. However it should be noted that as the model trains on a batch, it learns and its weights change. This means that the model running on the last batch of an epoch is substantially better than the model training on the initial batch of an epoch. For the multi output model, there are approximately 160 batches in each epoch. When the model then trains on the validation set, it is the best performing model derived from the last batch of the training set and is fixed i.e. it does not learn. This means that it does not suffer from the penalty performance of dropouts which are active during training. Similar to training, validation loss for an epoch is calculated as the average of the batch losses across the epoch. This observation can be mathematically explained as following:
+
+\vskip -0.5cm
+\begin{gather*}
+ 	\text{Training loss of an epoch} = \frac{1}{X} \sum^{X}_{i}e(f_{i}(x_{i}))  \\
+	\text{where $X$ is the number of batches in the training set and $e(f_{i}(x_{i}))$ is the loss of model $f_{i}$ on batch $x_{i}$ } \\
+	\text{Validation loss of an epoch} = \frac{1}{Y} \sum^{Y}_{j}e(f_{X}(x_{j})).  \\
+	\text{where $Y$ is the number of batches in the training set and $e(f_{X}(x_{i}))$ is the loss of the best and last batch training model $f_{X}$ on batch $x_{j}.$}
+\end{gather*}
+
+For the output predictor, the same observation of a higher training than validation can be observed up until around epoch 14. At this point, the new lines intersect and validation loss thereafter increases in a typical fashion of an overfitting model. This is further backed up by the accuracy plot in figure \ref{accuracy_plots} as it can be seen that validation accuracy plateaus around epoch 14.
+
+The output prediction model was then used to predict labels using input vectors from the unseen test dataset. The three evaluation metrics were then calculated, as seen in table \ref{eval_metrics}. Recall is the least targeted metric as false negative predictions aren't heavily penalised by the model since they are still positive returns in reality. However, precision is the 
 
 \begin{table}[hbt!]
 \begin{center}
@@ -1167,49 +1262,54 @@ Accuracy & Precision & Recall\\
 \end{tabular}
 \end{center}
 \caption{Evaluation metrics of the model performed on hold out test data.}
-\end{table}
-
-
-\begin{table}[hbt!]
-\begin{center}
-\begin{tabular}{c|c|c|c}
- & Entire Dataset & Test Dataset & Model-Selected Labels in Test Dataset\\
-\hline
-Mean & 0.000389 & notknown & 0.00764\\
-\hline
-Variance & 0.000546 & notknown & 0.000269\\
-\hline
-Max & 7.098 & notknown & 0.277\\
-\hline
-Min & -0.714 & notknown & -0.368\\
-\hline
-Skewness & 64.114 & notknown & 1.224\\
-\hline
-Kurtosis & 18474.170 & notknown & 31.110\\
-\end{tabular}
-\end{center}
-\caption{Statistical summary of percentage changes i.e. returns of sets of data.}
+\label{eval_metrics}
 \end{table}
 
 \begin{figure}[!hbt!]
+\figuretitle{Returns of Model Selected Datapoints} 
 \centering
 \includegraphics[width=16.5cm]{results_distributions.png}
 \caption{Histogram of the returns and log returns of the selected labels by the model.}
 \end{figure}
 
+\begin{figure}[!hbt!]
+\figuretitle{Returns of Test Set Datapoints} 
+\centering
+\includegraphics[width=16.5cm]{test_returns.png}
+\caption{Histogram of the returns and log returns of the entire unseen test data set.}
+\end{figure}
+
+
+\begin{table}[hbt!]
+\begin{center}
+\begin{tabular}{c|c|c|c}
+ & Entire Dataset & Test Dataset & Model Selected Data\\
+\hline
+Mean & 0.000389 & -0.000147 & 0.00764\\
+\hline
+Variance & 0.000546 & 0.000364 & 0.000269\\
+\hline
+Max & 7.098 & 0.278 & 0.277\\
+\hline
+Min & -0.714 & -0.482 & -0.368\\
+\hline
+Skewness & 64.114 & -1.489 & 1.224\\
+\hline
+Kurtosis & 18474.170 & 43.882 & 31.110\\
+\end{tabular}
+\end{center}
+\caption{Statistical summary of percentage changes i.e. returns of sets of data. Entire Dataset equates to all returns from 2000 onwards, Test Data is the returns allocated to the test split and Model Selected Data is the collection of returns that the model predicted would have positive returns from the Test Dataset.}
+\end{table}
+
 
 %-------------------------------------------------------------------------
-\newpage
 
-
-%-------------------------------------------------------------------------
 \newpage
 
 \section{Conclusions}
 
 \subsection{Evaluation} \label{evaluation}
 \iffalse
-
 How successful have you been? What have you achieved? . It is important here to identify positively what is worthwhile in your work. At the same time, honesty, and a clear description of the limits of your work, is equally important.
 
 are your most significant achievements. In the conclusions you must summarise this, referring as necessary to other sections for more detail.
@@ -1222,14 +1322,12 @@ Why was it difficult? How did you overcome the difficulties?
 
 Did you discover or invent anything novel?
 
-What did you learn?
-critical evaluation of your work as compared to previous analysis, algorithms, products, and when related to your original objectives.
+What did you learn? critical evaluation of your work as compared to previous analysis, algorithms, products, and when related to your original objectives.
 
 What are the advantages, disadvantages of your approach compared with related work? 
 
 How does the scope of your work differ from related work? Examiners expect your project report to show evidence of your ability to think as an engineer, and that includes the ability to critically reflect on your own work and evaluate its significance. 
 \fi
-
 
 Although there is not a significant amount of structured research into price prediction models, the results align with those seen in various forecasting papers, such as Smyl's findings at Uber. It was believed that part of the poor performance of the model was due to the fact that not all the factors that affect the price were considered, especially at the noisy 'daily' time step. There is a 
 
@@ -1237,7 +1335,6 @@ Although there is not a significant amount of structured research into price pre
 \centering
 \includegraphics[width=10cm]{uber_architecture}
 \caption{Feature selection and forecast models by Uber.}
-\label{data_structuring}
 \end{figure}
 
 \subsection{Objective Completion}
@@ -1276,10 +1373,9 @@ There are countless future development paths that could be done to improve and g
 \newpage
  
 \section{Appendix}
-Listing \ref{libraries} depicts a list of external packages used to develop the model. These packages are roughly split by use case; mathematical structuring, data visualisation, functionalities required, machine learning tools and miscellaneous. 
 
-\begin{lstlisting}[language=Python, breaklines=true, label={libraries},]
-iimport numpy as np
+\begin{lstlisting}[language=Python, breaklines=true, label={libraries}, caption={Depiction of the list of external packages used to develop the model. These packages are roughly split by use case; mathematical structuring, data visualisation, functionalities required, machine learning tools and miscellaneous.}]
+import numpy as np
 import pandas as pd
 import datetime as dt
 
@@ -1302,7 +1398,7 @@ from google.colab import files
 import os
 \end{lstlisting} 
 
-\subsection{Source Code}
+\subsection{Source Code} \label{source code}
 
 The project repository, which contains the codebase can be found on GitHub with the link \href{https://github.com/twutang/SXNP-Factor-Models}{here}. The code can be found in both its original Jupyter Notebook (.ipynb) and python file (.py) formats. It is suggested to use the Google Colaboratory environment, which integrates all of the required libraries. The original file can be found \href{https://colab.research.google.com/drive/1IHPEI-sPNSS0rKdFThywR4LTpeOt0Z_y}{here}. Please see the README file and notebook text cells within the GitHub repository for documentation on the functionality of the codebase. 
 

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.11.12)  17 JUN 2019 20:38
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.11.12)  19 JUN 2019 00:49
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -385,21 +385,21 @@ LaTeX Warning: Label `data_structuring' multiply defined.
 )
 \openout1 = `thw116.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 56.
-LaTeX Font Info:    ... okay on input line 56.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 56.
-LaTeX Font Info:    ... okay on input line 56.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 56.
-LaTeX Font Info:    ... okay on input line 56.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 56.
-LaTeX Font Info:    ... okay on input line 56.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 56.
-LaTeX Font Info:    ... okay on input line 56.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 56.
-LaTeX Font Info:    ... okay on input line 56.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 56.
-LaTeX Font Info:    ... okay on input line 56.
-LaTeX Font Info:    Try loading font information for OT1+ptm on input line 56.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Try loading font information for OT1+ptm on input line 63.
  (/usr/local/texlive/2018/texmf-dist/tex/latex/psnfss/ot1ptm.fd
 File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
 )
@@ -440,7 +440,7 @@ Package caption Info: hyperref package is loaded.
 Package caption Info: End \AtBeginDocument code.
 \AtBeginShipoutBox=\box33
 Package atbegshi Info: Package `everyshi' patched.
-Package hyperref Info: Link coloring OFF on input line 56.
+Package hyperref Info: Link coloring OFF on input line 63.
 
 (/usr/local/texlive/2018/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
@@ -450,247 +450,268 @@ Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
 \c@section@level=\count135
 )
-LaTeX Info: Redefining \ref on input line 56.
-LaTeX Info: Redefining \pageref on input line 56.
-LaTeX Info: Redefining \nameref on input line 56.
+LaTeX Info: Redefining \ref on input line 63.
+LaTeX Info: Redefining \pageref on input line 63.
+LaTeX Info: Redefining \nameref on input line 63.
 <logo.png, id=4, 510.9489pt x 340.6326pt>
 File: logo.png Graphic file (type png)
 <use logo.png>
-Package pdftex.def Info: logo.png  used on input line 75.
+Package pdftex.def Info: logo.png  used on input line 82.
 (pdftex.def)             Requested size: 256.07414pt x 170.7161pt.
-LaTeX Font Info:    Try loading font information for U+msa on input line 78.
+LaTeX Font Info:    Try loading font information for U+msa on input line 85.
 
 (/usr/local/texlive/2018/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 78.
+LaTeX Font Info:    Try loading font information for U+msb on input line 85.
 
 (/usr/local/texlive/2018/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 79.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 86.
  [1
 
 {/usr/local/texlive/2018/texmf-var/fonts/map/pdftex/updmap/pdftex.map} <./logo.
 png>]
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 90.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 97.
 pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has 
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.98 \newpage
-              [1] (./thw116.toc [2])
+l.105 \newpage
+               [1] (./thw116.toc [2])
 \tf@toc=\write3
 \openout3 = `thw116.toc'.
 
  [3]
-LaTeX Font Info:    Try loading font information for OMS+ptm on input line 121.
+LaTeX Font Info:    Try loading font information for OMS+ptm on input line 128.
 
 
 (/usr/local/texlive/2018/texmf-dist/tex/latex/psnfss/omsptm.fd
 File: omsptm.fd 
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 121.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 128.
  [4] [5]
 [6]
-<mlp_rnn_comparison.png, id=177, 707.64375pt x 214.8025pt>
+<mlp_rnn_comparison.png, id=180, 707.64375pt x 214.8025pt>
 File: mlp_rnn_comparison.png Graphic file (type png)
 <use mlp_rnn_comparison.png>
-Package pdftex.def Info: mlp_rnn_comparison.png  used on input line 175.
+Package pdftex.def Info: mlp_rnn_comparison.png  used on input line 182.
 (pdftex.def)             Requested size: 412.56496pt x 125.2345pt.
-<rnn_topologies.png, id=179, 629.35126pt x 222.8325pt>
+<rnn_topologies.png, id=182, 629.35126pt x 222.8325pt>
 File: rnn_topologies.png Graphic file (type png)
 <use rnn_topologies.png>
-Package pdftex.def Info: rnn_topologies.png  used on input line 183.
+Package pdftex.def Info: rnn_topologies.png  used on input line 190.
 (pdftex.def)             Requested size: 412.56496pt x 146.07365pt.
  [7 <./mlp_rnn_comparison.png> <./rnn_topologies.png>]
-<lstm_unit.png, id=193, 244.915pt x 255.95625pt>
+<lstm_unit.png, id=195, 244.915pt x 255.95625pt>
 File: lstm_unit.png Graphic file (type png)
 <use lstm_unit.png>
-Package pdftex.def Info: lstm_unit.png  used on input line 210.
+Package pdftex.def Info: lstm_unit.png  used on input line 217.
 (pdftex.def)             Requested size: 113.81102pt x 118.9403pt.
  [8 <./lstm_unit.png>]
-<binary_log_loss.png, id=211, 468.75125pt x 329.23pt>
+<binary_log_loss.png, id=213, 468.75125pt x 329.23pt>
 File: binary_log_loss.png Graphic file (type png)
 <use binary_log_loss.png>
-Package pdftex.def Info: binary_log_loss.png  used on input line 240.
+Package pdftex.def Info: binary_log_loss.png  used on input line 247.
 (pdftex.def)             Requested size: 128.0374pt x 89.92313pt.
 [9 <./binary_log_loss.png>]
-<draw_network.png, id=225, 662.475pt x 181.67876pt>
+<draw_network.png, id=227, 662.475pt x 181.67876pt>
 File: draw_network.png Graphic file (type png)
 <use draw_network.png>
-Package pdftex.def Info: draw_network.png  used on input line 273.
+Package pdftex.def Info: draw_network.png  used on input line 280.
 (pdftex.def)             Requested size: 412.56496pt x 113.14142pt.
-<draw_results.png, id=226, 328.22626pt x 156.585pt>
+<draw_results.png, id=228, 328.22626pt x 156.585pt>
 File: draw_results.png Graphic file (type png)
 <use draw_results.png>
-Package pdftex.def Info: draw_results.png  used on input line 279.
+Package pdftex.def Info: draw_results.png  used on input line 286.
 (pdftex.def)             Requested size: 355.65944pt x 169.67554pt.
  [10 <./draw_network.png>] [11 <./draw_results.png>]
-<Kim_results.png, id=248, 494.84875pt x 89.33376pt>
+<Kim_results.png, id=250, 494.84875pt x 89.33376pt>
 File: Kim_results.png Graphic file (type png)
 <use Kim_results.png>
-Package pdftex.def Info: Kim_results.png  used on input line 330.
+Package pdftex.def Info: Kim_results.png  used on input line 337.
 (pdftex.def)             Requested size: 412.56496pt x 74.47958pt.
 [12 <./Kim_results.png>]
-<alberg_intro.png, id=261, 427.5975pt x 160.6pt>
+<alberg_intro.png, id=263, 427.5975pt x 160.6pt>
 File: alberg_intro.png Graphic file (type png)
 <use alberg_intro.png>
-Package pdftex.def Info: alberg_intro.png  used on input line 347.
+Package pdftex.def Info: alberg_intro.png  used on input line 354.
 (pdftex.def)             Requested size: 412.56496pt x 154.9535pt.
  [13 <./alberg_intro.png>]
-<smyl_architecture.png, id=274, 627.34375pt x 157.58875pt>
+<smyl_architecture.png, id=276, 627.34375pt x 157.58875pt>
 File: smyl_architecture.png Graphic file (type png)
 <use smyl_architecture.png>
-Package pdftex.def Info: smyl_architecture.png  used on input line 383.
+Package pdftex.def Info: smyl_architecture.png  used on input line 390.
 (pdftex.def)             Requested size: 412.56496pt x 103.64098pt.
  [14 <./smyl_architecture.png>] [15] [16]
-<design_pipeline.png, id=304, 487.8225pt x 96.36pt>
+<design_pipeline.png, id=306, 487.8225pt x 96.36pt>
 File: design_pipeline.png Graphic file (type png)
 <use design_pipeline.png>
-Package pdftex.def Info: design_pipeline.png  used on input line 441.
+Package pdftex.def Info: design_pipeline.png  used on input line 448.
 (pdftex.def)             Requested size: 412.56496pt x 81.49467pt.
-<process_overview.png, id=305, 629.35126pt x 109.40875pt>
+<process_overview.png, id=307, 629.35126pt x 109.40875pt>
 File: process_overview.png Graphic file (type png)
 <use process_overview.png>
-Package pdftex.def Info: process_overview.png  used on input line 448.
+Package pdftex.def Info: process_overview.png  used on input line 455.
 (pdftex.def)             Requested size: 412.56496pt x 71.72083pt.
-<database.png, id=306, 664.4825pt x 143.53625pt>
+<database.png, id=308, 664.4825pt x 143.53625pt>
 File: database.png Graphic file (type png)
 <use database.png>
-Package pdftex.def Info: database.png  used on input line 467.
+Package pdftex.def Info: database.png  used on input line 474.
 (pdftex.def)             Requested size: 412.56496pt x 89.11858pt.
  [17 <./design_pipeline.png> <./process_overview.png>]
-<returns_distribution.png, id=317, 835.12pt x 221.82875pt>
+<returns_distribution.png, id=319, 835.12pt x 221.82875pt>
 File: returns_distribution.png Graphic file (type png)
 <use returns_distribution.png>
-Package pdftex.def Info: returns_distribution.png  used on input line 487.
+Package pdftex.def Info: returns_distribution.png  used on input line 494.
 (pdftex.def)             Requested size: 496.85625pt x 131.97787pt.
  [18 <./database.png>]
-<input_counts.png, id=328, 556.0775pt x 116.435pt>
+<input_counts.png, id=330, 556.0775pt x 116.435pt>
 File: input_counts.png Graphic file (type png)
 <use input_counts.png>
-Package pdftex.def Info: input_counts.png  used on input line 502.
+Package pdftex.def Info: input_counts.png  used on input line 509.
 (pdftex.def)             Requested size: 496.85625pt x 104.03722pt.
-<output_counts.png, id=329, 543.02875pt x 269.005pt>
+<output_counts.png, id=331, 543.02875pt x 269.005pt>
 File: output_counts.png Graphic file (type png)
 <use output_counts.png>
-Package pdftex.def Info: output_counts.png  used on input line 509.
+Package pdftex.def Info: output_counts.png  used on input line 516.
 (pdftex.def)             Requested size: 496.85625pt x 246.14125pt.
-<input_delta_counts.png, id=331, 574.145pt x 124.465pt>
+<input_delta_counts.png, id=333, 574.145pt x 124.465pt>
 File: input_delta_counts.png Graphic file (type png)
 <use input_delta_counts.png>
-Package pdftex.def Info: input_delta_counts.png  used on input line 517.
+Package pdftex.def Info: input_delta_counts.png  used on input line 524.
 (pdftex.def)             Requested size: 496.85625pt x 107.712pt.
-<heatmaps.png, id=332, 461.725pt x 268.00125pt>
+<heatmaps.png, id=334, 461.725pt x 268.00125pt>
 File: heatmaps.png Graphic file (type png)
 <use heatmaps.png>
-Package pdftex.def Info: heatmaps.png  used on input line 526.
+Package pdftex.def Info: heatmaps.png  used on input line 533.
 (pdftex.def)             Requested size: 496.85625pt x 288.39423pt.
  [19 <./returns_distribution.png> <./input_counts.png>] [20 <./output_counts.pn
 g> <./input_delta_counts.png>] [21 <./heatmaps.png>]
-<first_model.png, id=358, 827.09pt x 372.39125pt>
+<first_model.png, id=360, 827.09pt x 372.39125pt>
 File: first_model.png Graphic file (type png)
 <use first_model.png>
-Package pdftex.def Info: first_model.png  used on input line 597.
+Package pdftex.def Info: first_model.png  used on input line 604.
 (pdftex.def)             Requested size: 412.56496pt x 185.75763pt.
-<stacked_lstm.png, id=359, 367.3725pt x 149.55875pt>
+<stacked_lstm.png, id=361, 367.3725pt x 149.55875pt>
 File: stacked_lstm.png Graphic file (type png)
 <use stacked_lstm.png>
-Package pdftex.def Info: stacked_lstm.png  used on input line 603.
+Package pdftex.def Info: stacked_lstm.png  used on input line 610.
 (pdftex.def)             Requested size: 412.56496pt x 167.96791pt.
-<rnn_missingval_perception.png, id=360, 668.4975pt x 279.0425pt>
+<rnn_missingval_perception.png, id=362, 668.4975pt x 279.0425pt>
 File: rnn_missingval_perception.png Graphic file (type png)
 <use rnn_missingval_perception.png>
-Package pdftex.def Info: rnn_missingval_perception.png  used on input line 611.
+Package pdftex.def Info: rnn_missingval_perception.png  used on input line 618.
 
 (pdftex.def)             Requested size: 412.56496pt x 172.21686pt.
  [22 <./first_model.png>]
-<multi_output.png, id=367, 505.89pt x 281.05pt>
+<multi_output.png, id=369, 505.89pt x 281.05pt>
 File: multi_output.png Graphic file (type png)
 <use multi_output.png>
-Package pdftex.def Info: multi_output.png  used on input line 619.
+Package pdftex.def Info: multi_output.png  used on input line 626.
 (pdftex.def)             Requested size: 497.92322pt x 276.62788pt.
 
-Overfull \hbox (1.06697pt too wide) in paragraph at lines 619--620
+Overfull \hbox (1.06697pt too wide) in paragraph at lines 626--627
  [][] 
  []
 
 [23 <./stacked_lstm.png> <./rnn_missingval_perception.png>]
-Overfull \hbox (2.53894pt too wide) in paragraph at lines 637--638
+Overfull \hbox (2.53894pt too wide) in paragraph at lines 644--645
 []\OT1/ptm/m/n/10 Ruder anal-y-ses the ad-van-tages and dis-ad-van-tages of var
 -i-ous gra-di-ent de-scent op-ti-mi-sa-tion al-go-rithms in his 2017 paper[[]].
 
  []
 
 [24 <./multi_output.png>]
-<problem_tuning.png, id=388, 642.4pt x 122.95938pt>
+<problem_tuning.png, id=390, 642.4pt x 122.95938pt>
 File: problem_tuning.png Graphic file (type png)
 <use problem_tuning.png>
-Package pdftex.def Info: problem_tuning.png  used on input line 645.
+Package pdftex.def Info: problem_tuning.png  used on input line 652.
 (pdftex.def)             Requested size: 298.75394pt x 57.18489pt.
  [25 <./problem_tuning.png>] [26]
-<data_structuring.png, id=413, 438.63875pt x 112.42pt>
+<data_structuring.png, id=415, 438.63875pt x 112.42pt>
 File: data_structuring.png Graphic file (type png)
 <use data_structuring.png>
-Package pdftex.def Info: data_structuring.png  used on input line 709.
+Package pdftex.def Info: data_structuring.png  used on input line 715.
 (pdftex.def)             Requested size: 496.85625pt x 127.3436pt.
-LaTeX Font Info:    Try loading font information for OT1+pcr on input line 716.
+LaTeX Font Info:    Try loading font information for OT1+pcr on input line 722.
 
 
 (/usr/local/texlive/2018/texmf-dist/tex/latex/psnfss/ot1pcr.fd
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
 ) [27 <./data_structuring.png>]
-<data_preprocessing.png, id=438, 712.6625pt x 342.27875pt>
+<data_preprocessing.png, id=440, 712.6625pt x 342.27875pt>
 File: data_preprocessing.png Graphic file (type png)
 <use data_preprocessing.png>
-Package pdftex.def Info: data_preprocessing.png  used on input line 748.
+Package pdftex.def Info: data_preprocessing.png  used on input line 754.
 (pdftex.def)             Requested size: 496.85625pt x 238.62726pt.
  [28 <./data_preprocessing.png>] [29] [30]
-<input_structure.png, id=552, 422.57875pt x 211.79124pt>
+<input_structure.png, id=554, 422.57875pt x 211.79124pt>
 File: input_structure.png Graphic file (type png)
 <use input_structure.png>
-Package pdftex.def Info: input_structure.png  used on input line 902.
+Package pdftex.def Info: input_structure.png  used on input line 908.
 (pdftex.def)             Requested size: 227.62204pt x 114.08441pt.
  [31 <./input_structure.png>] [32] [33]
-<evaluationflow.png, id=689, 363.3575pt x 119.44624pt>
+<evaluationflow.png, id=691, 363.3575pt x 119.44624pt>
 File: evaluationflow.png Graphic file (type png)
 <use evaluationflow.png>
-Package pdftex.def Info: evaluationflow.png  used on input line 1041.
+Package pdftex.def Info: evaluationflow.png  used on input line 1047.
 (pdftex.def)             Requested size: 496.85625pt x 163.33597pt.
  [34 <./evaluationflow.png>]
-<confusion_matrix.png, id=727, 357.335pt x 268.00125pt>
+<confusion_matrix.png, id=730, 357.335pt x 268.00125pt>
 File: confusion_matrix.png Graphic file (type png)
 <use confusion_matrix.png>
-Package pdftex.def Info: confusion_matrix.png  used on input line 1060.
+Package pdftex.def Info: confusion_matrix.png  used on input line 1066.
 (pdftex.def)             Requested size: 213.39566pt x 160.04544pt.
  [35 <./confusion_matrix.png (PNG copy)>] [36]
-<evaluation.png, id=776, 189.70876pt x 289.08pt>
+<evaluation.png, id=779, 189.70876pt x 289.08pt>
 File: evaluation.png Graphic file (type png)
 <use evaluation.png>
-Package pdftex.def Info: evaluation.png  used on input line 1118.
+Package pdftex.def Info: evaluation.png  used on input line 1126.
 (pdftex.def)             Requested size: 99.58464pt x 151.75162pt.
-<integrated_testing.png, id=778, 498.86375pt x 127.47626pt>
+<integrated_testing.png, id=781, 498.86375pt x 127.47626pt>
 File: integrated_testing.png Graphic file (type png)
 <use integrated_testing.png>
-Package pdftex.def Info: integrated_testing.png  used on input line 1133.
+Package pdftex.def Info: integrated_testing.png  used on input line 1141.
 (pdftex.def)             Requested size: 469.47046pt x 119.96968pt.
- [37 <./evaluation.png> <./integrated_testing.png>] [38]
-<results_distributions.png, id=796, 343.2825pt x 109.40875pt>
+ [37 <./evaluation.png> <./integrated_testing.png>] [38] [39]
+<loss_plots.png, id=857, 557.08125pt x 161.60374pt>
+File: loss_plots.png Graphic file (type png)
+<use loss_plots.png>
+Package pdftex.def Info: loss_plots.png  used on input line 1230.
+(pdftex.def)             Requested size: 496.85625pt x 144.1351pt.
+<accuracy_plots.png, id=858, 659.46375pt x 199.74625pt>
+File: accuracy_plots.png Graphic file (type png)
+<use accuracy_plots.png>
+Package pdftex.def Info: accuracy_plots.png  used on input line 1237.
+(pdftex.def)             Requested size: 496.85625pt x 150.49814pt.
+
+Overfull \hbox (43.34549pt too wide) detected at line 1250
+[]
+ []
+
+[40 <./loss_plots.png> <./accuracy_plots.png>]
+<results_distributions.png, id=869, 343.2825pt x 109.40875pt>
 File: results_distributions.png Graphic file (type png)
 <use results_distributions.png>
-Package pdftex.def Info: results_distributions.png  used on input line 1196.
+Package pdftex.def Info: results_distributions.png  used on input line 1271.
 (pdftex.def)             Requested size: 469.47046pt x 149.62527pt.
- [39 <./results_distributions.png>]
-<uber_architecture.png, id=805, 522.95375pt x 358.33875pt>
+<test_returns.png, id=870, 569.12625pt x 183.68625pt>
+File: test_returns.png Graphic file (type png)
+<use test_returns.png>
+Package pdftex.def Info: test_returns.png  used on input line 1278.
+(pdftex.def)             Requested size: 469.47046pt x 151.52899pt.
+ [41 <./results_distributions.png>]
+<uber_architecture.png, id=878, 522.95375pt x 358.33875pt>
 File: uber_architecture.png Graphic file (type png)
 <use uber_architecture.png>
-Package pdftex.def Info: uber_architecture.png  used on input line 1238.
+Package pdftex.def Info: uber_architecture.png  used on input line 1336.
 (pdftex.def)             Requested size: 284.52756pt x 194.96541pt.
- [40 <./uber_architecture.png>] [41] (./thw116.bbl
+ [42 <./test_returns.png>] [43 <./uber_architecture.png>] (./thw116.bbl
 Underfull \hbox (badness 4927) in paragraph at lines 25--31
 []\OT1/ptm/m/n/9 J. Brown-lee.  \OT1/ptm/m/it/9 A Gen-tle In-tro-duc-tion to th
 e Rec-ti-fied Lin-ear Unit (ReLU) for Deep Learn-ing Neu-ral Net-works\OT1/ptm/
@@ -704,24 +725,24 @@ ore-cast-ing Com-pe-ti-tion: In-tro-duc-ing a New Hy-brid ES-RNN Model\OT1/ptm/
 m/n/9 .
  []
 
-) [42]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1309.
- [43]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1309.
+) [44]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1405.
+ [45]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1405.
  (./thw116.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1309.
-Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 1309.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1405.
+Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 1405.
 
 
 LaTeX Warning: There were multiply-defined labels.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1309.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1405.
  ) 
 Here is how much of TeX's memory you used:
- 10489 strings out of 492649
- 154710 string characters out of 6129621
- 396075 words of memory out of 5000000
- 13719 multiletter control sequences out of 15000+600000
+ 10591 strings out of 492649
+ 156259 string characters out of 6129621
+ 396916 words of memory out of 5000000
+ 13762 multiletter control sequences out of 15000+600000
  21055 words of font info for 44 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  36i,13n,47p,1512b,1918s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -741,10 +762,10 @@ f-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/2018/texmf-dist/f
 onts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1
 /urw/times/utmr8a.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/urw/times
 /utmri8a.pfb>
-Output written on thw116.pdf (44 pages, 3750744 bytes).
+Output written on thw116.pdf (46 pages, 4290274 bytes).
 PDF statistics:
- 1013 PDF objects out of 1200 (max. 8388607)
- 880 compressed objects within 9 object streams
- 503 named destinations out of 1000 (max. 500000)
- 161 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1101 PDF objects out of 1200 (max. 8388607)
+ 959 compressed objects within 10 object streams
+ 559 named destinations out of 1000 (max. 500000)
+ 176 words of extra memory for PDF output out of 10000 (max. 10000000)
 
