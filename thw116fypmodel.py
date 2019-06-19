@@ -13,16 +13,21 @@ import datetime as dt
 
 import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
+import seaborn as sns
 
-from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import MinMaxScaler, Normalizer
+from scipy import stats
 
-from keras.models import Sequential
-from keras.layers import Dense, LSTM, Dropout, Masking
-
+from keras.models import Sequential, Model, load_model
+from keras.layers import Activation, Dense, LSTM, Dropout, Masking, Input
+from keras import optimizers
 from keras.utils.vis_utils import model_to_dot
+
 from IPython.display import SVG
 
 from google.colab import files
+
+import os
 
 """# Initial Data Importation and Structuring
 
@@ -63,11 +68,6 @@ market_cap = pd.read_csv('/content/drive/My Drive/thw116_FYP/data/market_cap.csv
 print(ltm_book.head())
 print("**************************************")
 print(ltm_book.info())
-print("**************************************")
-print(ntm_book.head())
-print("**************************************")
-print(ntm_book.info())
-
 
 # Price target output data
 
@@ -77,24 +77,14 @@ print(price_close.head())
 print("**************************************")
 print(price_close.info())
 
-
-
-# Test data
-
-# test_data = pd.read_csv("/content/drive/My Drive/thw116_FYP/data/test_price.csv")
-
-# print(test_data.head())
-# print("**************************************")
-# print(test_data.info())
-
 """##Restructuring and Standardising the datasets"""
 
 # Filtering incorrect datasets to suitable company subsets
 industrials_subset = price_close.columns.values.tolist()
 
-ltm_inputs = [ltm_book, ltm_div, ltm_ebit, ltm_ebitda, ltm_ebitda, ltm_eps, ltm_fcf, ltm_pbook, ltm_sales] 
-ntm_inputs = [ntm_book, ntm_div, ntm_ebit, ntm_ebitda, ntm_ebitda, ntm_eps, ntm_fcf, ntm_pbook, ntm_sales]
-tech_inputs = [price_high, price_low, price_open, volume, enterprise_val]
+ltm_inputs = [ltm_book, ltm_div, ltm_ebit, ltm_eps, ltm_fcf, ltm_pbook, ltm_sales] 
+ntm_inputs = [ntm_book, ntm_div, ntm_ebit, ntm_eps, ntm_fcf, ntm_pbook, ntm_sales]
+tech_inputs = [price_high, price_low, price_open, volume, enterprise_val, market_cap]
 
 for i in range(0,len(ltm_inputs)):
   ltm_inputs[i] = ltm_inputs[i].loc[:, ltm_inputs[i].columns.str.contains('|'.join(industrials_subset))]
@@ -136,10 +126,6 @@ for i in range(0,len(tech_inputs)):
   time_index_generator(tech_inputs[i])  
 
 time_index_generator(price_close)
-  
-print(ltm_inputs[0].head())
-print(ntm_inputs[0].head())
-print(tech_inputs[0].head())
 
 # Check all columns align correctly
 print(ltm_inputs[0].columns.difference(price_close.columns))
@@ -170,21 +156,12 @@ for i in range(0,len(tech_inputs)):
 
 price_close.columns = anon_tickers
 
-print(ltm_inputs[0].head())
+# # Selecting a Ticker and plotting
 
-# Selecting a Ticker and plotting
-
-# test_data['Ticker 1'].plot(figsize=(16,6))
-# plt.title('Test Results - Ticker 1')
+# ltm_inputs[0]['Ticker 1'].plot(figsize=(16,6))
+# plt.title('ltm_book - Ticker 1')
 # plt.xlabel('Date')
 # plt.ylabel('Attribute')
-
-# test_data.plot(figsize=(16,6))
-
-ltm_inputs[0]['Ticker 1'].plot(figsize=(16,6))
-plt.title('ltm_book - Ticker 1')
-plt.xlabel('Date')
-plt.ylabel('Attribute')
 
 """###Price to Returns Converter"""
 
@@ -198,7 +175,7 @@ def price_to_returns(timeframe, dataframe):
   
 returns = price_to_returns('daily', price_close) 
 
-# returns_data = price_to_returns(price_data)
+print(returns.head(2))
 
 """# Data Preprocessing
 
@@ -212,7 +189,7 @@ Several steps are taken in order to structure the data so that it can be procces
 
 4. Data Integration: Data is merged together appropriately to form the input shape of the model.
 
-##Data Analysis and Cleaning
+##Data Analysis
 
 Something to consider is the fact that returns are more likely to correlate with changes in fundamentals rather than the absolute values of fundamentals. However, there is likely to be a disceprancy in the rate of change of fundamentals and the change in prices. Fundamentals are often only declared quarterly whereas prices are subject to daily fluctuations. We will first analyse the number of times a fundamental changes relative to the price changes.
 
@@ -230,7 +207,6 @@ plt.show()
 
 # plt.savefig('tech_box.png')
 # files.download('tech_box.png') 
-
 
 # Individual tickers' datapoint count bar graph
 
@@ -257,6 +233,7 @@ def data_change(dataframe, column):
 #   print('The number of rows where no change occurs: ', noChange_count)
 #   print('The number of rows which are NaN: ', NaN_count)
 #   print('Useful datapoints:', (len(dataframe[column])-noChange_count-NaN_count))
+
   return len(dataframe[column])-noChange_count-NaN_count
 
 delta_change = []
@@ -265,29 +242,59 @@ for companies in range(0, tech_inputs[0].shape[1]):
   delta_val = data_change(tech_inputs[0], anon_tickers[companies])
   delta_change.append(delta_val)
   
-
 plt.boxplot(delta_change, showmeans = True)
 plt.xlabel('Technical inputs')
 plt.show()
 
-allreturns = returns.stack(dropna=False).reset_index(drop=True).to_frame('new')
-allreturns.hist(range=(0.75,1.25), figsize=(16,8), bins=200)
+"""### Returns distribution plots"""
+
+# Plotting the distributions of the returns datapoints. 
+
+allreturns = returns.stack(dropna=False).reset_index(drop=True).to_frame('Returns Plot')
+allreturns.hist(range=(-0.2,0.2), figsize=(16,8), bins=200)
 
 allreturns = np.log(allreturns) 
-allreturns.hist(range=(-0.75,0.75), figsize=(16,8), bins=200)
+allreturns.hist(range=(-10,0), figsize=(16,8), bins=200)
 
-"""## Training Data Generation"""
+"""## Data Snipping"""
+
+# # Entire dataset
+# for i in range(0,len(ltm_inputs)):
+#   ltm_inputs[i] = ltm_inputs[i].loc[ltm_inputs[i].index > pd.to_datetime('2000-1-1')]
+
+# for i in range(0,len(ntm_inputs)):
+#   ntm_inputs[i] = ntm_inputs[i].loc[ntm_inputs[i].index > pd.to_datetime('2000-1-1')]
+
+# for i in range(0,len(tech_inputs)):
+#   tech_inputs[i] = tech_inputs[i].loc[tech_inputs[i].index > pd.to_datetime('2000-1-1')]
+  
+# returns = returns.loc[returns.index > pd.to_datetime('2000-1-1')]
+
+
+# Reduced subset for faster training and testing
+
+for i in range(0,len(ltm_inputs)):
+  ltm_inputs[i] = ltm_inputs[i].loc[ltm_inputs[i].index > pd.to_datetime('2010-1-1')]
+
+for i in range(0,len(ntm_inputs)):
+  ntm_inputs[i] = ntm_inputs[i].loc[ntm_inputs[i].index > pd.to_datetime('2010-1-1')]
+
+for i in range(0,len(tech_inputs)):
+  tech_inputs[i] = tech_inputs[i].loc[tech_inputs[i].index > pd.to_datetime('2010-1-1')]
+  
+returns = returns.loc[returns.index > pd.to_datetime('2010-1-1')]
+
+"""## Data splitting
+
+### Training set
+"""
 
 def training_set(train_percentage, dataframe): 
   train_size = int(train_percentage*len(dataframe.index)) 
   train_set = dataframe[:train_size]
   return pd.DataFrame(train_set)  
 
-training_split = 0.8
-
-# INPUTS
-
-print(type(ltm_inputs))
+training_split = 0.6
 
 ltm_trainInputs = []
 ntm_trainInputs = []
@@ -302,48 +309,86 @@ for i in range(0,len(ntm_inputs)):
 for i in range(0,len(tech_inputs)):
   tech_trainInputs.append(training_set(training_split, tech_inputs[i]))
 
-  
 returns_trainOutput = training_set(training_split, returns)
-
 
 print(ntm_trainInputs[0].info())
 print(returns_trainOutput.info())
 
+"""### Validation Set"""
 
-# # TEST INPUT
-# test_train_set = training_set(training_split, test_data)
-# print("****************INPUT*****************")
-# print (test_train_set.head())
-# print("**************************************")
-# print(test_train_set.info())
-
-"""## Validation Data Generation"""
-
-def validation_set(train_percentage, dataframe): 
+def validation_set(train_percentage, val_percentage, dataframe): 
   train_size = int(train_percentage*len(dataframe.index)) 
+  val_size = int(val_percentage*len(dataframe.index))
   # val_size = len(dataframe.index)-int(train_percentage*len(dataframe.index)) 
-  val_set = dataframe[train_size:]
+  val_set = dataframe[train_size:(train_size+val_size)]
   return pd.DataFrame(val_set)  
 
+validation_split = 0.2
 
 ltm_valInputs = []
 ntm_valInputs = []
 tech_valInputs = []
 
 for i in range(0,len(ltm_inputs)):
-  ltm_valInputs.append(validation_set(training_split, ltm_inputs[i]))
+  ltm_valInputs.append(validation_set(training_split, validation_split, ltm_inputs[i]))
   
 for i in range(0,len(ntm_inputs)):
-  ntm_valInputs.append(validation_set(training_split, ntm_inputs[i]))
+  ntm_valInputs.append(validation_set(training_split, validation_split, ntm_inputs[i]))
 
 for i in range(0,len(tech_inputs)):
-  tech_valInputs.append(validation_set(training_split, tech_inputs[i]))
+  tech_valInputs.append(validation_set(training_split, validation_split, tech_inputs[i]))
 
   
-returns_valOutput = validation_set(training_split, returns)
+returns_valOutput = validation_set(training_split, validation_split, returns)
 
 print(ltm_valInputs[0].info())
 print(returns_valOutput.info())
+
+"""### Test Set"""
+
+def test_set(train_percentage, val_percentage, dataframe): 
+  test_percentage = 1-train_percentage-val_percentage
+  train_size = int(train_percentage*len(dataframe.index)) 
+  val_size = int(val_percentage*len(dataframe.index))
+  # val_size = len(dataframe.index)-int(train_percentage*len(dataframe.index)) 
+  test_set = dataframe[(train_size+val_size):]
+  return pd.DataFrame(test_set) 
+
+ltm_testInputs = []
+ntm_testInputs = []
+tech_testInputs = []
+
+for i in range(0,len(ltm_inputs)):
+  ltm_testInputs.append(test_set(training_split, validation_split, ltm_inputs[i]))
+  
+for i in range(0,len(ntm_inputs)):
+  ntm_testInputs.append(test_set(training_split, validation_split, ntm_inputs[i]))
+
+for i in range(0,len(tech_inputs)):
+  tech_testInputs.append(test_set(training_split, validation_split, tech_inputs[i]))
+
+returns_testOutput = test_set(training_split, validation_split, returns)
+
+print(ltm_testInputs[0].info())
+print(returns_testOutput.info())
+
+fig = plt.figure()
+fig.set_figheight(28)
+
+plt.subplot(4, 1, 1)
+sns.heatmap(returns_trainOutput.isnull(), cbar=False)
+
+plt.subplot(4, 1, 2)
+sns.heatmap(returns_valOutput.isnull(), cbar=False)
+
+plt.subplot(4, 1, 3)
+sns.heatmap(tech_trainInputs[1].isnull(), cbar=False)
+
+plt.subplot(4, 1, 4)
+sns.heatmap(tech_valInputs[1].isnull(), cbar=False)
+
+# plt.savefig('heatmap.png')
+# files.download('heatmap.png')
 
 """## Input and Output Transformation
 
@@ -354,53 +399,35 @@ def input_scaling(dataframe):
   
   # This is the MinMax Scaling function 
   sc = MinMaxScaler(feature_range = (0, 1))
-  scaled_input_dataframe = sc.fit_transform(dataframe) # This is now an n-dimensional array type
+  scaled_input = sc.fit_transform(dataframe) # This is now an n-dimensional array type
   
-  return scaled_input_dataframe
+#   transformer = Normalizer().fit(dataframe)
+#   Normalizer(copy=True, norm='l2')
+#   transformer.transform(X)
+  
+  return scaled_input
 
 np.warnings.filterwarnings('ignore', r'All-NaN (slice|axis) encountered')
 
 for i in range(0,len(ltm_inputs)):
   ltm_trainInputs[i] = input_scaling(ltm_trainInputs[i])
   ltm_valInputs[i] = input_scaling(ltm_valInputs[i])
+  ltm_testInputs[i] = input_scaling(ltm_testInputs[i])
   
 for i in range(0,len(ntm_inputs)):
   ntm_trainInputs[i] = input_scaling(ntm_trainInputs[i])
   ntm_valInputs[i] = input_scaling(ntm_valInputs[i])
+  ntm_testInputs[i] = input_scaling(ntm_testInputs[i])
 
 for i in range(0,len(tech_inputs)):
   tech_trainInputs[i] = input_scaling(tech_trainInputs[i])
   tech_valInputs[i] = input_scaling(tech_valInputs[i])
- 
-# print(type(ltm_trainInputs[0][1000:1001]))
-# print(len(ltm_trainInputs[0]))
-# print(ltm_trainInputs[0][1000:1001][0][3])
-# print(len(ltm_trainInputs[0][:1][0]))
-
-# print(ltm_trainInputs[0][1000:1001])
-
+  tech_testInputs[i] = input_scaling(tech_testInputs[i])
+  
 # sample_input = [ltm_trainInputs[0][1000:1001][0][3],ntm_trainInputs[0][1000:1001][0][3], tech_trainInputs[0][1000:1001][0][3] ]
 # print(sample_input)
 
-median = []
-median = returns_trainOutput.median(axis=1)
-
-# for column in range(0,returns_trainOutput.shape[0]):
-#   for row in range(0, returns_trainOutput.shape[1]): 
-#     if returns_trainOutput.iloc[column, row] >= median[row]: 
-#       returns_trainOutput.iloc[column, row] = 1
-#     else:
-#       returns_trainOutput.iloc[column, row] = 0
-      
-      
-# index, row in returns_trainOutput.iterrows():
-#     print(index, list(returns_trainOutput.columns[row > median[index]]))
-
-apply(lambda x: 'true' if x <= 2.5 else 'false')
-
-for ticker in range(0,len(returns_trainOutput)):
-  if returns_trainOutput[anon_tickers[ticker]] >= median[ticker]
-    df['my_channel'].mask(df['my_channel'] > 20000, 0, inplace=True)
+"""### Classifier"""
 
 def output_classifier(type ,dataframe): 
   
@@ -409,18 +436,24 @@ def output_classifier(type ,dataframe):
     scaled_dataframe = dataframe
   
   # Binary classifier where return>0 is +1, and return<0 is 0 labels
-  if type == 'binary baseline':
+  if type == 'binary':
     pos_returns = dataframe.values > 0
     neg_returns = dataframe.values <= 0 
     scaled_dataframe = pd.DataFrame(np.select([pos_returns,neg_returns], [1,0], default='NaN'), index=dataframe.index, columns=dataframe.columns)
 
   return scaled_dataframe
 
-returns_trainOutput = output_classifier('binary baseline', returns_trainOutput)
-returns_valOutput = output_classifier('binary baseline', returns_valOutput)
+returns_trainOutput = output_classifier('binary', returns_trainOutput)
+returns_valOutput = output_classifier('binary', returns_valOutput)
 
-print (returns_trainOutput.head())
+raw_testOutput = output_classifier('raw', returns_testOutput)
+returns_testOutput = output_classifier('binary', returns_testOutput)
+
+print (returns_trainOutput.head(2))
 print (returns_trainOutput.info())
+
+print (returns_valOutput.head(2))
+print (returns_valOutput.info())
 
 """## Data Integration"""
 
@@ -430,10 +463,17 @@ trainTarget = []
 valInput = []
 valTarget = []
 
+testInput = []
+testTarget = []
+rawtestTarget = []
+
 # Check that the indices are of the same length 
 if len(ltm_trainInputs[0]) != len(returns_trainOutput):
+  print ('training length', len(ltm_trainInputs[0]))
+  print ('target length', len(returns_trainOutput))
   assert False, "Incompatible dataframe index lengths!"
 
+# Training Set
 for company in range(0, len(ltm_trainInputs[0][:1][0])):
   
   for time_unit in range(0, len(ltm_trainInputs[0])): 
@@ -454,7 +494,7 @@ for company in range(0, len(returns_trainOutput.columns)):
   for time_unit in range(0, len(returns_trainOutput.index)): 
     trainTarget.append(returns_trainOutput[anon_tickers[company]][time_unit])
   
-  
+# Validation Set 
 for company in range(0, len(ltm_valInputs[0][:1][0])):
   
   for time_unit in range(0, len(ltm_valInputs[0])): 
@@ -475,26 +515,30 @@ for company in range(0, len(returns_valOutput.columns)):
   for time_unit in range(0, len(returns_valOutput.index)): 
     valTarget.append(returns_valOutput[anon_tickers[company]][time_unit])
 
-# for i in range(0, len(scaled_returns_train_set.index)): # this is the ratio of input data to output data. 
-#     X_train.append(scaled_test_train_set[i-6:i, 0]) # second parameter is the axis - in this case, only 1 dimension
-#     Y_train.append(scaled_returns_train_set[i, 0])
+# Test Set
+for company in range(0, len(ltm_testInputs[0][:1][0])):
+  
+  for time_unit in range(0, len(ltm_testInputs[0])): 
+    input_unit = []
+    
+    for ltm_attribute in range(0, len(ltm_testInputs)): 
+      input_unit.append(ltm_testInputs[ltm_attribute][time_unit:time_unit+1][0][company])
+                        
+    for ntm_attribute in range(0, len(ntm_testInputs)):
+      input_unit.append(ntm_testInputs[ntm_attribute][time_unit:time_unit+1][0][company])
+                        
+    for tech_attribute in range(0, len(tech_testInputs)): 
+      input_unit.append(tech_testInputs[tech_attribute][time_unit:time_unit+1][0][company])
+                        
+    testInput.append(input_unit)
+    
+for company in range(0, len(returns_testOutput.columns)):
+  for time_unit in range(0, len(returns_testOutput.index)): 
+    testTarget.append(returns_testOutput[anon_tickers[company]][time_unit])
 
-# print(type(input_trainDataset))
-# print("**************************************")
-# print(input_trainDataset[0:5])
-
-
-# # Conversion to numpy array for improved memory, performance and functionality
-# input_trainDataset, output_trainDataset = np.array(input_trainDataset), np.array(output_trainDataset)
-# print(type(input_trainDataset))
-# print("**************************************")
-
-# print(input_trainDataset[0:5])
-
-# print(input_trainDataset.shape[0])
-# print(input_trainDataset.shape[1])
-# print("**************************************")
-
+for company in range(0, len(raw_testOutput.columns)):
+  for time_unit in range(0, len(raw_testOutput.index)): 
+    rawtestTarget.append(raw_testOutput[anon_tickers[company]][time_unit])
 
 print(trainInput[0:1])
 print(len(trainInput))
@@ -506,7 +550,16 @@ print(len(valInput))
 print(valTarget[0:1])
 print(len(valTarget))
 
+print(testInput[0:1])
+print(len(testInput))
+print(testTarget[0:1])
+print(len(testTarget))
+
 """### Remove redundant data"""
+
+#239637
+#269977
+#166449
 
 def remove_useless_inputs(inputList, outputList):
   resultInput = []
@@ -524,11 +577,19 @@ def remove_useless_inputs(inputList, outputList):
   return resultInput, resultOutput
 
 newtrainInput, newtrainTarget = remove_useless_inputs(trainInput, trainTarget)
+newvalInput, newvalTarget = remove_useless_inputs(valInput, valTarget)
+newtestInput, newtestTarget = remove_useless_inputs(testInput, testTarget)
+newtestInput, newrawtestTarget = remove_useless_inputs(testInput, rawtestTarget)
+
 
 print(newtrainInput[0:1])
 print(len(newtrainInput))
 print(newtrainTarget[0:1])
 print(len(newtrainTarget))
+
+# 239635
+# 253107
+# 166448
 
 def remove_useless_outputs(inputList, outputList):
   resultInput = []
@@ -547,268 +608,355 @@ def remove_useless_outputs(inputList, outputList):
   return resultInput, resultOutput
 
 trainInput, trainTarget = remove_useless_outputs(newtrainInput, newtrainTarget)
+valInput, valTarget = remove_useless_outputs(newvalInput, newvalTarget)
+testInput, testTarget = remove_useless_inputs(newtestInput, newtestTarget)
+testInput, rawtestTarget = remove_useless_inputs(newtestInput, newrawtestTarget)
+
 
 print(trainInput[0:1])
 print(len(trainInput))
 print(trainTarget[0:1])
 print(len(trainTarget))
-
-
 print(type(trainTarget[0:1]))
-
-print(trainTarget[0:1])
-print(trainTarget[0])
-print(trainTarget[1])
 
 """### Reshaping data"""
 
 # Conversion to numpy array for improved memory, performance and functionality
 trainInput, trainTarget = np.array(trainInput), np.array(trainTarget)
-print(trainInput[0:1])
+valInput, valTarget = np.array(valInput), np.array(valTarget)
+testInput, testTarget = np.array(testInput), np.array(testTarget)
 
-print(trainInput.shape[0])
-print(trainInput.shape[1])
+print(trainInput[0:1])
 
 trainInput = np.reshape(trainInput, (trainInput.shape[0], trainInput.shape[1], 1))
+valInput = np.reshape(valInput, (valInput.shape[0], valInput.shape[1], 1))
+testInput = np.reshape(testInput, (testInput.shape[0], testInput.shape[1], 1))
 
 print(trainInput[0:1])
-
 print(trainInput.shape[0])
 print(trainInput.shape[1])
+
+print(trainInTarget[0:1])
+print(trainInTarget.shape[0])
 
 """# Network Implementation
 
 ## Core Architecture
+
+### Single Output LSTM
 """
 
 data_dim = trainInput.shape[1]
 timesteps = trainInput.shape[0]
 
+
 # Sample Code
 # model parameters:
 
 def create_model(train_X, train_Y, data_dim):
-  lstm_units = 128
+  lstm_units = 1024
   
 #   print('Build baseline binary model...')
 #   model = Sequential()
 #   model.add(Masking(mask_value=0., input_shape=(data_dim, 1)))
 #   model.add(LSTM(lstm_units))
-#   model.add(Dense(1))
+#   model.add(Dense(1, activation='sigmoid'))
 #   model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
   
-  
+    
   print('Build stacked binary model')
+  lstm_units = int(lstm_units/4)
+
   model = Sequential()
   model.add(Masking(mask_value=0., input_shape=(data_dim, 1)))
   model.add(LSTM(lstm_units, return_sequences=True))
   model.add(Dropout(rate=0.2))
   model.add(LSTM(lstm_units, return_sequences=True))
   model.add(Dropout(rate=0.2))
-
+  model.add(LSTM(lstm_units, return_sequences=True))
+  model.add(Dropout(rate=0.2))
   model.add(LSTM(lstm_units))
-  model.add(Dense(1))
+  model.add(Dense(1, activation='sigmoid'))
   model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-  
-  #   model.compile(loss='mean_squared_error', optimizer='adam', metrics=['accuracy'])
 
   return(model)
 
-  
 baseline_model = create_model(trainInput, trainTarget, data_dim)
+print(baseline_model.summary())
 SVG(model_to_dot(baseline_model, show_shapes=True).create(prog='dot', format='svg'))
 
-baseline_model.summary()
-baseline_model.fit(trainInput, trainTarget, epochs = 100, batch_size = 256, verbose = 1)
+history = baseline_model.fit(trainInput, trainTarget, epochs = 30, batch_size = 1024, verbose = 1)
+baseline_model.save('baseline.h5')
 
-data_dim = trainInput.shape[1]
-timesteps = trainInput.shape[0]
-
+"""### Multi output LSTM"""
 
 class fypNet: 
   @staticmethod
   def build_input_predictor(inputs, data_dim, lstm_units):
-    inPred = Masking(mask_value=0., input_shape = (data_dim, 1))(inputs)
-    inPred = LSTM(lstm_units, return_sequences=True)
+    lstm_units = int(lstm_units/8)
 
+    inPred = Masking(mask_value=-1., input_shape = (data_dim, 1))(inputs)
+    
+    inPred = LSTM(lstm_units, return_sequences=True)(inputs)
+    inPred = Dropout(rate=0.2)(inPred)
+    inPred = LSTM(lstm_units, return_sequences=True)(inPred)
+    inPred = Dropout(rate=0.2)(inPred)
+    inPred = LSTM(lstm_units, return_sequences=True)(inPred)
+    inPred = Dropout(rate=0.2)(inPred)
+    inPred = LSTM(lstm_units)(inPred)    
+    inPred = Dense(20)(inPred)
+    
     result = Activation('softmax', name= 'inPred_result')(inPred)
     
     return result
     
   @staticmethod
   def build_output_predictor(inputs, data_dim, lstm_units): 
+    lstm_units = int(lstm_units/4)
+    
     outPred = LSTM(lstm_units, return_sequences=True)(inputs)
-    outPred = LSTM(lstm_units)(outPred)
+    outPred = Dropout(rate=0.2)(outPred)
+    outPred = LSTM(lstm_units, return_sequences=True)(outPred)
+    outPred = Dropout(rate=0.2)(outPred)
+    outPred = LSTM(lstm_units, return_sequences=True)(outPred)
+    outPred = Dropout(rate=0.2)(outPred)
+    outPred = LSTM(lstm_units)(outPred)    
     outPred = Dense(1)(outPred)
-    result = Activation('softmax', name= 'outPred_result')(outPred)
+    result = Activation('sigmoid', name= 'outPred_result')(outPred)
 
     return result
   
   @staticmethod
-  def build():
-    input_shape = (data_dim, inputs, lstm_units)
-    
+  def build(data_dim, lstm_units):
+         
+    input_shape = (data_dim, 1)
     inputs = Input(shape = input_shape)
- 
-    inputBranch = fypNet.build_input_predictor(params)
-    outputBranch = fypNet.build_output_predictor(params)
+   
+    inputBranch = fypNet.build_input_predictor(inputs, data_dim, lstm_units)
+    outputBranch = fypNet.build_output_predictor(inputs, data_dim, lstm_units)
     
-    model = Model(inputs = inputs, outputs = [inputBranch, outputBranch])
+    model = Model(inputs= inputs, outputs= [inputBranch, outputBranch])
     
     return model
 
 data_dim = trainInput.shape[1]
 timesteps = trainInput.shape[0]
-lstm_units = 128
-
+lstm_units = 1024
 num_epochs = 30
-initial_lr = 1e-3
-batch_size = 32
+# initial_lr = 1e-3
+batch_sizes = 1024
 
-# initialize our FashionNet multi-output network
-model = fypNet.build(data_dim, trainInput, lstm_units)
+# initialize our fypNet multi-output network
+model = fypNet.build(data_dim, lstm_units)
  
-losses = {'inPred_result': 'mean_absolute_error','outPred_result': 'binary_crossentropy'}
+losses = {'inPred_result': 'mean_squared_error','outPred_result': 'binary_crossentropy'}
  
 # initialize the optimizer and compile the model
+
 print('Compiling model...')
-optimiser = Adam(lr=initial_lr, decay=initial_lr/epochs)
-model.compile(optimizer=opt, loss=losses, metrics=['accuracy'])
+# opt = Adam(lr=initial_lr, decay=initial_lr/epochs)
+model.compile(optimizer='adam', loss=losses, metrics=['acc'])
 
-SVG(model_to_dot(baseline_model, show_shapes=True).create(prog='dot', format='svg'))
-baseline_model.summary()
+# inPred = trainInput.shift(-1)
+trainInTarget = np.roll(trainInput, -1)
+trainValTarget = np.roll(valInput, -1)
 
+# print(inPred.head())
+print(model.summary())
+SVG(model_to_dot(model, show_shapes=True).create(prog='dot', format='svg'))
 
-model.fit(trainInput,{"inPred_result": , "outPred_result": trainTarget}, validation_data=(testInput, {"inPred_result": , "outPred_result": trainTarget}), epochs=num_epochs, verbose=1)
+trainInTarget = np.reshape(trainInTarget, (trainInTarget.shape[0], trainInTarget.shape[1]))
+trainValTarget = np.reshape(trainValTarget, (trainValTarget.shape[0], trainValTarget.shape[1]))
 
-class FashionNet:
-  @staticmethod
-  def build_category_branch(inputs, numCategories, finalAct="softmax",chanDim=-1):    
-    x = Lambda(lambda c: tf.image.rgb_to_grayscale(c))(inputs)
-		# utilize a lambda layer to convert the 3 channel input to a
-		# grayscale representation
- 
-		# CONV => RELU => POOL
-		x = Conv2D(32, (3, 3), padding="same")(x)
-		x = Activation("relu")(x)
-		x = BatchNormalization(axis=chanDim)(x)
-		x = MaxPooling2D(pool_size=(3, 3))(x)
-		x = Dropout(0.25)(x)
-    
-    	# (CONV => RELU) * 2 => POOL
-		x = Conv2D(64, (3, 3), padding="same")(x)
-		x = Activation("relu")(x)
-		x = BatchNormalization(axis=chanDim)(x)
-		x = Conv2D(64, (3, 3), padding="same")(x)
-		x = Activation("relu")(x)
-		x = BatchNormalization(axis=chanDim)(x)
-		x = MaxPooling2D(pool_size=(2, 2))(x)
-		x = Dropout(0.25)(x)
- 
-		# (CONV => RELU) * 2 => POOL
-		x = Conv2D(128, (3, 3), padding="same")(x)
-		x = Activation("relu")(x)
-		x = BatchNormalization(axis=chanDim)(x)
-		x = Conv2D(128, (3, 3), padding="same")(x)
-		x = Activation("relu")(x)
-		x = BatchNormalization(axis=chanDim)(x)
-		x = MaxPooling2D(pool_size=(2, 2))(x)
-		x = Dropout(0.25)(x)
-    
-    # define a branch of output layers for the number of different
-		# clothing categories (i.e., shirts, jeans, dresses, etc.)
-		x = Flatten()(x)
-		x = Dense(256)(x)
-		x = Activation("relu")(x)
-		x = BatchNormalization()(x)
-		x = Dropout(0.5)(x)
-		x = Dense(numCategories)(x)
-		x = Activation(finalAct, name="category_output")(x)
- 
-		# return the category prediction sub-network
-		return x
+history = model.fit(trainInput,{"inPred_result": trainInTarget, "outPred_result": trainTarget}, validation_data=(valInput, {"inPred_result": trainValTarget, "outPred_result": valTarget}), batch_size = batch_sizes, epochs=num_epochs, verbose=1)
+# Input prediction is the input vector shifted by 1
+
+model.save('multioutput.h5')
+
+history.history
+
+print('hi')
+
+"""#Results Interpretations
+
+## Model Loading
+"""
+
+trained_stack = load_model('/content/drive/My Drive/thw116_FYP/saved_models/stacked_model.h5')
+
+# trained_stack = load_model('/content/drive/My Drive/thw116_FYP/saved_models/multioutput.h5')
+                           
+stack_pred = trained_stack.predict(testInput, verbose=1)
+print(stack_pred)
+
+stack_classPred = trained_stack.predict_classes(testInput, verbose=1)
+print(stack_classPred)
+
+"""## Evaluation Metrics"""
+
+def evaluation_metrics(prediction, actual):
+  TP = 0
+  TN = 0
+  FP = 0
+  FN = 0
+  for i in range (0, len(actual)):
+    if actual[i][0] == '1':
+      if prediction[i][0] == 1:
+        TP += 1
+      else:
+        FN += 1
+    if actual[i][0] == '0':
+      if prediction[i][0] == 0:
+        TN += 1
+      else: 
+        FP += 1
+     
+  print(TP, TN, FP, FN)
+  return (TP+TN)/(TP+TN+FP+FN), TP/(TP+FP), TP/(TP+FN)
+
+accuracy, precision, recall = evaluation_metrics(stack_classPred, testTarget)
+
+print(accuracy, precision, recall)
+
+selected = []
+
+for i in range(len(rawtestTarget)):
+  if stack_classPred[i][0] == 1: 
+    selected.append(rawtestTarget[i])
+
+"""## Selected Labels Results distributions"""
+
+plt.hist(selected,range=(-0.2,0.2), bins=200)
+plt.ylabel('Returns')
+
+npselected = np.array(selected)
+selectreturns = np.log(npselected) 
+plt.hist(selectreturns, range=(-10,0), bins=200)
+
+"""## Test Data Returns Distributions"""
+
+plt.hist(rawtestTarget,range=(-0.2,0.2), bins=200)
+plt.ylabel('Returns')
+
+nprawtestTarget = np.array(rawtestTarget)
+rawreturns = np.log(nprawtestTarget) 
+plt.hist(rawreturns, range=(-10,0), bins=200)
+
+"""## Benchmark
+
+### Selected Label Statistics
+"""
+
+print(stats.describe(selected))
+plt.boxplot(selected)
+plt.tight_layout() 
+plt.show()
+
+"""### Test Data Statistics"""
+
+print(stats.describe(rawtestTarget))
+plt.boxplot(rawtestTarget)
+plt.tight_layout() 
+plt.show()
+
+"""### Whole Dataset Statistics"""
+
+allreturns = returns.stack(dropna=False).reset_index(drop=True).to_frame('Returns Plot')
+listreturns = []
+for i in range (len(allreturns.values)):
+  listreturns.append(allreturns.values[i][0])
+
+cleanedreturns = [x for x in listreturns if str(x) != 'nan']
   
-  @staticmethod
-	def build_output_predictor(inputs, numColors, finalAct="softmax", chanDim=-1):
-		# CONV => RELU => POOL
-		x = Conv2D(16, (3, 3), padding="same")(inputs)
-		x = Activation("relu")(x)
-		x = BatchNormalization(axis=chanDim)(x)
-		x = MaxPooling2D(pool_size=(3, 3))(x)
-		x = Dropout(0.25)(x)
- 
-		# CONV => RELU => POOL
-		x = Conv2D(32, (3, 3), padding="same")(x)
-		x = Activation("relu")(x)
-		x = BatchNormalization(axis=chanDim)(x)
-		x = MaxPooling2D(pool_size=(2, 2))(x)
-		x = Dropout(0.25)(x)
- 
-		# CONV => RELU => POOL
-		x = Conv2D(32, (3, 3), padding="same")(x)
-		x = Activation("relu")(x)
-		x = BatchNormalization(axis=chanDim)(x)
-		x = MaxPooling2D(pool_size=(2, 2))(x)
-		x = Dropout(0.25)(x)
-    
-    # define a branch of output layers for the number of different
-		# colors (i.e., red, black, blue, etc.)
-		x = Flatten()(x)
-		x = Dense(128)(x)
-		x = Activation("relu")(x)
-		x = BatchNormalization()(x)
-		x = Dropout(0.5)(x)
-		x = Dense(numColors)(x)
-		x = Activation(finalAct, name="color_output")(x)
- 
-		# return the color prediction sub-network
-		return x
-  
-  @staticmethod
-    def build(width, height, numCategories, numColors, finalAct="softmax"):
-      # initialize the input shape and channel dimension (this code
-      # assumes you are using TensorFlow which utilizes channels
-      # last ordering)
-      inputShape = (height, width, 3)
-      chanDim = -1
+print(stats.describe(cleanedreturns))
+plt.boxplot(cleanedreturns)
+plt.tight_layout() 
+plt.show()
 
-      # construct both the "category" and "color" sub-networks
-      inputs = Input(shape=inputShape)
-      categoryBranch = FashionNet.build_category_branch(inputs,
-        numCategories, finalAct=finalAct, chanDim=chanDim)
-      colorBranch = FashionNet.build_color_branch(inputs,
-        numColors, finalAct=finalAct, chanDim=chanDim)
+"""# Testing
 
-      # create the model using our input (the batch of images) and
-      # two separate outputs -- one for the clothing category
-      # branch and another for the color branch, respectively
-      model = Model(
-        inputs=inputs,
-        outputs=[categoryBranch, colorBranch],
-        name="fashionnet")
+## Unit Tests
+"""
 
-      # return the constructed network architecture
-      return model
+# Returns Converter Test
 
-# initialize our FashionNet multi-output network
-model = FashionNet.build(96, 96,
-	numCategories=len(categoryLB.classes_),
-	numColors=len(colorLB.classes_),
-	finalAct="softmax")
- 
-# define two dictionaries: one that specifies the loss method for
-# each output of the network along with a second dictionary that
-# specifies the weight per loss
-losses = {
-	"category_output": "categorical_crossentropy",
-	"color_output": "categorical_crossentropy",
-}
-lossWeights = {"category_output": 1.0, "color_output": 1.0}
- 
-# initialize the optimizer and compile the model
-print("[INFO] compiling model...")
-opt = Adam(lr=INIT_LR, decay=INIT_LR / EPOCHS)
-model.compile(optimizer=opt, loss=losses, loss_weights=lossWeights, metrics=["accuracy"])
+price = [1, 1.1, 1.21, 1.452]
+change1 = [float('nan'), 0.1, 0.1, 0.2] # success case
+change2 = [1, 0.2, 0.2, 0.2] # fail case
+testdf1 = pd.DataFrame(price)
+testdf2 = pd.DataFrame(change1)
+testdf3 = pd.DataFrame(change2)
 
-"""# Benchmark"""
+def test_RETURNS_CONVERTER(test, benchmark):
+  results = price_to_returns('daily', test)
+  pd.testing.assert_frame_equal(results, benchmark)
+  print('test successful')
+
+test_RETURNS_CONVERTER(testdf1, testdf2)
+test_RETURNS_CONVERTER(testdf1, testdf3)
+
+# Test Set Generator Test
+
+initialframe = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+outputframe1 = [7, 8, 9, 10] # success case
+outputframe2 = [4, 5, 6, 7] # fail case
+outputframe3 = [6, 7, 8, 9, 10] # fail case
+
+testdf1 = pd.DataFrame(initialframe)
+testdf2 = pd.DataFrame(outputframe1)
+testdf2.index += 6
+testdf3 = pd.DataFrame(outputframe2)
+testdf3.index += 6
+testdf4 = pd.DataFrame(outputframe3)
+testdf4.index += 6
+
+def test_SET_GENERATOR(test, benchmark):
+  results = test_set(0.5, 0.1, test)
+  pd.testing.assert_frame_equal(results, benchmark)
+  print('test successful')
+
+test_SET_GENERATOR(testdf1, testdf2)
+test_SET_GENERATOR(testdf1, testdf3)
+test_SET_GENERATOR(testdf1, testdf4)
+
+# Input Scaling Test
+# for minmax case
+
+inputvals = [1, 2, 3, 4, 5]
+
+minmax1 = np.array([0, 0.25, 0.5, 0.75, 1]) # success case
+minmax1 = np.reshape(minmax1,(5, 1))
+minmax2 = np.array([1, 0.25, 0.75, 0.75, 0]) # fail case
+minmax2 = np.reshape(minmax2,(5, 1))
+
+testdf1 = pd.DataFrame(inputvals)
+
+def test_INPUT_SCALER(test, benchmark):
+  results = input_scaling(test)
+  np.testing.assert_array_equal(results, benchmark)
+  print('test successful')
+
+test_INPUT_SCALER(testdf1, minmax1)
+test_INPUT_SCALER(testdf1, minmax2)
+
+# Output Classifier Test
+# for zero or less = 0 and positive return = 1
+
+returnvals = [0.5, 0.5, -0.2, -0.3, 0.8]
+classifier1 = [str(1), str(1), str(0), str(0), str(1)] # success case
+classifier2 = [str(0), str(0), str(0), str(0), str(0)] # fail case
+
+testdf1 = pd.DataFrame(returnvals)
+testdf2 = pd.DataFrame(classifier1)
+testdf3 = pd.DataFrame(classifier2)
+
+def test_OUTPUT_CLASSIFIER(test, benchmark):
+  results = output_classifier('binary', test)
+  pd.testing.assert_frame_equal(results, benchmark)
+  print('test successful')
+
+test_OUTPUT_CLASSIFIER(testdf1, testdf2)
+test_OUTPUT_CLASSIFIER(testdf1, testdf3)
+
+"""## Integration Tests"""

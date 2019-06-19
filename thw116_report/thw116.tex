@@ -10,6 +10,7 @@
 \usepackage{amsthm}
 \usepackage{mathtools}
 \usepackage{caption}
+\usepackage{afterpage}
 
 \setlength{\parskip}{0.2cm}
 
@@ -250,7 +251,7 @@ A popular example of a classification problem is the a binary classifier. These 
 
 \subsubsection{Cross Validation} \label{cross validation}
 
-An issue with LSTM networks arises when using classical cross validation methods. K-fold cross validation involves dividing the data into $k$ folds before assigning the initial fold as the test data and the rest as the training data. After each iteration of training, the test data assignment is then incremented until its position has permeated through all of the positions. However, with sequential data, this method causes disjoints in the training data since training for fold $n+1$ would involve information from $n-1$ rather than $n$. In 2015, Bergmeir et al. introduced a new method\cite{Bergmeir} to handle cross validation for time-series data. Their system involved a forward chaining concept such that training data is never interrupted. Although it resolves the issue, the generalisation error is then affected by the change in training data size. Below is a heuristic for the method: 
+An issue with LSTM networks arises when using classical cross validation methods. K-fold cross validation involves dividing the data into $k$ folds before assigning the initial fold as the test data and the rest as the training data. After each iteration of training, the test data assignment is then incremented until its position has permeated through all of the positions. However, with sequential data, this method causes disjoints in the training data since training for fold $n+1$ would involve information from $n-1$ rather than $n$. In 2015, Bergmeir et al. introduced a new method\cite{Bergmeir} to handle cross validation for time series data. Their system involved a forward chaining concept such that training data is never interrupted. Although it resolves the issue, the generalisation error is then affected by the change in training data size. Below is a heuristic for the method: 
 
 \begin{itemize}
  	\item Divide the data into $k$ folds. 
@@ -361,7 +362,7 @@ Additionally, normalisation of the inputs is carried out with two methods. The f
 
 \subsubsection{Related Works}
 
-Groundbreaking work can often be produced and found in competitions. The primarily example for time-series datasets was the M4 competition held in June by Makridakis of the University of Nicosia. This was the forth competition of a series which focussed on forecasting for 100,000 time-series datasets, spanning different time intervals and domains. Although not directly related to investing, there are various similarities and use of applications. A key objective of the task was to evaluate the performance of machine learning models compared to other statistical methodologies. Makridakis et al.\cite{Makridakis} published their findings after the competition. Below are a few of their major findings in the report:
+Groundbreaking work can often be produced and found in competitions. The primarily example for time series datasets was the M4 competition held in June by Makridakis of the University of Nicosia. This was the forth competition of a series which focussed on forecasting for 100,000 time series datasets, spanning different time intervals and domains. Although not directly related to investing, there are various similarities and use of applications. A key objective of the task was to evaluate the performance of machine learning models compared to other statistical methodologies. Makridakis et al.\cite{Makridakis} published their findings after the competition. Below are a few of their major findings in the report:
 
 \begin{itemize}
 	\item Combination of methods performed well in the M4 competition - 12 of the 17 most accurate methods were combinations of mostly statistical approaches.
@@ -609,6 +610,7 @@ The initial model used was the most fundamental LSTM possible, with one hidden l
 \centering
 \includegraphics[width=14.5cm]{stacked_lstm.png}
 \caption{LHS: Architectural overview of the stacked LSTM model. RHS: Model summary with number of parameters.}
+\label{stacked_lstm}
 \end{figure}
 
 One of the problematic issues was the model's capability of handling the missing values within the data. In order to reduce the dataset into a practically trainable size, it was chosen to delete missing values input vectors and output values. However, this had the consequence of causing time skips in the model. This meant that the memory cell was heavily biasing much older information and not achieving accurate prediction or performance. 
@@ -923,10 +925,21 @@ testInput = np.reshape(testInput, (testInput.shape[0], testInput.shape[1], 1))
 \subsection{Architecture} 
 \subsubsection{Single Output Model}
 
+For the single output model, the format for building the model was defined as a function that took in the parameters, train\_X, train\_Y, data\_dim, which are the training data, test data, and dimensionality of the input training vector ($20\times1$) respectively. Various Keras functionalities are then called to define the model. Initially, Sequential() is called to establish an empty model using the Sequential API. A \textit{Sequential} model is a linear stack of layers which can be created using the .add() method. 
+
+The first layer of the model must take the input\_shape as a parameter. This is required for the model to provide it information on the format of the input vectors. The argument input\_shape defines a 2 dimensional shape tuple. The first parameter of input\_shape defines the width of the vector (i.e. the number of attributes/columns) and the second defines the time step size (also known as window size). When displaying the model, as shown in figure \ref{stacked_lstm}, the \textit{None} parameter of the input shape indicates the batch size and means that any positive integer can be expected for that dimension, since batch dimension is not initialised at this point. 
+
+The two main layer types used in the architecture are Dropout and LSTM. Dropout is classed as a \textit{Core} layer in Keras whereas LSTM falls under \textit{Recurrent}. Dropout layers simply apply dropout to the inputs of their layers i.e. the outputs of previous layers. This is achieved by randomly a fraction of input units, specified by the parameter 'rate', to 0 during the update when training. 
+
+LSTM layers also require a few parameters to configure. As the name suggests, they are responsible for implementing the LSTM cell architectures. The parameter 'unit' specifies the number of cells in the layer. In stacking architectures, it is important to set the return\_sequences parameter to \textit{True} for all but the last layer. This means that all of the hidden state outputs are returned and passed to the next layer as opposed to just the hidden state of the final cell. 
+
+The final Dense layer is simply a fully connected layer than transforms the output of the previous cell into the intended output shape for the model. In this case, since only a single value is predicted, the 'units' parameter specifies the output dimensionality i.e. the number of nodes in the dense layer.
+
+After the model is defined, the learning process must be configured by using the .compile() method. There are two arguments that must be specified which are the choice of optimiser and loss function. Optionally, a list of metrics may also be parsed through as an argument to provide evaluation of the model. Finally, the model is trained using the .fit() method. This takes as arguments \textit{numpy} arrays representing the input and target data, as well as the number of epochs to train for and size of batch size. This generates a \textit{History} object, which stores a record of the training losses and metrics after each epoch.
+
 \begin{lstlisting}[language=Python, breaklines=true, caption={Model creation, compilation and fitting functionality of the single output model. The initial single hidden layer model is commented out.}]
 data_dim = trainInput.shape[1]
 timesteps = trainInput.shape[0]
-
 
 # Sample Code
 # model parameters:
@@ -968,7 +981,11 @@ history = baseline_model.fit(trainInput, trainTarget, epochs = 30, batch_size = 
 
 \subsubsection{Multi output Model}
 
-\begin{lstlisting}[language=Python, breaklines=true, caption={Structuring of the multi output model, with two forks focused on the separate tasks of predicting the target variable, $y$ and the next input vector, $x_{t+1}$.}]
+By redeveloping the model into a multi output structure, the \textit{Sequential} API was no longer usable. Hence, the model was initiated by calling the \textit{Functional} API instead. Rather than structuring the object build inside a function as with the single output method, a class was defined to instantiate the model. This then allowed class methods to be developed to neatly define each individual branch of the two predictors. 
+
+Layers are connected together by pairing rather than using the .add() method in the single output model. This allows for more flexibility in terms of connecting layers in a non linear fashion.   
+
+\begin{lstlisting}[language=Python, breaklines=true, caption={Structuring of the multi output model, with two branches focused on the separate tasks of predicting the target variable, $y$ and the next input vector, $x_{t+1}$.}]
 class fypNet: 
   @staticmethod
   def build_input_predictor(inputs, data_dim, lstm_units):
@@ -1001,6 +1018,7 @@ class fypNet:
     outPred = Dropout(rate=0.2)(outPred)
     outPred = LSTM(lstm_units)(outPred)    
     outPred = Dense(1)(outPred)
+    
     result = Activation('sigmoid', name= 'outPred_result')(outPred)
    
     return result
@@ -1019,7 +1037,7 @@ class fypNet:
     return model
 \end{lstlisting} 
  
-\begin{lstlisting}[language=Python, breaklines=true]
+\begin{lstlisting}[language=Python, breaklines=true, caption={Initialisation, compilation and training implementation for the multi output model}]
 lstm_units = 1024
 num_epochs = 10
 initial_lr = 1e-3
@@ -1127,7 +1145,7 @@ This section is normally useful for software or hardware deliverables and less r
 \caption{Levels of software testing from high (Top) to low (Bottom)}
 \end{figure}
 
-The procedure of evaluating the achievements of the project will vary according to the stage of the software development cycle. On the atomic level is the unit test, which will be used to validate that each of the separate modules and functions of the software are functioning as expected. An example\cite{python_testing} of how unit testing will be implemented is shown below. By using the assert statement in Python, it is possible to determine whether the function, $sum()$, is outputting the expected result of $6$. An incorrect result will raise an $AssertionError$ and output the message $not6$.
+The procedure of evaluating the achievements of the project will vary according to the stage of the software development cycle. On the atomic level is the unit test, which will be used to validate that each of the separate modules and functions of the software are functioning as expected. An example\cite{python_testing} of how unit testing will be implemented is shown below. By using the assert statement in Python, it is possible to determine whether the function, sum(), is outputting the expected result of $6$. An incorrect result will raise an AssertionError and output the message $not6$.
 
 \begin{lstlisting}[language=Python, caption=Example Test.]
 def test_sum():
@@ -1144,9 +1162,9 @@ The next level up involves integration testing, which focuses on the correctness
 
 System testing will involve evaluating the realised performance of the whole system. This will then allow for the model to be comparable to other methodologies developed in the field and industry. This will be covered in section \ref{evaluation}.
 
-\subsection{Unit Test Results} 
+\subsection{Unit Test Implementation} 
 
-The results for some unit tests are depicted below, with one for DataFrame assertion and another for a \textit{numpy} assertion. Sample tests were first initialised in lists before being converted into the appropriate format for the function that was being tested. Both correct and incorrect results for the tests were then created in lists and converted appropriately before a function was implemented to carry out the test. Listing \ref{error_message} demonstrates an example of an AssertionError which also returns an error message identifying the problem. These unit tests are not exhaustive in terms of establishing edge cases but provide reasonable effectiveness at building correctly functioning code for the purpose of the project.
+The implementation for some unit tests are depicted below, with one for a DataFrame assertion and another for a \textit{numpy} assertion. Sample tests were first initialised in lists before being converted into the appropriate format for the function that was being tested. Both correct and incorrect results for the tests were then created in lists and converted appropriately before a function was implemented to carry out the test. Listing \ref{error_message} demonstrates an example of an AssertionError which also returns an error message identifying the problem. These unit tests are not exhaustive in terms of establishing edge cases but provide reasonable effectiveness at building correctly functioning code for the purpose of the project.
 
 \begin{lstlisting}[language=Python, breaklines=true, caption={Example of a DataFrame comparison test.}]
 # Test Set Generator Test
@@ -1205,8 +1223,75 @@ test_INPUT_SCALER(testdf1, minmax1)
 test_INPUT_SCALER(testdf1, minmax2)
 \end{lstlisting} 
 
-\subsection{Integration Test Results} 
+\subsection{Integration Test Implementation} 
 
+One integration test was implemented but it was decided that they were fairly convoluted to implement and redundant. The structure of the codebase is very linear, to the point where all the integration tests are simply a direct combination of unit tests. AssertionErrors in integration tests are also much less effective, as shown in listing \ref{integration_test}. The fail case in this example has multiple errors, such as mislabelled column names and incorrectly computed values in the dataframe. However, the AssertionError simply indicates the first one encountered, which was the dataframe columns mislabelling.   
+
+\begin{figure}[!hbt!]
+\centering
+\includegraphics[width=10.5cm]{integration_useful.png}
+\caption{Integration testing may be more useful in the contrived bottom program flow example where functionality is not very linear. This project's program flow is more similar to that of the top program flow, depicted in blue.}
+\label{integration_useful}
+\end{figure}
+
+\begin{lstlisting}[language=Python, breaklines=true, caption={Example of an integration test for 3 linked functionalities.}, label={integration_test}]
+# Data Wrangling Test
+
+start = dt.datetime.strptime("26-12-1999", "%d-%m-%Y")
+end = dt.datetime.strptime("5-01-2000", "%d-%m-%Y")
+dates = [start + dt.timedelta(days=x) for x in range(0, (end-start).days)]
+values1 = [10000, 10000, 9000, 9000, 9900, 9900, 9999, 9999, 19998, 19998]
+values2 = [float('nan'),float('nan'),float('nan'),float('nan'),float('nan'),float('nan'),float('nan'),float('nan'),float('nan'),float('nan')]
+
+testdf1 = pd.DataFrame(dates)
+testdf1.rename( columns={0:'Date'}, inplace=True )
+testdf1['CompanyA'] = values1
+testdf1['CompanyB'] = values2
+
+# success case
+test1values1 = [float('nan'), 0.0, -0.1, 0.0, 0.1, 0.0, 0.01, 0.0, 1.0, 0.0]
+test1values2 = [float('nan'),float('nan'),float('nan'),float('nan'),float('nan'),float('nan'),float('nan'),float('nan'),float('nan'),float('nan')]
+
+benchmarkdf1 = pd.DataFrame(dates)
+benchmarkdf1.rename(columns={0:'Date'}, inplace=True)
+benchmarkdf1 = benchmarkdf1.set_index('Date')
+benchmarkdf1['Ticker 1'] = test1values1
+benchmarkdf1['Ticker 2'] = test1values2
+
+# fail case
+test2values1 = [10000, 10000, 9000, 9000, 9900, 9900, 9999, 9999, 19998, 19998]
+test2values2 = [float('nan'),float('nan'),float('nan'),float('nan'),float('nan'),float('nan'),float('nan'),float('nan'),float('nan'),float('nan')]
+
+benchmarkdf2 = pd.DataFrame(dates)
+benchmarkdf2.rename(columns={0:'Date'}, inplace=True)
+benchmarkdf2 = benchmarkdf2.set_index('Date')
+benchmarkdf2['Ticker 1'] = test2values1
+benchmarkdf2['Ticker 3'] = test2values2
+
+def test_WRANGLE_INTEGRATION(test, benchmark):
+  # First Test
+  time_index_generator(test)
+  
+  # Second Test
+  anon_tickers = ticker_list_generator(len(test.columns))
+  test.columns = anon_tickers
+  
+  # Third Test
+  results = price_to_returns('daily', test) 
+  
+  pd.testing.assert_frame_equal(results, benchmark)
+  print('test successful')
+
+test_WRANGLE_INTEGRATION(testdf1, benchmarkdf1)
+
+# reset testdf1
+testdf1 = pd.DataFrame(dates)
+testdf1.rename( columns={0:'Date'}, inplace=True )
+testdf1['CompanyA'] = values1
+testdf1['CompanyB'] = values2
+
+test_WRANGLE_INTEGRATION(testdf1, benchmarkdf2)
+\end{lstlisting} 
 
 %-------------------------------------------------------------------------
 \newpage
@@ -1249,9 +1334,27 @@ A few interesting observations can be made in both of the models. Surprisingly, 
 	\text{where $Y$ is the number of batches in the training set and $e(f_{X}(x_{i}))$ is the loss of the best and last batch training model $f_{X}$ on batch $x_{j}.$}
 \end{gather*}
 
-For the output predictor, the same observation of a higher training than validation can be observed up until around epoch 14. At this point, the new lines intersect and validation loss thereafter increases in a typical fashion of an overfitting model. This is further backed up by the accuracy plot in figure \ref{accuracy_plots} as it can be seen that validation accuracy plateaus around epoch 14.
+For the output predictor, the same observation of a higher training than validation loss can be observed up until around epoch 14. At this point, the new lines intersect and validation loss thereafter increases in a typical fashion of an overfitting model. When the lines intersect, $\frac{1}{X} \sum^{X}_{i}e(f_{i}(x_{i}) = \frac{1}{Y} \sum^{Y}_{j}e(f_{X}(x_{j}))$, meaning the average performance of the training model is equal to that of the validation model. From here on afterwards, $\frac{1}{X} \sum^{X}_{i}e(f_{i}(x_{i}) - \frac{1}{Y} \sum^{Y}_{j}e(f_{X}(x_{j})) < 0$, which suggests weaker generalisation and thus overfitting. This observation is further backed up by the accuracy plot in figure \ref{accuracy_plots} as it can be seen that validation accuracy plateaus around epoch 14. 
 
-The output prediction model was then used to predict labels using input vectors from the unseen test dataset. The three evaluation metrics were then calculated, as seen in table \ref{eval_metrics}. Recall is the least targeted metric as false negative predictions aren't heavily penalised by the model since they are still positive returns in reality. However, precision is the 
+The output prediction loss curves are fairly unintuitive, with very low initial learning. Good learning then occurs from around epoch 7 to 14. Given more time, it would have been experiment with modifying the learning rate hyperparameter of the optimiser. From the behaviour of the loss curves, it could be hypothesised that a decaying learning rate with a higher initial learning rate may achieve better performance. Additionally, experimenting with the kernel initialisation could produce better initial learning. 
+
+\begin{lstlisting}[language=Python, breaklines=true, label={libraries}, caption={New proposed implementation of the optimiser.}]
+# default hyperparameters of Adam optimiser in Keras
+keras.optimizers.Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0, amsgrad=False)
+# proposed new optimiser
+initial_lr = 1e-2
+epochs = 30
+opt = Adam(lr=initial_lr, beta_1=0.9, beta_2=0.999, epsilon=None, decay=initial_lr/epochs, amsgrad=False)
+\end{lstlisting} 
+
+The output prediction model was then used to predict labels using input vectors from the unseen test dataset. The three evaluation metrics were then calculated, as seen in table \ref{eval_metrics}. Recall is the least targeted metric as false negative predictions do not need to be heavily penalised since they are still positive returns in reality. However, precision is important since this accounts for the false positives, which are negative returns in reality that have been incorrectly predicted. As mentioned on Google's developer course\cite{google}, precision and recall are often traded off against each other i.e. increasing precision results in decreasing recall. Theoretically, it could then be possible to improve the empirical performance of the model by allocating a higher classification threshold, as demonstrated in figure \ref{classification_threshold}.
+
+\begin{figure}[!hbt!]
+\centering
+\includegraphics[width=9cm]{classification_threshold.png}
+\caption{Top: Initial classification threshold resulting in Precision = 0.8, Recall = 0.73. Bottom: Higher classification threshold with results in Precision = 0.88, Recall = 0.64.}
+\label{classification_threshold}
+\end{figure} 
 
 \begin{table}[hbt!]
 \begin{center}
@@ -1265,6 +1368,11 @@ Accuracy & Precision & Recall\\
 \label{eval_metrics}
 \end{table}
 
+After the prediction model was applied to the test data, statistical and visual results of the selected points were compared and contrasted to that of the entire test set. This somewhat represented the initial goal of benchmarking the project against the naive diversification heuristic since that benchmark results in exposure to every single return datapoint in the test set. As shown in table \ref{benchmarkstats}, the mean is comparable to the absolute return of the benchmark and the variance is similar to that of the volatility or risk of a portfolio of stocks. Using these measures, it could be interpreted that the model is capable of outperforming the benchmark by approximately 0.78\% on average in terms of daily absolute return. Over the course of 252 trading days per year, the model would, on average, return $1.0076^{252} = 581\%$ return on investment (ROI) whereas the benchmark would be down approximately 3.6\% ($(1-0.000147)^{252} = 0.96363$.) Please note that this is a highly trivialised estimation since it does not take into account either the variance or time sequential order of the returns.
+
+More interesting is the difference in shape of the actual distributions. The selected points exhibit as positive skew whereas the general test set is negative. This suggests that a larger concentration of returns were higher than the mean return in the model selected points and conversely in the general test set. This reflects well on the performance of the model's prediction capabilities as it has correctly identified many more positive returns than negative. Additionally, variance is lower in the model selected data, indicating a potentially less volatile and higher Sharpe ratio portfolio. Kurtosis was also lower, suggesting lighter tails than in the general test set. 
+
+
 \begin{figure}[!hbt!]
 \figuretitle{Returns of Model Selected Datapoints} 
 \centering
@@ -1272,13 +1380,14 @@ Accuracy & Precision & Recall\\
 \caption{Histogram of the returns and log returns of the selected labels by the model.}
 \end{figure}
 
+\afterpage{
+
 \begin{figure}[!hbt!]
 \figuretitle{Returns of Test Set Datapoints} 
 \centering
 \includegraphics[width=16.5cm]{test_returns.png}
 \caption{Histogram of the returns and log returns of the entire unseen test data set.}
 \end{figure}
-
 
 \begin{table}[hbt!]
 \begin{center}
@@ -1299,16 +1408,35 @@ Kurtosis & 18474.170 & 43.882 & 31.110\\
 \end{tabular}
 \end{center}
 \caption{Statistical summary of percentage changes i.e. returns of sets of data. Entire Dataset equates to all returns from 2000 onwards, Test Data is the returns allocated to the test split and Model Selected Data is the collection of returns that the model predicted would have positive returns from the Test Dataset.}
+\label{benchmarkstats}
 \end{table}
+  \clearpage
+}
 
 
 %-------------------------------------------------------------------------
-
-\newpage
+\clearpage
 
 \section{Conclusions}
 
+\subsection{Objectives Completion}
+
+Below is an analytical breakdown into the extend of which the requirements capture, as specified in section \ref{tasks}, has been achieved or changed. 
+
+\begin{enumerate}
+	\item Data Preprocessing: One of the more difficult aspects of the project was evaluating how to handle the data sparsity for a model which relied on consistent, time series data. The objective of preprocessing the data so that it had some detectable pattern that the model could learn was achieved, although it was very generic and blanket. For example, min-max scaling the inputs achieved the objective of scaling it correctly for the model, but begs the question of whether the scaling was appropriate for each individual attribute.  
+	\item Building and Testing Benchmark: The . 
+	\item Implementing and Testing Model Architecture: The implementation of a few models was successful in terms of functionality but disappointing in terms of performance. It quickly became obvious that Keras, although easy to understand and build with, offered minimal low level controls that were necessary for efficient and optimal architecture design. An example of this was the lack of skip connection implementation for models, which was an area that would very much have been explored if there was more time. It would only have been possible to implement this with the lower level TensorFlow library which is known to be fairly slow in terms of development speed.
+	\item Integration Testing and Debugging: This part of the project was successful achieved and extremely useful in debugging erroneous code. Testing helps signpost and indicate where faults occur although actual debugging often requires deeper analysis into data structures and function behaviour to truly solve the problem. One of the most useful aspects of testing was keeping track of object type conversions when calling functions from external packages. Although Python's dynamic datatypes allows for fast development, it was difficult to keep track of the types as the codebase grew. The linear flow of the program made it fairly easy to combine unit tests into integration tests.
+	\item Hyperparameter Optimisation: In depth research was done to arrive at the initialisation values for all of the hyperparameters but it was disappointing to see that adjustments failed to produce any marked improvement in the performance of the model. The project has taught that the fundamental structuring of data and the network is far more important for generating results and it is fairly useless to attempt to fine tune a poorly functioning model.  
+\end{enumerate}
+
 \subsection{Evaluation} \label{evaluation}
+
+The main highlight achieved in this project was actually implementing a model which showed some signs of signs of outperformance in terms of prediction against the designated benchmark. Although, the input data did not solely rely on fundamental data as initially desired, the addition of technical analysis data was deemed vital for the success of the model. It could be argued that this reflects more accurately on the real world factors that influence the price of a stock - they are not just a function of the fundamental values of a company.
+
+The project evaluates well a theoretical application of recurrent networks to the problem of predicting prices. However, it would be hard to translate any of the research generated into a practical investment application. 
+
 \iffalse
 How successful have you been? What have you achieved? . It is important here to identify positively what is worthwhile in your work. At the same time, honesty, and a clear description of the limits of your work, is equally important.
 
@@ -1317,7 +1445,6 @@ are your most significant achievements. In the conclusions you must summarise th
 What design choices did you have along the way, and why did you make the choices you made?
 
 What was the most difficult and/or clever part of the project?
-
 Why was it difficult? How did you overcome the difficulties?
 
 Did you discover or invent anything novel?
@@ -1329,6 +1456,7 @@ What are the advantages, disadvantages of your approach compared with related wo
 How does the scope of your work differ from related work? Examiners expect your project report to show evidence of your ability to think as an engineer, and that includes the ability to critically reflect on your own work and evaluate its significance. 
 \fi
 
+
 Although there is not a significant amount of structured research into price prediction models, the results align with those seen in various forecasting papers, such as Smyl's findings at Uber. It was believed that part of the poor performance of the model was due to the fact that not all the factors that affect the price were considered, especially at the noisy 'daily' time step. There is a 
 
 \begin{figure}[!hbt!]
@@ -1336,18 +1464,6 @@ Although there is not a significant amount of structured research into price pre
 \includegraphics[width=10cm]{uber_architecture}
 \caption{Feature selection and forecast models by Uber.}
 \end{figure}
-
-\subsection{Objective Completion}
-
-Below is an analytical breakdown into the extend of which the requirements capture, as specified in section \ref{tasks}, has been achieved or changed. 
-
-\begin{enumerate}
-	\item Data Preprocessing: This took up the most substantial part of the project and was initially to simplistically assumed.
-	 \item Building and Testing Benchmark: The . 
-	\item Implementing and Testing Model Architecture: The implementation of a few models was successful in terms of functionality but disappointing in terms of performance. It quickly became obvious that Keras, although easy to understand and build with, offered minimal low level controls that were necessary for efficient and optimal architecture design. An example of this was the lack of skip connection implementation for models, which was an area that would very much have been explored if there was more time. It would only have been possible to implement this with the lower level TensorFlow library which is known to be fairly slow in terms of development speed.
-	\item Integration Testing and Debugging: This part of the project was successful achieved and extremely useful in debugging erroneous code. Testing seems to provide could indicators of where faults occur although the final process of debugging often requires deeper analysis into data structures and function behaviour to truly identify the problem. The linear flow of the program made it fairly easy to combine unit tests into integration tests.
-	\item Hyperparameter Optimisation: In depth research was done to arrive at the initialisation values for all of the hyperparameters but it was disappointing to see that adjustments failed to produce any marked improvement in the performance of the model. The project has taught that the fundamental structuring of data and the network is far more important for generating results and it is fairly useless to attempt to fine tune a poorly functioning model.  
-\end{enumerate}
 
 \subsection{Future Work} 
 
@@ -1373,6 +1489,8 @@ There are countless future development paths that could be done to improve and g
 \newpage
  
 \section{Appendix}
+
+Keras source code can be found at \href{https://github.com/keras-team/keras/tree/master/keras}{this} GitHub repository submodule. Documentation for the library can be found \href{https://keras.io/}{here}.
 
 \begin{lstlisting}[language=Python, breaklines=true, label={libraries}, caption={Depiction of the list of external packages used to develop the model. These packages are roughly split by use case; mathematical structuring, data visualisation, functionalities required, machine learning tools and miscellaneous.}]
 import numpy as np

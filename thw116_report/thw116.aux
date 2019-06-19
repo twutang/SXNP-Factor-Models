@@ -122,6 +122,7 @@
 \newlabel{design iterations}{{4.4.4}{22}{Design Iterations}{subsubsection.4.4.4}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {18}{\ignorespaces LHS: Architectural overview of the initial one hidden layer model. RHS: Model summary with number of parameters.\relax }}{22}{figure.caption.28}}
 \@writefile{lof}{\contentsline {figure}{\numberline {19}{\ignorespaces LHS: Architectural overview of the stacked LSTM model. RHS: Model summary with number of parameters.\relax }}{23}{figure.caption.29}}
+\newlabel{stacked_lstm}{{19}{23}{LHS: Architectural overview of the stacked LSTM model. RHS: Model summary with number of parameters.\relax }{figure.caption.29}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {20}{\ignorespaces Demonstration of errors introduced into output function of LSTM by missing values.\relax }}{23}{figure.caption.30}}
 \citation{Ruder}
 \@writefile{lof}{\contentsline {figure}{\numberline {21}{\ignorespaces Overview of the architecture of the multi output model.\relax }}{24}{figure.caption.31}}
@@ -163,44 +164,55 @@
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {5.3.1}Single Output Model}{32}{subsubsection.5.3.1}}
 \@writefile{lol}{\contentsline {lstlisting}{\numberline {10}Model creation, compilation and fitting functionality of the single output model. The initial single hidden layer model is commented out.}{32}{lstlisting.10}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {5.3.2}Multi output Model}{33}{subsubsection.5.3.2}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {11}Structuring of the multi output model, with two forks focused on the separate tasks of predicting the target variable, $y$ and the next input vector, $x_{t+1}$.}{33}{lstlisting.11}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.4}\hskip -1em.\nobreakspace  {}Evaluation Metrics}{34}{subsection.5.4}}
-\@writefile{lof}{\contentsline {figure}{\numberline {26}{\ignorespaces Program flow diagram of evaluation processes.\relax }}{34}{figure.caption.36}}
-\newlabel{evaluationflow}{{26}{34}{Program flow diagram of evaluation processes.\relax }{figure.caption.36}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {12}Keras predict functions to generate predicted labels from test data.}{35}{lstlisting.12}}
-\@writefile{lof}{\contentsline {figure}{\numberline {27}{\ignorespaces Confusion matrix for labelling prediction results.\relax }}{35}{figure.caption.37}}
-\newlabel{confusion_matrix}{{27}{35}{Confusion matrix for labelling prediction results.\relax }{figure.caption.37}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {13}Implemented function which evaluates the model prediction performance based on accuracy\tmspace  +\thinmuskip {.1667em} precision and recall.}{35}{lstlisting.13}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {14}Filtering out positively labelled predictions to extract related actual return.}{36}{lstlisting.14}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {11}Structuring of the multi output model, with two branches focused on the separate tasks of predicting the target variable, $y$ and the next input vector, $x_{t+1}$.}{33}{lstlisting.11}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {12}Initialisation, compilation and training implementation for the multi output model}{34}{lstlisting.12}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4}\hskip -1em.\nobreakspace  {}Evaluation Metrics}{35}{subsection.5.4}}
+\@writefile{lof}{\contentsline {figure}{\numberline {26}{\ignorespaces Program flow diagram of evaluation processes.\relax }}{35}{figure.caption.36}}
+\newlabel{evaluationflow}{{26}{35}{Program flow diagram of evaluation processes.\relax }{figure.caption.36}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {13}Keras predict functions to generate predicted labels from test data.}{35}{lstlisting.13}}
+\@writefile{lof}{\contentsline {figure}{\numberline {27}{\ignorespaces Confusion matrix for labelling prediction results.\relax }}{36}{figure.caption.37}}
+\newlabel{confusion_matrix}{{27}{36}{Confusion matrix for labelling prediction results.\relax }{figure.caption.37}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {14}Implemented function which evaluates the model prediction performance based on accuracy\tmspace  +\thinmuskip {.1667em} precision and recall.}{36}{lstlisting.14}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {15}Filtering out positively labelled predictions to extract related actual return.}{36}{lstlisting.15}}
 \citation{python_testing}
-\@writefile{toc}{\contentsline {section}{\numberline {6}\hskip -1em.\nobreakspace  {}Testing}{37}{section.6}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}\hskip -1em.\nobreakspace  {}Test Plan}{37}{subsection.6.1}}
-\@writefile{lof}{\contentsline {figure}{\numberline {28}{\ignorespaces Levels of software testing from high (Top) to low (Bottom)\relax }}{37}{figure.caption.38}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {15}Example Test.}{37}{lstlisting.15}}
-\@writefile{lof}{\contentsline {figure}{\numberline {29}{\ignorespaces Flow diagram of how an integrated test may be executed.\relax }}{37}{figure.caption.39}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}\hskip -1em.\nobreakspace  {}Unit Test Results}{38}{subsection.6.2}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {16}Example of a DataFrame comparison test.}{38}{lstlisting.16}}
-\newlabel{error_message}{{17}{38}{Assertion Error raised by the second fail case of the Test Set Generator Test}{lstlisting.17}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {17}Assertion Error raised by the second fail case of the Test Set Generator Test.}{38}{lstlisting.17}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {18}Example of a \textit  {numpy} comparison test.}{38}{lstlisting.18}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.3}\hskip -1em.\nobreakspace  {}Integration Test Results}{39}{subsection.6.3}}
-\@writefile{toc}{\contentsline {section}{\numberline {7}\hskip -1em.\nobreakspace  {}Results}{40}{section.7}}
-\newlabel{results}{{7}{40}{\hskip -1em.~Results}{section.7}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {30}{\ignorespaces LHS: Plot of multi output model's losses for next input predictor. RHS: Plot of multi output model's losses for target variable predictor.\relax }}{40}{figure.caption.40}}
-\newlabel{loss_plots}{{30}{40}{LHS: Plot of multi output model's losses for next input predictor. RHS: Plot of multi output model's losses for target variable predictor.\relax }{figure.caption.40}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {31}{\ignorespaces LHS: Plot of multi output model's accuracy for next input predictor. RHS: Plot of multi output model's accuracy for target variable predictor.\relax }}{40}{figure.caption.41}}
-\newlabel{accuracy_plots}{{31}{40}{LHS: Plot of multi output model's accuracy for next input predictor. RHS: Plot of multi output model's accuracy for target variable predictor.\relax }{figure.caption.41}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Evaluation metrics of the model performed on hold out test data.\relax }}{41}{table.caption.42}}
-\newlabel{eval_metrics}{{2}{41}{Evaluation metrics of the model performed on hold out test data.\relax }{table.caption.42}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {32}{\ignorespaces Histogram of the returns and log returns of the selected labels by the model.\relax }}{41}{figure.caption.43}}
-\@writefile{lof}{\contentsline {figure}{\numberline {33}{\ignorespaces Histogram of the returns and log returns of the entire unseen test data set.\relax }}{42}{figure.caption.44}}
-\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Statistical summary of percentage changes i.e. returns of sets of data. Entire Dataset equates to all returns from 2000 onwards, Test Data is the returns allocated to the test split and Model Selected Data is the collection of returns that the model predicted would have positive returns from the Test Dataset.\relax }}{42}{table.caption.45}}
-\@writefile{toc}{\contentsline {section}{\numberline {8}\hskip -1em.\nobreakspace  {}Conclusions}{42}{section.8}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {8.1}\hskip -1em.\nobreakspace  {}Evaluation}{42}{subsection.8.1}}
-\newlabel{evaluation}{{8.1}{42}{\hskip -1em.~Evaluation}{subsection.8.1}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {8.2}\hskip -1em.\nobreakspace  {}Objective Completion}{42}{subsection.8.2}}
-\@writefile{lof}{\contentsline {figure}{\numberline {34}{\ignorespaces Feature selection and forecast models by Uber.\relax }}{43}{figure.caption.46}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {8.3}\hskip -1em.\nobreakspace  {}Future Work}{43}{subsection.8.3}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}\hskip -1em.\nobreakspace  {}Testing}{38}{section.6}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}\hskip -1em.\nobreakspace  {}Test Plan}{38}{subsection.6.1}}
+\@writefile{lof}{\contentsline {figure}{\numberline {28}{\ignorespaces Levels of software testing from high (Top) to low (Bottom)\relax }}{38}{figure.caption.38}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {16}Example Test.}{38}{lstlisting.16}}
+\@writefile{lof}{\contentsline {figure}{\numberline {29}{\ignorespaces Flow diagram of how an integrated test may be executed.\relax }}{38}{figure.caption.39}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}\hskip -1em.\nobreakspace  {}Unit Test Implementation}{39}{subsection.6.2}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {17}Example of a DataFrame comparison test.}{39}{lstlisting.17}}
+\newlabel{error_message}{{18}{39}{Assertion Error raised by the second fail case of the Test Set Generator Test}{lstlisting.18}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {18}Assertion Error raised by the second fail case of the Test Set Generator Test.}{39}{lstlisting.18}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {19}Example of a \textit  {numpy} comparison test.}{39}{lstlisting.19}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3}\hskip -1em.\nobreakspace  {}Integration Test Implementation}{40}{subsection.6.3}}
+\@writefile{lof}{\contentsline {figure}{\numberline {30}{\ignorespaces Integration testing may be more useful in the contrived bottom program flow example where functionality is not very linear. This project's program flow is more similar to that of the top program flow, depicted in blue.\relax }}{40}{figure.caption.40}}
+\newlabel{integration_useful}{{30}{40}{Integration testing may be more useful in the contrived bottom program flow example where functionality is not very linear. This project's program flow is more similar to that of the top program flow, depicted in blue.\relax }{figure.caption.40}{}}
+\newlabel{integration_test}{{20}{40}{Example of an integration test for 3 linked functionalities}{lstlisting.20}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {20}Example of an integration test for 3 linked functionalities.}{40}{lstlisting.20}}
+\@writefile{toc}{\contentsline {section}{\numberline {7}\hskip -1em.\nobreakspace  {}Results}{42}{section.7}}
+\newlabel{results}{{7}{42}{\hskip -1em.~Results}{section.7}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {31}{\ignorespaces LHS: Plot of multi output model's losses for next input predictor. RHS: Plot of multi output model's losses for target variable predictor.\relax }}{42}{figure.caption.41}}
+\newlabel{loss_plots}{{31}{42}{LHS: Plot of multi output model's losses for next input predictor. RHS: Plot of multi output model's losses for target variable predictor.\relax }{figure.caption.41}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {32}{\ignorespaces LHS: Plot of multi output model's accuracy for next input predictor. RHS: Plot of multi output model's accuracy for target variable predictor.\relax }}{42}{figure.caption.42}}
+\newlabel{accuracy_plots}{{32}{42}{LHS: Plot of multi output model's accuracy for next input predictor. RHS: Plot of multi output model's accuracy for target variable predictor.\relax }{figure.caption.42}{}}
+\citation{google}
+\newlabel{libraries}{{21}{43}{New proposed implementation of the optimiser}{lstlisting.21}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {21}New proposed implementation of the optimiser.}{43}{lstlisting.21}}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Evaluation metrics of the model performed on hold out test data.\relax }}{43}{table.caption.44}}
+\newlabel{eval_metrics}{{2}{43}{Evaluation metrics of the model performed on hold out test data.\relax }{table.caption.44}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {33}{\ignorespaces Top: Initial classification threshold resulting in Precision = 0.8, Recall = 0.73. Bottom: Higher classification threshold with results in Precision = 0.88, Recall = 0.64.\relax }}{44}{figure.caption.43}}
+\newlabel{classification_threshold}{{33}{44}{Top: Initial classification threshold resulting in Precision = 0.8, Recall = 0.73. Bottom: Higher classification threshold with results in Precision = 0.88, Recall = 0.64.\relax }{figure.caption.43}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {34}{\ignorespaces Histogram of the returns and log returns of the selected labels by the model.\relax }}{44}{figure.caption.45}}
+\@writefile{lof}{\contentsline {figure}{\numberline {35}{\ignorespaces Histogram of the returns and log returns of the entire unseen test data set.\relax }}{45}{figure.caption.46}}
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Statistical summary of percentage changes i.e. returns of sets of data. Entire Dataset equates to all returns from 2000 onwards, Test Data is the returns allocated to the test split and Model Selected Data is the collection of returns that the model predicted would have positive returns from the Test Dataset.\relax }}{45}{table.caption.47}}
+\newlabel{benchmarkstats}{{3}{45}{Statistical summary of percentage changes i.e. returns of sets of data. Entire Dataset equates to all returns from 2000 onwards, Test Data is the returns allocated to the test split and Model Selected Data is the collection of returns that the model predicted would have positive returns from the Test Dataset.\relax }{table.caption.47}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {8}\hskip -1em.\nobreakspace  {}Conclusions}{46}{section.8}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.1}\hskip -1em.\nobreakspace  {}Objectives Completion}{46}{subsection.8.1}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.2}\hskip -1em.\nobreakspace  {}Evaluation}{46}{subsection.8.2}}
+\newlabel{evaluation}{{8.2}{46}{\hskip -1em.~Evaluation}{subsection.8.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.3}\hskip -1em.\nobreakspace  {}Future Work}{46}{subsection.8.3}}
+\@writefile{lof}{\contentsline {figure}{\numberline {36}{\ignorespaces Feature selection and forecast models by Uber.\relax }}{47}{figure.caption.48}}
 \bibstyle{ieee}
 \bibdata{thw116bib}
 \bibcite{jupyter_notebook}{1}
@@ -212,34 +224,35 @@
 \bibcite{Eun}{7}
 \bibcite{Fama}{8}
 \bibcite{Gal}{9}
-\bibcite{Graham}{10}
-\bibcite{Gregor}{11}
-\bibcite{Hagan}{12}
-\bibcite{Henrique}{13}
-\bibcite{Hockreiter}{14}
-\bibcite{Kim}{15}
-\bibcite{Janocha}{16}
-\bibcite{Adam}{17}
-\bibcite{Makridakis}{18}
-\bibcite{Merz}{19}
-\bibcite{Olah}{20}
-\bibcite{Pascanu}{21}
-\bibcite{Racine}{22}
-\bibcite{Reimers}{23}
-\bibcite{Man_Group}{24}
-\bibcite{Ross}{25}
-\bibcite{Rouwenhorst}{26}
-\bibcite{Ruder}{27}
-\bibcite{Rumelhart}{28}
-\bibcite{Sak}{29}
-\bibcite{Sharpe}{30}
-\bibcite{python_testing}{31}
-\bibcite{Smyl}{32}
-\bibcite{Treynor}{33}
-\bibcite{Winters}{34}
-\@writefile{toc}{\contentsline {section}{\numberline {9}\hskip -1em.\nobreakspace  {}Bibliography}{44}{section.9}}
-\@writefile{toc}{\contentsline {section}{\numberline {10}\hskip -1em.\nobreakspace  {}Appendix}{45}{section.10}}
-\newlabel{libraries}{{19}{45}{Depiction of the list of external packages used to develop the model. These packages are roughly split by use case; mathematical structuring, data visualisation, functionalities required, machine learning tools and miscellaneous}{lstlisting.19}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {19}Depiction of the list of external packages used to develop the model. These packages are roughly split by use case; mathematical structuring, data visualisation, functionalities required, machine learning tools and miscellaneous.}{45}{lstlisting.19}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {10.1}\hskip -1em.\nobreakspace  {}Source Code}{45}{subsection.10.1}}
-\newlabel{source code}{{10.1}{45}{\hskip -1em.~Source Code}{subsection.10.1}{}}
+\bibcite{google}{10}
+\bibcite{Graham}{11}
+\bibcite{Gregor}{12}
+\bibcite{Hagan}{13}
+\bibcite{Henrique}{14}
+\bibcite{Hockreiter}{15}
+\bibcite{Kim}{16}
+\bibcite{Janocha}{17}
+\bibcite{Adam}{18}
+\bibcite{Makridakis}{19}
+\bibcite{Merz}{20}
+\bibcite{Olah}{21}
+\bibcite{Pascanu}{22}
+\bibcite{Racine}{23}
+\bibcite{Reimers}{24}
+\bibcite{Man_Group}{25}
+\bibcite{Ross}{26}
+\bibcite{Rouwenhorst}{27}
+\bibcite{Ruder}{28}
+\bibcite{Rumelhart}{29}
+\bibcite{Sak}{30}
+\bibcite{Sharpe}{31}
+\bibcite{python_testing}{32}
+\bibcite{Smyl}{33}
+\bibcite{Treynor}{34}
+\bibcite{Winters}{35}
+\@writefile{toc}{\contentsline {section}{\numberline {9}\hskip -1em.\nobreakspace  {}Bibliography}{48}{section.9}}
+\@writefile{toc}{\contentsline {section}{\numberline {10}\hskip -1em.\nobreakspace  {}Appendix}{49}{section.10}}
+\newlabel{libraries}{{22}{49}{Depiction of the list of external packages used to develop the model. These packages are roughly split by use case; mathematical structuring, data visualisation, functionalities required, machine learning tools and miscellaneous}{lstlisting.22}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {22}Depiction of the list of external packages used to develop the model. These packages are roughly split by use case; mathematical structuring, data visualisation, functionalities required, machine learning tools and miscellaneous.}{49}{lstlisting.22}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {10.1}\hskip -1em.\nobreakspace  {}Source Code}{49}{subsection.10.1}}
+\newlabel{source code}{{10.1}{49}{\hskip -1em.~Source Code}{subsection.10.1}{}}

@@ -51,6 +51,13 @@ Y.~Gal and Z.~Ghahramani.
   Neural Networks}.
 \newblock arXiv, 2016.
 
+\bibitem{google}
+Google.
+\newblock {\em Classification: Precision and Recall}.
+\newblock
+  https://developers.google.com/machine-learning/crash-course/classification/precision-and-recall,
+  2019.
+
 \bibitem{Graham}
 B.~Graham and D.~Dodd.
 \newblock {\em Security Analysis}.
