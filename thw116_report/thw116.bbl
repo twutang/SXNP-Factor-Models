@@ -100,6 +100,12 @@ D.~P. Kingma and J.~L. Ba.
 \newblock {\em ADAM: A METHOD FOR STOCHASTIC OPTIMIZATION}.
 \newblock arXiv, 2014.
 
+\bibitem{Laptev}
+N.~Laptev, J.~Yosinski, L.~E. Li, and S.~Smyl.
+\newblock {\em Time-series Extreme Event Forecasting with Neural Networks at
+  Uber}.
+\newblock arXiv, 2017.
+
 \bibitem{Makridakis}
 S.~Makridakis, E.~Spiliotis, and V.~Assimakopoulos.
 \newblock {\em The M4 Competition: Results, findings, conclusion and way

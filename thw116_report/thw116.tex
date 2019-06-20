@@ -97,7 +97,7 @@ style = mystyle
 
 \begin{abstract}
 
-This project explores the effectiveness of certain recurrent neural network architectures with long short-term memory units (LSTM RNNs) in the forecasting of stock prices for companies in the STOXX Europe 600 Industrial Goods and Services Index (SXNP). In particular, the project focused on attempting to identify whether certain attributes of a company’s fundamentals data, such as book value and annual sales, had significant influences on its stock price. The main emphasis of this project was to implement a complete tool that would provide all the functionalities required to take this machine learning problem from the initial raw dataset to a reasonable final forecast result. As such, the various processes required to develop a solution to a machine learning problem such as data preparation, network structuring, optimisation etc. were studied and analysed. A significant proportion of the project focused on processing the raw data into a suitable and effective format that could be used as the input of a Keras model. Additionally, by tuning various hyperparameters and experimenting with multiple loss functions and classifications methods, attempts were also made to optimize and improve the performance of the model. Finally, the stock weightings provided by the model were used to construct a portfolio to simulate a real world scenario. Its performance was then compared to the naïve diversification heuristic over a time period consisting of unseen test data. 
+This project explores the effectiveness of certain recurrent neural network architectures with long short-term memory units (LSTM RNNs) in the forecasting of stock prices for companies in the STOXX Europe 600 Industrial Goods and Services Index (SXNP). In particular, the project focuses on attempting to identify whether certain attributes of a company’s fundamentals data, such as book value and annual sales, had significant influences on its stock price. The main emphasis of this project was to implement a complete tool that would provide all the functionalities required to take this machine learning problem from the initial raw dataset to a reasonable final forecast result. As such, the various processes required to develop a solution to a machine learning problem such as data preparation, network structuring, optimisation etc. were studied and analysed. A significant proportion of the project focused on processing the raw data into a suitable and effective format that could be used as the input of a Keras model. Additionally, by evaluating various hyperparameters and deepening the architecture, attempts were also made to optimise and improve the performance of the model. Finally, the returns that were predicted to be positive by the model were evaluated with respect to the general distribution of stock returns. The results show some promise of accurate forecasting, with the model returning approximately 0.7 in accuracy, precision and recall metrics for the test set.
 \end{abstract}
 
 \section*{Acknowledgements}
@@ -591,7 +591,6 @@ As specified in section \ref{design iterations}, multiple designs for outputs we
 		\item Price Close: The end price of a company's stock at the finish of the trading day. 
 \end{itemize}
 
-
 \subsubsection{Loss Function}
 
 Although the idea of designing a specific loss function for the problem was considered, there were concerns that it may cause more issues. Therefore, it was decided to first attempt the model with a standard binary cross entropy loss function as described in section \ref{loss functions}.
@@ -651,8 +650,8 @@ As mentioned by Brownlee\cite{brownlee_activation}, the activations functions fo
 
 \begin{figure}[!hbt!]
 \centering
-\includegraphics[width=10.5cm]{problem_tuning.png}
-\caption{Screenshot indicating an issue with no decreasing loss function during training due to an incorrectly selected activation function.}
+\includegraphics[width=15.5cm]{tanhandsigmoidcomb.png}
+\caption{LHS: Plots of the activation functions, $tanh$ and sigmoid. RHS: Screenshot indicating an issue with no decreasing loss function during training due to an incorrectly selected activation function.}
 \end{figure}
 
 The selection of the batch size mainly revolved around computational time efficiency as the high complexity of the model and size of dataset made iterations very taxing to run. It was therefore decided to initially begin with large batch sizes of 1024 as there are suggestions that powers of 2 can improve computational performance by aligning virtual processors onto the physical processors of the GPU, which are often a power of 2. Smaller batches are often considered better for test accuracy as they provide more frequent updates to the model parameters. However, the counterargument is that very small batches are more susceptible to noise and therefore not converge on the correct minima thus increasing convergence time.
@@ -925,15 +924,15 @@ testInput = np.reshape(testInput, (testInput.shape[0], testInput.shape[1], 1))
 \subsection{Architecture} 
 \subsubsection{Single Output Model}
 
-For the single output model, the format for building the model was defined as a function that took in the parameters, train\_X, train\_Y, data\_dim, which are the training data, test data, and dimensionality of the input training vector ($20\times1$) respectively. Various Keras functionalities are then called to define the model. Initially, Sequential() is called to establish an empty model using the Sequential API. A \textit{Sequential} model is a linear stack of layers which can be created using the .add() method. 
+For the single output model, the format for building the model was defined as a function that took in the parameters, train\_X, train\_Y, data\_dim, which are the training data, test data, and dimensionality of the input training vector ($20\times1$) respectively. Various Keras functionalities are then called to define the model. Initially, the Sequential() method is called to establish an empty model using the Sequential API. A \textit{Sequential} model is a linear stack of layers which can be created using the .add() method. 
 
-The first layer of the model must take the input\_shape as a parameter. This is required for the model to provide it information on the format of the input vectors. The argument input\_shape defines a 2 dimensional shape tuple. The first parameter of input\_shape defines the width of the vector (i.e. the number of attributes/columns) and the second defines the time step size (also known as window size). When displaying the model, as shown in figure \ref{stacked_lstm}, the \textit{None} parameter of the input shape indicates the batch size and means that any positive integer can be expected for that dimension, since batch dimension is not initialised at this point. 
+The first layer of the model must take the \textit{input\_shape} as a parameter. This is required for the model to provide it information on the format of the input vectors. The parameter \textit{input\_shape} defines a 2 dimensional shape tuple. The first argument of input\_shape defines the width of the vector (i.e. the number of attributes/columns) and the second defines the time step size (also known as window size). When displaying the model, as shown in figure \ref{stacked_lstm}, the \textit{None} parameter of the input shape indicates the batch size and means that any positive integer can be expected for that dimension, since batch dimension is not initialised at this point. 
 
-The two main layer types used in the architecture are Dropout and LSTM. Dropout is classed as a \textit{Core} layer in Keras whereas LSTM falls under \textit{Recurrent}. Dropout layers simply apply dropout to the inputs of their layers i.e. the outputs of previous layers. This is achieved by randomly a fraction of input units, specified by the parameter 'rate', to 0 during the update when training. 
+The two main layer types used in the architecture are Dropout and LSTM. Dropout is classed as a \textit{Core} layer in Keras whereas LSTM falls under \textit{Recurrent}. Dropout layers simply apply dropout to the inputs of their layers i.e. the outputs of previous layers. This is achieved by randomly a fraction of input units, specified by the parameter \textit{rate}, to 0 during the update when training. 
 
-LSTM layers also require a few parameters to configure. As the name suggests, they are responsible for implementing the LSTM cell architectures. The parameter 'unit' specifies the number of cells in the layer. In stacking architectures, it is important to set the return\_sequences parameter to \textit{True} for all but the last layer. This means that all of the hidden state outputs are returned and passed to the next layer as opposed to just the hidden state of the final cell. 
+LSTM layers also require a few parameters to configure. As the name suggests, they are responsible for implementing the LSTM cell architectures. The parameter \textit{unit} specifies the number of cells in the layer. In stacking architectures, it is important to set the \textit{return\_sequences} parameter to \textit{True} for all but the last layer. This means that all of the hidden state outputs are returned and passed to the next layer as opposed to just the hidden state of the final cell. 
 
-The final Dense layer is simply a fully connected layer than transforms the output of the previous cell into the intended output shape for the model. In this case, since only a single value is predicted, the 'units' parameter specifies the output dimensionality i.e. the number of nodes in the dense layer.
+The final Dense layer is simply a fully connected layer than transforms the output of the previous cell into the intended output shape for the model. In this case, since only a single value is predicted, the \textit{unit} parameter specifies the output dimensionality i.e. the number of nodes in the dense layer.
 
 After the model is defined, the learning process must be configured by using the .compile() method. There are two arguments that must be specified which are the choice of optimiser and loss function. Optionally, a list of metrics may also be parsed through as an argument to provide evaluation of the model. Finally, the model is trained using the .fit() method. This takes as arguments \textit{numpy} arrays representing the input and target data, as well as the number of epochs to train for and size of batch size. This generates a \textit{History} object, which stores a record of the training losses and metrics after each epoch.
 
@@ -981,9 +980,9 @@ history = baseline_model.fit(trainInput, trainTarget, epochs = 30, batch_size = 
 
 \subsubsection{Multi output Model}
 
-By redeveloping the model into a multi output structure, the \textit{Sequential} API was no longer usable. Hence, the model was initiated by calling the \textit{Functional} API instead. Rather than structuring the object build inside a function as with the single output method, a class was defined to instantiate the model. This then allowed class methods to be developed to neatly define each individual branch of the two predictors. 
+By redeveloping the model into a multi output structure, the \textit{Sequential} API was no longer usable. Hence, the model was initiated by calling the \textit{Functional} API instead. Rather than structuring the object build inside a function as with the single output method, a class was defined to instantiate the model. This then allowed class methods to be developed to neatly define each individual branch of the two predictors. The \textit{output} parameter of the Model() method is then defined as a list of the two methods.
 
-Layers are connected together by pairing rather than using the .add() method in the single output model. This allows for more flexibility in terms of connecting layers in a non linear fashion.   
+Layers are connected together by pairing rather than using the .add() method in the single output model. This allows for more flexibility in terms of connecting layers in a non linear fashion. However, the architecture in this project does not really take advantage of this. One of the key differences is the \textit{unit} parameter for the input predictor. Since this output is a $20\times1$ vector, the parameter is declared as 20 rather than 1. \\
 
 \begin{lstlisting}[language=Python, breaklines=true, caption={Structuring of the multi output model, with two branches focused on the separate tasks of predicting the target variable, $y$ and the next input vector, $x_{t+1}$.}]
 class fypNet: 
@@ -1036,6 +1035,8 @@ class fypNet:
     
     return model
 \end{lstlisting} 
+
+The initialisation of the multi output model is also slightly more complex. In order to apply the correct loss functions, the last layer in both of the branches must be named, by passing the \textit{name} parameter. A dictionary is then set up where the two named layers are the keys and their respective loss functions the values. Additionally, when calling the fit() method, supplementary validation data was also to provide more evaluation metrics during training. The \textit{Stateful} parameter was set to \textit{False}, which meant that the hidden states of the model were reset after every batch.
  
 \begin{lstlisting}[language=Python, breaklines=true, caption={Initialisation, compilation and training implementation for the multi output model}]
 lstm_units = 1024
@@ -1043,10 +1044,10 @@ num_epochs = 10
 initial_lr = 1e-3
 batch_size = 32
 
-# initialize our fypNet multi-output network
+# initialise our fypNet multi-output network
 model = fypNet.build(data_dim, lstm_units)
  
-losses = {'inPred_result': 'mean_absolute_error','outPred_result': 'binary_crossentropy'}
+losses = {'inPred_result': 'mean_absolute_error', 'outPred_result': 'binary_crossentropy'}
  
 # initialize the optimizer and compile the model
 
@@ -1067,7 +1068,7 @@ model.fit(trainInput,{"inPred_result": trainInTarget, "outPred_result": trainTar
 \label{evaluationflow}
 \end{figure}
 
-The final section of the code relates to actually evaluating the predictions of the result. For this, it was first required to generate the predictions from the unseen test data input. Since labels were binary, the Keras function of \textit{predict\_classes} was more suitable as this would generate the appropriate labels. Given more time, the \textit{predict} values would be analysed to evaluate whether the continuous probabilities showed signs of an underlying relationship that higher returns correlated with higher probabilities. 
+The final section of the code relates to actually evaluating the predictions of the result. For this, it was first required to generate the predictions from the unseen test data input. Since labels were binary, the Keras function of \textit{predict\_classes} was more suitable as this would generate the appropriate labels. \\
 
 \begin{lstlisting}[language=Python, breaklines=true, caption= {Keras predict functions to generate predicted labels from test data.}]
 stack_pred = trained_stack.predict(testInput, verbose=1)
@@ -1372,21 +1373,20 @@ After the prediction model was applied to the test data, statistical and visual 
 
 More interesting is the difference in shape of the actual distributions. The selected points exhibit as positive skew whereas the general test set is negative. This suggests that a larger concentration of returns were higher than the mean return in the model selected points and conversely in the general test set. This reflects well on the performance of the model's prediction capabilities as it has correctly identified many more positive returns than negative. Additionally, variance is lower in the model selected data, indicating a potentially less volatile and higher Sharpe ratio portfolio. Kurtosis was also lower, suggesting lighter tails than in the general test set. 
 
+The final bit of analysis conducted was to establish whether the underlying prediction probabilities correlated with the realised returns, with both selected and not selected data. The results are shown in figure \ref{probsvsreturns}. Although there is no distinct correlation, it should be noted that the extreme probabilities seem to fare slightly better at predicting returns.
 
 \begin{figure}[!hbt!]
 \figuretitle{Returns of Model Selected Datapoints} 
 \centering
 \includegraphics[width=16.5cm]{results_distributions.png}
-\caption{Histogram of the returns and log returns of the selected labels by the model.}
+\caption{Histograms of the returns and log returns of the selected labels by the model.}
 \end{figure}
-
-\afterpage{
 
 \begin{figure}[!hbt!]
 \figuretitle{Returns of Test Set Datapoints} 
 \centering
 \includegraphics[width=16.5cm]{test_returns.png}
-\caption{Histogram of the returns and log returns of the entire unseen test data set.}
+\caption{Histograms of the returns and log returns of the entire unseen test data set.}
 \end{figure}
 
 \begin{table}[hbt!]
@@ -1410,8 +1410,13 @@ Kurtosis & 18474.170 & 43.882 & 31.110\\
 \caption{Statistical summary of percentage changes i.e. returns of sets of data. Entire Dataset equates to all returns from 2000 onwards, Test Data is the returns allocated to the test split and Model Selected Data is the collection of returns that the model predicted would have positive returns from the Test Dataset.}
 \label{benchmarkstats}
 \end{table}
-  \clearpage
-}
+
+\begin{figure}[!hbt!]
+\centering
+\includegraphics[width=16.5cm]{prob_vs_returns.png}
+\caption{Scatter plots of the unselected ($<0.5$) and selected ($>0.5$) prediction probabilities against the actual returns of the datapoint.}
+\label{probsvsreturns}
+\end{figure}
 
 
 %-------------------------------------------------------------------------
@@ -1419,35 +1424,25 @@ Kurtosis & 18474.170 & 43.882 & 31.110\\
 
 \section{Conclusions}
 
-\subsection{Objectives Completion}
+\subsection{Objectives Completion} \label{objectives_completed}
 
 Below is an analytical breakdown into the extend of which the requirements capture, as specified in section \ref{tasks}, has been achieved or changed. 
 
 \begin{enumerate}
-	\item Data Preprocessing: One of the more difficult aspects of the project was evaluating how to handle the data sparsity for a model which relied on consistent, time series data. The objective of preprocessing the data so that it had some detectable pattern that the model could learn was achieved, although it was very generic and blanket. For example, min-max scaling the inputs achieved the objective of scaling it correctly for the model, but begs the question of whether the scaling was appropriate for each individual attribute.  
-	\item Building and Testing Benchmark: The . 
-	\item Implementing and Testing Model Architecture: The implementation of a few models was successful in terms of functionality but disappointing in terms of performance. It quickly became obvious that Keras, although easy to understand and build with, offered minimal low level controls that were necessary for efficient and optimal architecture design. An example of this was the lack of skip connection implementation for models, which was an area that would very much have been explored if there was more time. It would only have been possible to implement this with the lower level TensorFlow library which is known to be fairly slow in terms of development speed.
-	\item Integration Testing and Debugging: This part of the project was successful achieved and extremely useful in debugging erroneous code. Testing helps signpost and indicate where faults occur although actual debugging often requires deeper analysis into data structures and function behaviour to truly solve the problem. One of the most useful aspects of testing was keeping track of object type conversions when calling functions from external packages. Although Python's dynamic datatypes allows for fast development, it was difficult to keep track of the types as the codebase grew. The linear flow of the program made it fairly easy to combine unit tests into integration tests.
-	\item Hyperparameter Optimisation: In depth research was done to arrive at the initialisation values for all of the hyperparameters but it was disappointing to see that adjustments failed to produce any marked improvement in the performance of the model. The project has taught that the fundamental structuring of data and the network is far more important for generating results and it is fairly useless to attempt to fine tune a poorly functioning model.  
+	\item Data Preprocessing: One of the more difficult aspects of the project was evaluating how to handle the data sparsity for a model which relied on consistent, time series data. The objective of preprocessing the data so that it had some detectable pattern that the model could learn was achieved, although it was very generic and blanket. For example, min-max scaling the inputs achieved the objective of scaling it correctly for the model, but begs the question of whether the scaling method was appropriate for each individual attribute. 
+	\item Building and Testing Benchmark: A benchmark was created, although not as initially visioned. This was partly due to the limitations of the translating the model results onto a real world application, as mention in sections \ref{benchmark} and \ref{evaluation}. As such, the benchmark devolved more into analysis and comparison between the statistical properties of the predicted and general returns data, which can be found in section \ref{results}.
+	\item Implementing and Testing Model Architecture: The implementation of a few models was successful in terms of functionality and moderate in terms of performance. It quickly became obvious that Keras, although easy to understand and build with, did not offer the minimal low level controls that were necessary for efficient and optimal architecture design. An example of this was the lack of skip connection implementation for models. This relied on implementing alterations to the input gate logic which was not possible with the library. Given more time, it may have been possible to implement this with the lower level TensorFlow library which is renowned to be fairly slow in terms of development speed.
+	\item Integration Testing and Debugging: This part of the project was successfully achieved and extremely useful in debugging erroneous code. Testing helps signpost and indicate where faults occur although actual debugging often requires deeper analysis into data structures and function behaviour to truly solve the problem. One of the most useful aspects of testing was keeping track of object type conversions when calling functions from external packages. Although Python's dynamic datatypes allows for fast development, it was difficult to keep track of the types as the codebase grew. The linear flow of the program made it fairly easy to combine unit tests into integration tests.
+	\item Hyperparameter Optimisation: In depth research was done to arrive at the initialisation values for all of the hyperparameters but it was difficult to perform a grid search optimisation due time constraints. Minor adjustments, such as batch size, failed to produce any marked improvement in the performance of the model and was mainly tuned to optimise computational speed. The project has taught that the fundamental structuring of data and the network is much more important for generating results and it is fairly useless to attempt to fine tune a poorly functioning model, as discovered with initial models.  
 \end{enumerate}
 
 \subsection{Evaluation} \label{evaluation}
 
-The main highlight achieved in this project was actually implementing a model which showed some signs of signs of outperformance in terms of prediction against the designated benchmark. Although, the input data did not solely rely on fundamental data as initially desired, the addition of technical analysis data was deemed vital for the success of the model. It could be argued that this reflects more accurately on the real world factors that influence the price of a stock - they are not just a function of the fundamental values of a company.
-
-The project evaluates well a theoretical application of recurrent networks to the problem of predicting prices. However, it would be hard to translate any of the research generated into a practical investment application. 
-
 \iffalse
-How successful have you been? What have you achieved? . It is important here to identify positively what is worthwhile in your work. At the same time, honesty, and a clear description of the limits of your work, is equally important.
-
-are your most significant achievements. In the conclusions you must summarise this, referring as necessary to other sections for more detail.
-
 What design choices did you have along the way, and why did you make the choices you made?
 
 What was the most difficult and/or clever part of the project?
 Why was it difficult? How did you overcome the difficulties?
-
-Did you discover or invent anything novel?
 
 What did you learn? critical evaluation of your work as compared to previous analysis, algorithms, products, and when related to your original objectives.
 
@@ -1456,24 +1451,30 @@ What are the advantages, disadvantages of your approach compared with related wo
 How does the scope of your work differ from related work? Examiners expect your project report to show evidence of your ability to think as an engineer, and that includes the ability to critically reflect on your own work and evaluate its significance. 
 \fi
 
+The main highlight achieved in this project was actually implementing a model which showed some signs of signs of outperformance in terms of prediction against the designated benchmark. Although, the input data did not solely rely on fundamental data as initially desired, the addition of technical analysis data was deemed vital for the success of the model. It could be argued that this reflects more accurately on the real world factors that influence the price of a stock - they are not just a function of the fundamental values of a company. On reflection, even if there was more fundamental available at more frequent time intervals, it is highly likely that adding technical data would still improve the model and so should be utilised.
 
-Although there is not a significant amount of structured research into price prediction models, the results align with those seen in various forecasting papers, such as Smyl's findings at Uber. It was believed that part of the poor performance of the model was due to the fact that not all the factors that affect the price were considered, especially at the noisy 'daily' time step. There is a 
+The project evaluates well a theoretical application of recurrent networks to the problem of predicting prices. However, it would be hard to translate any of the research generated into a practical investment application. For example, one of the issues arising from the problem is that it takes the company metrics and predicts the price at that specific time step $t$. This does not translate into a viable long term investment plan as the objective in that is to evaluate the company metrics and judge the future time at a time step $x+c$ where $c$ is the investment horizon period.
 
-\begin{figure}[!hbt!]
-\centering
-\includegraphics[width=10cm]{uber_architecture}
-\caption{Feature selection and forecast models by Uber.}
-\end{figure}
+One of the key unique aspects of the project revolved around choosing the initial universe of companies. In most of the literature involving machine learning, entire major indices are selected. These tend to represent the entire economy. By selecting only the industrials sector, the project focused more on a specific subset and this is likely to have improved model performance relative to other research results since there may be a stronger pattern in the data of similar companies. In the context of investing methodologies, this project offers a more 'results-orientated' approach compared to classical methods. Whereas classical methods focus more on forming a theory and then deriving a model, this approach operates by forming a model to derive a theory. Some may argue that this black boxed approach lacks appropriate rational grounding but it can be argued that it still provides insight to aid the investment process.
+
+Overall, this project provided a good learning experience into undertaking and structuring a machine learning solution to a forecasting problem. Designing the whole pipeline offered the chance to consider all aspects of the problem and it was learned that one of the most important components to have is a good dataset that is throughly prepared for the problem.
 
 \subsection{Future Work} 
 
-There are countless future development paths that could be done to improve and generate more interesting results from this project. A few are listed below:  
+There are numerous future development paths that could be done to improve and generate more interesting results from this project. A few are listed below:  
 
 \begin{itemize}
-	\item Implementation of a real world application benchmark: 
-	\item Unsupervised learning algorithms:
-	\item Further data cleaning and processing:
-	\item Improving model design: Only LSTM networks were explored in this paper
+	\item Data Feeds: It would be interesting to further add more types of data to see if this would add any improvement. For example, sentiment data, such as analysing newsfeeds could be useful. In particular, because the model operates on the relatively short daily time scale, it could be seen that this would help model the 'noise fluctuations' of the prices better. 
+	\item Classification methodology: Alternate labelling methods could be used for the target variable such as multi class or even continuous. In binary classification, one thing that could have been adjusted was discarding returns that were not significant more or less than 0. It is likely that these learning samples are edge cases and do not accurately reflect well on the problem itself.
+	\item Alternate learning algorithms: The project structured the problem in a supervised learning domain but it may be worth experimenting with alternate methods such as a reinforcement approach. An example framework would be to use the profit and loss of a portfolio as the reward, with buying and selling stocks being the decision and action processes. This could result in a more practical result as the problem would be structured in a more investment orientated way.
+	\item Further data cleaning and processing: A potential improvement would be to add principal component analysis into the model to further reduce the input dimensionality by evaluating the covariance matrix. This could be useful since it is likely that many attributes are highly correlated to one another and so contain significant amounts of redundant information.
+	\item Improving model design: Although there is not a significant amount of structured research into stock price prediction models, similar methodologies could be borrowed from research in various other forecasting tasks to test and analyse. One such example of this would be using an auto-encoder to provide a more powerful feature extraction and feed the output descriptor in a forecaster model. This is was a method adopted by a research team led by Laptev\cite{Laptev}.  
+	
+\begin{figure}[!hbt!]
+\centering
+\includegraphics[width=10cm]{uber_architecture}
+\caption{Feature selection and forecast models by Laptev et al.}
+\end{figure}
 \end{itemize}
 
 \newpage

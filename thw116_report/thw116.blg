@@ -7,45 +7,45 @@ Warning--to sort, need author, editor, or key in jupyter_notebook
 Warning--empty author and editor in jupyter_notebook
 Warning--empty year in python_testing
 Warning--empty publisher in Treynor
-You've used 35 entries,
+You've used 36 entries,
             2120 wiz_defined-function locations,
-            679 strings with 8215 characters,
-and the built_in function-call counts, 8746 in all, are:
-= -- 752
-> -- 440
+            683 strings with 8358 characters,
+and the built_in function-call counts, 9059 in all, are:
+= -- 778
+> -- 463
 < -- 0
-+ -- 182
-- -- 140
-* -- 445
-:= -- 1539
-add.period$ -- 104
-call.type$ -- 35
-change.case$ -- 140
++ -- 191
+- -- 148
+* -- 466
+:= -- 1595
+add.period$ -- 107
+call.type$ -- 36
+change.case$ -- 146
 chr.to.int$ -- 0
-cite$ -- 39
-duplicate$ -- 421
-empty$ -- 773
-format.name$ -- 140
-if$ -- 1826
+cite$ -- 40
+duplicate$ -- 433
+empty$ -- 795
+format.name$ -- 148
+if$ -- 1889
 int.to.chr$ -- 0
-int.to.str$ -- 35
-missing$ -- 69
-newline$ -- 177
-num.names$ -- 68
-pop$ -- 318
+int.to.str$ -- 36
+missing$ -- 71
+newline$ -- 182
+num.names$ -- 70
+pop$ -- 329
 preamble$ -- 1
-purify$ -- 140
+purify$ -- 146
 quote$ -- 0
-skip$ -- 218
+skip$ -- 224
 stack$ -- 0
-substring$ -- 182
-swap$ -- 35
+substring$ -- 187
+swap$ -- 36
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 70
+type$ -- 72
 warning$ -- 4
-while$ -- 68
-width$ -- 37
-write$ -- 348
+while$ -- 70
+width$ -- 38
+write$ -- 358
 (There were 4 warnings)

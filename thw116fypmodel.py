@@ -820,10 +820,34 @@ accuracy, precision, recall = evaluation_metrics(stack_classPred, testTarget)
 print(accuracy, precision, recall)
 
 selected = []
+selectedpred = []
+originalret = []
+
+notselectedpred = []
+originalret2 = []
 
 for i in range(len(rawtestTarget)):
   if stack_classPred[i][0] == 1: 
     selected.append(rawtestTarget[i])
+    selectedpred.append(stack_pred[i][0])
+    originalret.append(rawtestTarget[i])
+  else:
+    notselectedpred.append(stack_pred[i][0])
+    originalret2.append(rawtestTarget[i])
+
+plt.figure(figsize=(10, 10))
+plt.title('Selected Prediction Probabilities vs Actual Return')
+plt.ylabel('Actual Return')
+plt.xlabel('Prediction Probabilites')
+
+plt.scatter(selectedpred, originalret)
+
+plt.figure(figsize=(10, 10))
+plt.title('Not Selected Prediction Probabilities vs Actual Return')
+plt.ylabel('Actual Return')
+plt.xlabel('Prediction Probabilites')
+
+plt.scatter(notselectedpred, originalret2)
 
 """## Selected Labels Results distributions"""
 
@@ -885,16 +909,16 @@ price = [1, 1.1, 1.21, 1.452]
 change1 = [float('nan'), 0.1, 0.1, 0.2] # success case
 change2 = [1, 0.2, 0.2, 0.2] # fail case
 testdf1 = pd.DataFrame(price)
-testdf2 = pd.DataFrame(change1)
-testdf3 = pd.DataFrame(change2)
+benchmarkdf1 = pd.DataFrame(change1)
+benchmarkdf2 = pd.DataFrame(change2)
 
 def test_RETURNS_CONVERTER(test, benchmark):
   results = price_to_returns('daily', test)
   pd.testing.assert_frame_equal(results, benchmark)
   print('test successful')
 
-test_RETURNS_CONVERTER(testdf1, testdf2)
-test_RETURNS_CONVERTER(testdf1, testdf3)
+test_RETURNS_CONVERTER(testdf1, benchmarkdf1)
+test_RETURNS_CONVERTER(testdf1, benchmarkdf2)
 
 # Test Set Generator Test
 
@@ -904,21 +928,21 @@ outputframe2 = [4, 5, 6, 7] # fail case
 outputframe3 = [6, 7, 8, 9, 10] # fail case
 
 testdf1 = pd.DataFrame(initialframe)
-testdf2 = pd.DataFrame(outputframe1)
-testdf2.index += 6
-testdf3 = pd.DataFrame(outputframe2)
-testdf3.index += 6
-testdf4 = pd.DataFrame(outputframe3)
-testdf4.index += 6
+benchmarkdf1 = pd.DataFrame(outputframe1)
+benchmarkdf1.index += 6
+benchmarkdf2 = pd.DataFrame(outputframe2)
+benchmarkdf2.index += 6
+benchmarkdf3 = pd.DataFrame(outputframe3)
+benchmarkdf3.index += 6
 
 def test_SET_GENERATOR(test, benchmark):
   results = test_set(0.5, 0.1, test)
   pd.testing.assert_frame_equal(results, benchmark)
   print('test successful')
 
-test_SET_GENERATOR(testdf1, testdf2)
-test_SET_GENERATOR(testdf1, testdf3)
-test_SET_GENERATOR(testdf1, testdf4)
+test_SET_GENERATOR(testdf1, benchmarkdf1)
+test_SET_GENERATOR(testdf1, benchmarkdf2)
+test_SET_GENERATOR(testdf1, benchmarkdf3)
 
 # Input Scaling Test
 # for minmax case
@@ -948,15 +972,72 @@ classifier1 = [str(1), str(1), str(0), str(0), str(1)] # success case
 classifier2 = [str(0), str(0), str(0), str(0), str(0)] # fail case
 
 testdf1 = pd.DataFrame(returnvals)
-testdf2 = pd.DataFrame(classifier1)
-testdf3 = pd.DataFrame(classifier2)
+benchmarkdf1 = pd.DataFrame(classifier1)
+benchmarkdf2 = pd.DataFrame(classifier2)
 
 def test_OUTPUT_CLASSIFIER(test, benchmark):
   results = output_classifier('binary', test)
   pd.testing.assert_frame_equal(results, benchmark)
   print('test successful')
 
-test_OUTPUT_CLASSIFIER(testdf1, testdf2)
-test_OUTPUT_CLASSIFIER(testdf1, testdf3)
+test_OUTPUT_CLASSIFIER(testdf1, benchmarkdf1)
+test_OUTPUT_CLASSIFIER(testdf1, benchmarkdf2)
 
 """## Integration Tests"""
+
+# Data Wrangling Test
+
+start = dt.datetime.strptime("26-12-1999", "%d-%m-%Y")
+end = dt.datetime.strptime("5-01-2000", "%d-%m-%Y")
+dates = [start + dt.timedelta(days=x) for x in range(0, (end-start).days)]
+values1 = [10000, 10000, 9000, 9000, 9900, 9900, 9999, 9999, 19998, 19998]
+values2 = [float('nan'),float('nan'),float('nan'),float('nan'),float('nan'),float('nan'),float('nan'),float('nan'),float('nan'),float('nan')]
+
+testdf1 = pd.DataFrame(dates)
+testdf1.rename( columns={0:'Date'}, inplace=True )
+testdf1['CompanyA'] = values1
+testdf1['CompanyB'] = values2
+
+# success case
+test1values1 = [float('nan'), 0.0, -0.1, 0.0, 0.1, 0.0, 0.01, 0.0, 1.0, 0.0]
+test1values2 = [float('nan'),float('nan'),float('nan'),float('nan'),float('nan'),float('nan'),float('nan'),float('nan'),float('nan'),float('nan')]
+
+benchmarkdf1 = pd.DataFrame(dates)
+benchmarkdf1.rename(columns={0:'Date'}, inplace=True)
+benchmarkdf1 = benchmarkdf1.set_index('Date')
+benchmarkdf1['Ticker 1'] = test1values1
+benchmarkdf1['Ticker 2'] = test1values2
+
+# fail case
+test2values1 = [10000, 10000, 9000, 9000, 9900, 9900, 9999, 9999, 19998, 19998]
+test2values2 = [float('nan'),float('nan'),float('nan'),float('nan'),float('nan'),float('nan'),float('nan'),float('nan'),float('nan'),float('nan')]
+
+benchmarkdf2 = pd.DataFrame(dates)
+benchmarkdf2.rename(columns={0:'Date'}, inplace=True)
+benchmarkdf2 = benchmarkdf2.set_index('Date')
+benchmarkdf2['Ticker 1'] = test2values1
+benchmarkdf2['Ticker 3'] = test2values2
+
+def test_WRANGLE_INTEGRATION(test, benchmark):
+  # First Test
+  time_index_generator(test)
+  
+  # Second Test
+  anon_tickers = ticker_list_generator(len(test.columns))
+  test.columns = anon_tickers
+  
+  # Third Test
+  results = price_to_returns('daily', test) 
+  
+  pd.testing.assert_frame_equal(results, benchmark)
+  print('test successful')
+
+test_WRANGLE_INTEGRATION(testdf1, benchmarkdf1)
+
+# reset testdf1
+testdf1 = pd.DataFrame(dates)
+testdf1.rename( columns={0:'Date'}, inplace=True )
+testdf1['CompanyA'] = values1
+testdf1['CompanyB'] = values2
+
+test_WRANGLE_INTEGRATION(testdf1, benchmarkdf2)
